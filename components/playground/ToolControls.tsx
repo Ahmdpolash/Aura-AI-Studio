@@ -11,7 +11,9 @@ import {
   ChevronDownIcon,
   ChevronUpIcon,
   CrownIcon,
+  LayersIcon,
   Loader2Icon,
+  ScissorsIcon,
   SparklesIcon,
   Wand2Icon,
   ZapIcon,
@@ -87,13 +89,47 @@ export function ToolControls({
   const selectedTool = STUDIO_TOOLS.find((t) => t.id === selectedToolId) || STUDIO_TOOLS[0];
   const isPro = Boolean(isProProp || usageData?.plan === "PRO");
 
-  const DEFAULT_VISIBLE_COUNT = 6;
-  const [showAllTools, setShowAllTools] = useState(false);
+  // =========================================================================
+  // CONCEPT 1: CATEGORY TABS SYSTEM (ACTIVE)
+  // =========================================================================
+  const CATEGORIES = [
+    { id: "background", label: "Background", count: 4, icon: ScissorsIcon },
+    { id: "enhance", label: "Enhance", count: 2, icon: SparklesIcon },
+    { id: "overlay", label: "Effects", count: 2, icon: LayersIcon },
+  ] as const;
 
-  // Keep expanded if user has selected a tool from the hidden section
-  const isSelectedInHidden = STUDIO_TOOLS.slice(DEFAULT_VISIBLE_COUNT).some((t) => t.id === selectedToolId);
-  const isExpanded = showAllTools || isSelectedInHidden;
-  const displayedTools = isExpanded ? STUDIO_TOOLS : STUDIO_TOOLS.slice(0, DEFAULT_VISIBLE_COUNT);
+  const [activeCategory, setActiveCategory] = useState<"background" | "enhance" | "overlay">(
+    (selectedTool.category as any) || "background"
+  );
+
+  // Sync category if tool is selected externally
+  React.useEffect(() => {
+    if (selectedTool?.category && selectedTool.category !== activeCategory) {
+      setActiveCategory(selectedTool.category as any);
+    }
+  }, [selectedToolId]);
+
+  const handleCategoryClick = (catId: "background" | "enhance" | "overlay") => {
+    setActiveCategory(catId);
+    const toolsInCat = STUDIO_TOOLS.filter((t) => t.category === catId);
+    if (!toolsInCat.some((t) => t.id === selectedToolId) && toolsInCat.length > 0) {
+      onSelectTool(toolsInCat[0]);
+    }
+  };
+
+  const filteredTools = STUDIO_TOOLS.filter((t) => t.category === activeCategory);
+
+  /* =========================================================================
+   * PREVIOUS VERSION BACKUP: 6-TOOL DEFAULT WITH "VIEW ALL" TOGGLE
+   * (Preserved for comparison as requested)
+   * -------------------------------------------------------------------------
+   * const DEFAULT_VISIBLE_COUNT = 6;
+   * const [showAllTools, setShowAllTools] = useState(false);
+   * const isSelectedInHidden = STUDIO_TOOLS.slice(DEFAULT_VISIBLE_COUNT).some((t) => t.id === selectedToolId);
+   * const isExpanded = showAllTools || isSelectedInHidden;
+   * const displayedTools = isExpanded ? STUDIO_TOOLS : STUDIO_TOOLS.slice(0, DEFAULT_VISIBLE_COUNT);
+   * =========================================================================
+   */
 
   return (
     <div className="studio-panel flex flex-col gap-6 rounded-[2rem] border border-border/60 p-5 sm:p-7">
@@ -130,13 +166,47 @@ export function ToolControls({
           <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             1. Choose AI Tool
           </label>
-          <span className="rounded-full border border-primary/30 bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">
-            {isExpanded ? `All ${STUDIO_TOOLS.length}` : `${DEFAULT_VISIBLE_COUNT} of ${STUDIO_TOOLS.length}`}
+          <span className="rounded-full border border-primary/30 bg-primary/10 px-2.5 py-0.5 text-[10px] font-bold text-primary">
+            {filteredTools.length} {activeCategory === "background" ? "Background" : activeCategory === "enhance" ? "Enhance" : "Effect"} Tools
           </span>
         </div>
 
-        <div className="mt-3 grid grid-cols-2 gap-2.5 sm:grid-cols-2">
-          {displayedTools.map((tool) => {
+        {/* Concept 1: Category Pills Bar */}
+        <div className="mt-3 grid grid-cols-3 gap-1.5 rounded-2xl border border-white/10 bg-background/50 p-1.5 backdrop-blur-md shadow-inner">
+          {CATEGORIES.map((cat) => {
+            const isActive = activeCategory === cat.id;
+            const CatIcon = cat.icon;
+
+            return (
+              <button
+                key={cat.id}
+                type="button"
+                onClick={() => handleCategoryClick(cat.id)}
+                className={cn(
+                  "flex items-center justify-center gap-1.5 rounded-xl py-2 px-2 text-xs font-semibold transition-all duration-200 cursor-pointer",
+                  isActive
+                    ? "bg-gradient-to-r from-primary via-orange-500 to-amber-500 text-white shadow-[0_2px_14px_rgba(255,90,20,0.4)] scale-[1.02]"
+                    : "text-muted-foreground hover:bg-white/5 hover:text-foreground"
+                )}
+              >
+                <CatIcon className="size-3.5 shrink-0" />
+                <span>{cat.label}</span>
+                <span
+                  className={cn(
+                    "ml-0.5 rounded-full px-1.5 py-0.2 text-[10px] font-bold",
+                    isActive ? "bg-black/25 text-white" : "bg-white/10 text-muted-foreground"
+                  )}
+                >
+                  {cat.count}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Concept 1: Filtered Category Tools Grid */}
+        <div className="mt-3 grid grid-cols-2 gap-2.5 sm:grid-cols-2 animate-in fade-in duration-200">
+          {filteredTools.map((tool) => {
             const Icon = tool.icon;
             const isSelected = tool.id === selectedToolId;
 
@@ -146,14 +216,14 @@ export function ToolControls({
                 type="button"
                 onClick={() => onSelectTool(tool)}
                 className={cn(
-                  "group relative flex flex-col items-start gap-2 rounded-2xl border p-3.5 text-left transition-all cursor-pointer",
+                  "group relative flex flex-col items-start gap-2.5 rounded-2xl border p-3.5 text-left transition-all duration-200 cursor-pointer",
                   isSelected
-                    ? "border-primary bg-primary/10 text-foreground shadow-[0_0_20px_rgba(255,180,0,0.15)]"
+                    ? "border-primary bg-primary/10 text-foreground shadow-[0_0_24px_rgba(255,140,0,0.22)] ring-1 ring-primary/40 scale-[1.01]"
                     : "border-border/50 bg-card/40 text-muted-foreground hover:border-border hover:bg-card/70 hover:text-foreground"
                 )}
               >
                 {tool.badge && (
-                  <span className="absolute right-2.5 top-2.5 rounded-md bg-primary/20 px-1.5 py-0.5 text-[10px] font-semibold text-primary">
+                  <span className="absolute right-2.5 top-2.5 rounded-md bg-primary/20 border border-primary/30 px-1.5 py-0.5 text-[10px] font-semibold text-primary">
                     {tool.badge}
                   </span>
                 )}
@@ -162,15 +232,15 @@ export function ToolControls({
                   className={cn(
                     "flex size-8 items-center justify-center rounded-xl border transition-colors",
                     isSelected
-                      ? "border-primary/50 bg-primary/20 text-primary"
-                      : "border-border/50 bg-background/40 text-muted-foreground group-hover:text-primary"
+                      ? "border-primary/60 bg-primary/20 text-primary shadow-[0_0_12px_rgba(255,140,0,0.25)]"
+                      : "border-border/50 bg-background/40 text-muted-foreground group-hover:text-primary group-hover:border-primary/30"
                   )}
                 >
                   <Icon className="size-4" />
                 </div>
 
                 <div>
-                  <p className="text-sm font-semibold text-foreground">{tool.name}</p>
+                  <p className="text-sm font-semibold text-foreground tracking-tight">{tool.name}</p>
                   <p className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">
                     {tool.description}
                   </p>
@@ -179,28 +249,6 @@ export function ToolControls({
             );
           })}
         </div>
-
-        {STUDIO_TOOLS.length > DEFAULT_VISIBLE_COUNT && (
-          <div className="mt-3.5 flex items-center justify-center">
-            <button
-              type="button"
-              onClick={() => setShowAllTools((prev) => !prev)}
-              className="group inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-card/60 px-4 py-1.5 text-xs font-medium text-muted-foreground backdrop-blur-md transition-all hover:border-primary/40 hover:bg-card hover:text-foreground cursor-pointer shadow-sm"
-            >
-              {isExpanded ? (
-                <>
-                  <span>Show Less</span>
-                  <ChevronUpIcon className="size-3.5 transition-transform group-hover:-translate-y-0.5" />
-                </>
-              ) : (
-                <>
-                  <span>View All Tools (+{STUDIO_TOOLS.length - DEFAULT_VISIBLE_COUNT} more)</span>
-                  <ChevronDownIcon className="size-3.5 transition-transform group-hover:translate-y-0.5" />
-                </>
-              )}
-            </button>
-          </div>
-        )}
       </div>
 
       <div className="rounded-2xl border border-border/40 bg-background/25 p-4">
