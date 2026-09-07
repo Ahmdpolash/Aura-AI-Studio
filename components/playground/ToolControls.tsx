@@ -8,6 +8,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
+  ChevronDownIcon,
+  ChevronUpIcon,
   CrownIcon,
   Loader2Icon,
   SparklesIcon,
@@ -85,6 +87,14 @@ export function ToolControls({
   const selectedTool = STUDIO_TOOLS.find((t) => t.id === selectedToolId) || STUDIO_TOOLS[0];
   const isPro = Boolean(isProProp || usageData?.plan === "PRO");
 
+  const DEFAULT_VISIBLE_COUNT = 6;
+  const [showAllTools, setShowAllTools] = useState(false);
+
+  // Keep expanded if user has selected a tool from the hidden section
+  const isSelectedInHidden = STUDIO_TOOLS.slice(DEFAULT_VISIBLE_COUNT).some((t) => t.id === selectedToolId);
+  const isExpanded = showAllTools || isSelectedInHidden;
+  const displayedTools = isExpanded ? STUDIO_TOOLS : STUDIO_TOOLS.slice(0, DEFAULT_VISIBLE_COUNT);
+
   return (
     <div className="studio-panel flex flex-col gap-6 rounded-[2rem] border border-border/60 p-5 sm:p-7">
       <div className="flex flex-col gap-3 rounded-2xl border border-border/50 bg-background/35 p-4 sm:flex-row sm:items-center sm:justify-between">
@@ -116,11 +126,17 @@ export function ToolControls({
       </div>
 
       <div>
-        <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-          1. Choose AI Tool
-        </label>
+        <div className="flex items-center justify-between">
+          <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            1. Choose AI Tool
+          </label>
+          <span className="rounded-full border border-primary/30 bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">
+            {isExpanded ? `All ${STUDIO_TOOLS.length}` : `${DEFAULT_VISIBLE_COUNT} of ${STUDIO_TOOLS.length}`}
+          </span>
+        </div>
+
         <div className="mt-3 grid grid-cols-2 gap-2.5 sm:grid-cols-2">
-          {STUDIO_TOOLS.map((tool) => {
+          {displayedTools.map((tool) => {
             const Icon = tool.icon;
             const isSelected = tool.id === selectedToolId;
 
@@ -163,6 +179,28 @@ export function ToolControls({
             );
           })}
         </div>
+
+        {STUDIO_TOOLS.length > DEFAULT_VISIBLE_COUNT && (
+          <div className="mt-3.5 flex items-center justify-center">
+            <button
+              type="button"
+              onClick={() => setShowAllTools((prev) => !prev)}
+              className="group inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-card/60 px-4 py-1.5 text-xs font-medium text-muted-foreground backdrop-blur-md transition-all hover:border-primary/40 hover:bg-card hover:text-foreground cursor-pointer shadow-sm"
+            >
+              {isExpanded ? (
+                <>
+                  <span>Show Less</span>
+                  <ChevronUpIcon className="size-3.5 transition-transform group-hover:-translate-y-0.5" />
+                </>
+              ) : (
+                <>
+                  <span>View All Tools (+{STUDIO_TOOLS.length - DEFAULT_VISIBLE_COUNT} more)</span>
+                  <ChevronDownIcon className="size-3.5 transition-transform group-hover:translate-y-0.5" />
+                </>
+              )}
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="rounded-2xl border border-border/40 bg-background/25 p-4">
