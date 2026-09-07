@@ -1,5 +1,7 @@
-import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
-import { ChevronDownIcon } from "lucide-react";
+"use client";
+
+import { useSession, signIn, signOut } from "next-auth/react";
+import { ChevronDownIcon, LogInIcon, LogOutIcon, SparklesIcon, Wand2Icon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -7,6 +9,9 @@ import { Button } from "@/components/ui/button";
 import { CENTER_NAV_LINKS, HERO_VIDEO_SRC } from "@/lib/constants";
 
 export function HomeHeroSection() {
+  const { data: session, status } = useSession();
+  const user = session?.user as any;
+
   return (
     <section className="home-hero">
       <div className="hero-surface absolute inset-0 z-10" />
@@ -39,8 +44,8 @@ export function HomeHeroSection() {
               <span className="caps-2xs block text-sm font-semibold text-foreground">
                 Luma Studio
               </span>
-              <span className="caps-xs block truncate text-xs uppercase text-muted-foreground">
-                AI image restyling
+              <span className="caps-xs block truncate text-xs uppercase text-primary">
+                AI Image Studio
               </span>
             </div>
           </Link>
@@ -61,59 +66,70 @@ export function HomeHeroSection() {
           </div>
 
           <div className="home-nav-auth">
-            <Show when="signed-out">
-              <SignInButton mode="modal" fallbackRedirectUrl="/studio">
-                <Button type="button" variant="outline" size="sm" className="home-btn-signin">
-                  Sign In
+            {status === "authenticated" && user ? (
+              <div className="flex items-center gap-3">
+                <Button variant="outline" asChild className="home-btn-studio-outline">
+                  <Link href="/playground" prefetch={false}>
+                    Playground
+                  </Link>
                 </Button>
-              </SignInButton>
-              <SignUpButton mode="modal" fallbackRedirectUrl="/studio">
-                <Button type="button" className="home-btn-nav-primary">
-                  Get Started
+                {user.image && (
+                  <img
+                    src={user.image}
+                    alt={user.name || "User"}
+                    className="size-8 rounded-full border border-border/60 object-cover"
+                  />
+                )}
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => signOut()}
+                  className="size-8 rounded-full p-0 text-muted-foreground hover:text-foreground"
+                  title="Sign Out"
+                >
+                  <LogOutIcon className="size-4" />
                 </Button>
-              </SignUpButton>
-            </Show>
-
-            <Show when="signed-in">
-              <Button variant="outline" asChild className="home-btn-studio-outline">
-                <Link href="/studio" prefetch={false}>
-                  Studio
-                </Link>
-              </Button>
-              <UserButton />
-            </Show>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => signIn("google")}
+                  className="home-btn-signin"
+                >
+                  <LogInIcon className="mr-1.5 size-3.5" /> Sign In
+                </Button>
+                <Button asChild className="home-btn-nav-primary">
+                  <Link href="/playground">Launch Studio</Link>
+                </Button>
+              </div>
+            )}
           </div>
         </nav>
 
         <div className="home-hero-copy">
           <h1 className="hero-title home-hero-title">
-            <span className="block">High-fidelity style transfer.</span>
-            <span className="home-hero-tagline">One upload, a gallery-ready image.</span>
+            <span className="block">Next-Gen AI Image Studio.</span>
+            <span className="home-hero-tagline">
+              Remove Backgrounds, Replace Scenes & Upscale in Real-time.
+            </span>
           </h1>
 
           <p className="home-hero-lede">
-            Upload once, pick a curated style, get a polished restyle.
+            Professional AI image editing powered by ImageKit. Isolate subjects, generate custom AI environments, enhance micro-details 2x, and stamp dynamic watermarks.
           </p>
 
           <div className="home-hero-ctas">
-            <Show when="signed-out">
-              <SignUpButton mode="modal" fallbackRedirectUrl="/studio">
-                <Button type="button" className="home-btn-hero-primary">
-                  Get Started Free
-                </Button>
-              </SignUpButton>
-            </Show>
-
-            <Show when="signed-in">
-              <Button asChild className="home-btn-hero-primary">
-                <Link href="/studio" prefetch={false}>
-                  Open Studio
-                </Link>
-              </Button>
-            </Show>
+            <Button asChild className="home-btn-hero-primary">
+              <Link href="/playground" prefetch={false}>
+                <Wand2Icon className="mr-2 size-5" /> Open AI Playground
+              </Link>
+            </Button>
 
             <Button asChild variant="ghost" className="hero-pill home-btn-hero-ghost">
-              <a href="#how-it-works">Watch 2min demo</a>
+              <a href="#how-it-works">See How It Works</a>
             </Button>
           </div>
         </div>
@@ -124,7 +140,7 @@ export function HomeHeroSection() {
               <div className="hero-demo-glass-inner home-demo-inner">
                 <Image
                   src="/demo.png"
-                  alt="Luma Studio workspace showing upload, curated styles, and a before-and-after preview"
+                  alt="Luma Studio workspace showing upload, AI tools, and interactive canvas comparison"
                   width={3290}
                   height={1872}
                   className="h-auto w-full"

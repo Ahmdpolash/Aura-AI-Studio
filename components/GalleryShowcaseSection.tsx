@@ -1,11 +1,11 @@
 "use client";
 
-import { Show, SignUpButton } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { GALLERY_IMAGES, GALLERY_STATS, HIGHLIGHTS, SHOWCASE_BG_VIDEO_SRC } from "@/lib/constants";
+import { Wand2Icon } from "lucide-react";
 
 export function GalleryShowcaseSection() {
   return (
@@ -50,7 +50,7 @@ export function GalleryShowcaseSection() {
                     <div className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-primary/14 text-primary">
                       <Icon className="size-5" />
                     </div>
-                    <p className="mt-4 text-sm tracking-wide text-muted-foreground">{item.label}</p>
+                    <p className="mt-4 text-xs font-semibold tracking-wide text-foreground">{item.label}</p>
                   </div>
                 );
               })}
@@ -58,16 +58,15 @@ export function GalleryShowcaseSection() {
 
             <div className="mt-10">
               <p className="caps-lg font-mono text-xs font-medium uppercase tracking-[0.24em] text-primary sm:text-sm">
-                Style showcase
+                AI Precision Suite
               </p>
               <h2 className="mt-5 font-mono text-5xl font-normal leading-[1.02] tracking-[-0.03em] text-foreground sm:text-6xl lg:text-7xl">
                 Transform <span className="font-medium text-primary">photos</span>
                 <br />
-                into art.
+                instantly.
               </h2>
               <p className="mt-6 max-w-xl font-mono text-[0.9375rem] leading-relaxed text-muted-foreground sm:text-base">
-                Turn everyday portraits and moments into richly styled scenes with cinematic depth,
-                warm character, and a premium editorial finish.
+                Isolate subjects with surgical edge precision, synthesize natural backgrounds, upscale micro-textures, and brand with customized watermarks.
               </p>
             </div>
 
@@ -81,28 +80,15 @@ export function GalleryShowcaseSection() {
             </div>
 
             <div className="mt-8">
-              <Show when="signed-out">
-                <SignUpButton mode="modal" fallbackRedirectUrl="/studio">
-                  <Button
-                    size="lg"
-                    className="rounded-2xl px-7 text-base shadow-lg shadow-primary/20"
-                  >
-                    Transform Photos
-                  </Button>
-                </SignUpButton>
-              </Show>
-
-              <Show when="signed-in">
-                <Button
-                  asChild
-                  size="lg"
-                  className="rounded-2xl px-7 text-base shadow-lg shadow-primary/20"
-                >
-                  <Link href="/studio" prefetch={false}>
-                    Transform Photos
-                  </Link>
-                </Button>
-              </Show>
+              <Button
+                asChild
+                size="lg"
+                className="studio-primary-action rounded-2xl px-7 text-base font-semibold shadow-lg"
+              >
+                <Link href="/playground" prefetch={false}>
+                  <Wand2Icon className="mr-2 size-5" /> Open Playground
+                </Link>
+              </Button>
             </div>
           </div>
         </div>

@@ -2,33 +2,37 @@ import type { LucideIcon } from "lucide-react";
 import {
   CameraIcon,
   ImagePlusIcon,
+  LayersIcon,
+  Maximize2Icon,
   PaletteIcon,
+  ScissorsIcon,
   SparklesIcon,
+  TypeIcon,
   Wand2Icon,
   ZapIcon,
 } from "lucide-react";
 
-/** MIME types accepted for user source images (upload + generation API). */
+/** MIME types accepted for user source images */
 export const ACCEPTED_SOURCE_IMAGE_MIME_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
 
 export const HIGHLIGHTS: { label: string; icon: LucideIcon }[] = [
-  { label: "AI Magic", icon: Wand2Icon },
-  { label: "Art Styles", icon: SparklesIcon },
-  { label: "Instant", icon: ZapIcon },
-  { label: "Creative", icon: CameraIcon },
+  { label: "AI Background Remove", icon: ScissorsIcon },
+  { label: "AI Upscale 2x", icon: Maximize2Icon },
+  { label: "Change Background", icon: SparklesIcon },
+  { label: "Text Watermark", icon: TypeIcon },
 ];
 
 export const GALLERY_STATS = [
-  { value: "50K+", label: "Images created" },
-  { value: "10K+", label: "Happy users" },
-  { value: "4.9/5", label: "User rating" },
+  { value: "100K+", label: "Images processed" },
+  { value: "25K+", label: "Happy creators" },
+  { value: "4.9/5", label: "User satisfaction" },
 ] as const;
 
 export const GALLERY_IMAGES = [
-  { src: "/gallery-1.png", alt: "Stylized rainy character portrait" },
-  { src: "/gallery-2.png", alt: "Stylized family gardening scene" },
-  { src: "/gallery-3.png", alt: "Stylized fantasy mushroom scene" },
-  { src: "/gallery-4.png", alt: "Stylized coffee making scene" },
+  { src: "/gallery-1.png", alt: "Stylized portrait with background removed" },
+  { src: "/gallery-2.png", alt: "AI scene replacement result" },
+  { src: "/gallery-3.png", alt: "Super-upscaled macro details" },
+  { src: "/gallery-4.png", alt: "Watermarked studio branding" },
 ] as const;
 
 export const HERO_VIDEO_SRC = "https://ik.imagekit.io/gcunh6w0m/hero.mp4";
@@ -38,21 +42,24 @@ export const SHOWCASE_BG_VIDEO_SRC =
 
 export const CENTER_NAV_LINKS = [
   { label: "Home", href: "/" },
-  { label: "Pricing", href: "#pricing" },
-  { label: "Styles", href: "#styles", chevron: true },
+  { label: "Playground", href: "/playground" },
   { label: "How it works", href: "#how-it-works" },
-  { label: "Privacy", href: "/privacy" },
-  { label: "FAQ", href: "#faq" },
+  { label: "Pricing", href: "#pricing" },
 ] as const;
 
 export const FOOTER_QUICK_LINKS = [
-  { label: "Pricing", href: "#pricing" },
-  { label: "Styles", href: "#styles" },
+  { label: "Home", href: "/" },
+  { label: "AI Playground", href: "/playground" },
   { label: "How it works", href: "#how-it-works" },
-  { label: "Studio", href: "/studio" },
+  { label: "Pricing", href: "#pricing" },
 ] as const;
 
-export const FEATURED_STYLES = ["Storybook 3D", "Anime Cel", "Clay Render", "Pixart"] as const;
+export const FEATURED_STYLES = [
+  "Background Removal",
+  "Scene Replacement",
+  "AI Super Upscale",
+  "Watermark Studio",
+] as const;
 
 export const WORKFLOW_STYLE_PREVIEW = [
   FEATURED_STYLES[0],
@@ -69,67 +76,67 @@ export type MarketingTestimonial = {
 
 export const TESTIMONIALS: MarketingTestimonial[] = [
   {
-    text: "This workflow completely changed how quickly we can turn original photos into polished campaign-ready visuals.",
+    text: "The background removal and upscale tools cut our product photography turnaround from hours to seconds.",
     image:
       "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80",
     name: "Briana Patton",
-    role: "Operations Manager",
+    role: "E-Commerce Director",
   },
   {
-    text: "The interface is clear, the outputs are consistent, and the rollout across our team was surprisingly effortless.",
+    text: "Being able to replace product backgrounds with natural studio lighting via prompt is a complete game changer.",
     image:
       "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80",
     name: "Bilal Ahmed",
-    role: "IT Manager",
+    role: "Creative Lead",
   },
   {
-    text: "Support has been thoughtful from the start, and the product already feels much more refined than most creative AI tools.",
+    text: "The interactive split-comparison canvas makes it effortless to verify edge detection before downloading.",
     image:
       "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=200&q=80",
     name: "Saman Malik",
-    role: "Customer Support Lead",
+    role: "Brand Designer",
   },
   {
-    text: "It preserves the essence of our source images while still giving every result a more elevated and art-directed finish.",
+    text: "Crisp 2x super-resolution and instantaneous cloud processing without installing heavy desktop software.",
     image:
       "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=200&q=80",
     name: "Omar Raza",
-    role: "CEO",
+    role: "Digital Artist",
   },
   {
-    text: "We saw immediate time savings once it became part of our content pipeline, especially for rapid visual explorations.",
+    text: "We integrated Luma Studio into our daily visual asset workflow. The speed and quality are unmatched.",
     image:
       "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?auto=format&fit=crop&w=200&q=80",
     name: "Zainab Hussain",
-    role: "Project Manager",
+    role: "Agency Founder",
   },
   {
-    text: "The outputs are premium enough for client reviews, which has helped us move from concept to approval much faster.",
+    text: "The watermark overlay feature protects all our client proofs seamlessly before final sign-off.",
     image:
       "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=200&q=80",
     name: "Aliza Khan",
-    role: "Business Analyst",
+    role: "Commercial Photographer",
   },
   {
-    text: "It gave our team a cleaner way to experiment with multiple directions without compromising subject fidelity.",
+    text: "It gave our team a cleaner way to isolate subjects without losing hair strands or soft transparency.",
     image:
       "https://images.unsplash.com/photo-1507591064344-4c6ce005b128?auto=format&fit=crop&w=200&q=80",
     name: "Farhan Siddiqui",
-    role: "Marketing Director",
+    role: "Head of Marketing",
   },
   {
-    text: "The experience feels premium end to end, and our customers noticed the jump in quality immediately.",
+    text: "The experience feels ultra-premium, intuitive, and blisteringly fast.",
     image:
       "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80",
     name: "Sana Sheikh",
-    role: "Sales Manager",
+    role: "Product Manager",
   },
   {
-    text: "The product helped us improve output quality and consistency while still giving the team room to move quickly.",
+    text: "Stripe checkout was instant, and unlimited AI edits on the Pro plan makes this an essential subscription.",
     image:
       "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=200&q=80",
     name: "Hassan Ali",
-    role: "E-commerce Manager",
+    role: "Senior Full-Stack Engineer",
   },
 ];
 
@@ -151,19 +158,19 @@ export const HOW_IT_WORKS_STEPS: HowItWorksStep[] = [
   {
     step: "Step 1",
     title: "Upload your image",
-    body: "Start with a portrait, pet photo, or scene you already love. Clear subjects and good lighting work best.",
+    body: "Upload any portrait, product photo, or landscape in JPG, PNG, or WebP format with secure cloud encryption.",
     icon: ImagePlusIcon,
   },
   {
     step: "Step 2",
-    title: "Choose a style",
-    body: "Pick a curated look like Storybook 3D, Anime Cel, or Clay Render without writing prompts or adjusting settings.",
-    icon: PaletteIcon,
+    title: "Choose an AI tool",
+    body: "Select Background Removal, AI Scene Replacement, 2x Super-Resolution Upscaling, or Watermark Overlay.",
+    icon: Wand2Icon,
   },
   {
     step: "Step 3",
-    title: "Generate the transformation",
-    body: "Luma restyles the image while protecting composition, identity cues, and the small details that matter.",
+    title: "Instant cloud magic",
+    body: "ImageKit AI processes your image in milliseconds. Compare before/after details with the live slider and download HD.",
     icon: SparklesIcon,
     featured: true,
   },

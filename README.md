@@ -1,88 +1,82 @@
-<h1 align="center">🎨 AI Image Generator SaaS – Next.js 2026 🚀</h1>
+<h1 align="center">✨ Luma Studio — AI Image Processing & Transformation Suite</h1>
 
-![Demo App](/public/screenshot-for-readme.png)
-
----
-
-## 🚀 Highlights
-
-- 🎨 AI Image Generation (powered by OpenAI)
-- 🏠 Premium Landing Page with 3D visuals & gradients
-- 🔐 Authentication via Clerk (Google, GitHub, Email & Password)
-- 🔑 Email Verification Flow
-- 🧠 Multiple AI Presets:
-  - Storybook
-  - Anime Cel
-  - Clay Render
-  - PixArt
-  - Voxel Block
-  - Marble Sculpture
-- 🧾 Image Generation History
-- 📊 User Dashboard (track generations left)
-- 💳 Subscription System:
-  - Free Plan → 3 generations/month
-  - Pro Plan ($19/month) → 75 generations
-  - Studio Plan ($29/month) → 175 generations
-- 🔄 Smart Upgrades (pay only the difference)
-- 📆 Monthly & Yearly Plans Support
-- 📩 Email Notifications & Receipts
-- 📂 PostgreSQL + Drizzle ORM
-- ⚡ Data Fetching with TanStack Query
-- 🎨 Tailwind CSS + Shadcn UI
-- 🛠️ Error Monitoring with Sentry
-- 🤖 AI-assisted development workflow (Cline)
-- 🚀 Deployment (free-tier friendly)
+<p align="center">
+  A production-grade AI-powered image editing platform built with <strong>Next.js 16</strong>, <strong>NextAuth.js</strong>, <strong>Prisma ORM</strong>, <strong>Neon PostgreSQL</strong>, <strong>ImageKit AI Transformations</strong>, and <strong>Stripe Billing</strong>.
+</p>
 
 ---
 
-## 🧠 What You’ll Learn
+## 🚀 Key Features
 
-- How to build a real AI SaaS product from scratch
-- How to integrate OpenAI for image generation
-- Authentication & user management with Clerk
-- Subscription payments & upgrade logic
-- Database design with PostgreSQL + Drizzle
-- Building premium 3D landing pages
-- Production-ready architecture & workflows
-- Deploying your app with a live URL
-
----
-
-## 🏗️ Tech Stack
-
-- **Framework:** Next.js (App Router)
-- **Language:** TypeScript
-- **UI:** Tailwind CSS + Shadcn
-- **Auth:** Clerk
-- **Database:** PostgreSQL (Neon) + Drizzle ORM
-- **Payments:** Clerk Billing
-- **AI:** OpenAI
-- **Monitoring:** Sentry
-- **Storage/CDN:** ImageKit
+- **🪄 AI Background Removal**: Instant subject isolation with edge detection and hair transparency (`e-bgremove` & `e-removedotbg`).
+- **🌄 AI Background Replacer**: Synthesize custom realistic backgrounds using text prompts (`e-changebg`).
+- **⚡ AI Super-Resolution Upscaling**: 2x resolution upscaling with high-frequency micro-texture enhancement (`e-upscale` & `e-retouch`).
+- **✍️ Watermark & Typography Overlay**: Real-time customizable text and branding watermarks with custom fonts, colors, and positioning.
+- **🎛️ Interactive Split Comparison Canvas**: Real-time draggable before-and-after comparison slider to inspect fine edge details.
+- **🔐 Google OAuth Authentication**: Effortless sign-in and session management via NextAuth.js.
+- **📊 Usage Quotas & Limiting**: 3 free uploads/transformations for new users, automatically tracked in PostgreSQL.
+- **💳 Stripe Subscription Integration**: Pro upgrade flow ($19/mo) with webhook-driven unlimited credit provisioning.
+- **📂 Cloud Image Delivery**: Client-side signed direct uploads to ImageKit with global CDN delivery.
 
 ---
 
-## ⚙️ .env Setup
+## 🛠️ Architecture & Tech Stack
 
-```bash
-DATABASE_URL="<your_database_url>"
+- **Framework**: Next.js 16 (App Router, Turbopack)
+- **Language**: TypeScript
+- **Database & ORM**: PostgreSQL (Neon Serverless) + Prisma ORM
+- **Authentication**: NextAuth.js (Google OAuth Provider)
+- **Image Pipeline**: ImageKit Next.js SDK & Real-time Transformation Engine
+- **Payments**: Stripe Checkout & Webhooks
+- **Styling**: Tailwind CSS v4, Lucide Icons, Radix UI Primitives
 
-NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY="<your_imagekit_public_key>"
-IMAGEKIT_PRIVATE_KEY="<your_imagekit_private_key>"
+---
 
-SENTRY_AUTH_TOKEN="<your_sentry_auth_token>"
+## ⚙️ Environment Variables
 
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="<your_clerk_publishable_key>"
-CLERK_SECRET_KEY="<your_clerk_secret_key>"
+Create a `.env` file with the following variables:
 
-OPEN_AI_API_KEY="<your_openai_api_key>"
+```env
+# Database (Neon PostgreSQL)
+DATABASE_URL="postgresql://user:password@endpoint.neon.tech/neondb?sslmode=require"
 
+# NextAuth
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="your-generated-secret-key"
 
+# Google OAuth
+GOOGLE_CLIENT_ID="your-google-client-id"
+GOOGLE_CLIENT_SECRET="your-google-client-secret"
+
+# ImageKit
+NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY="public_..."
+IMAGEKIT_PRIVATE_KEY="private_..."
+
+# Stripe
+STRIPE_SECRET_KEY="sk_test_..."
+STRIPE_PUBLISHABLE_KEY="pk_test_..."
+STRIPE_PRICE_ID="price_..."
+STRIPE_WEBHOOK_SECRET="whsec_..."
 ```
 
-## 🚀 Run the app
+---
 
-```bash
-npm install
-npm run dev
-```
+## 🏃 Getting Started
+
+1. **Install dependencies:**
+   ```bash
+   bun install
+   # or npm install
+   ```
+
+2. **Sync database schema:**
+   ```bash
+   bun x prisma db push
+   ```
+
+3. **Start development server:**
+   ```bash
+   bun run dev
+   ```
+
+4. Open [http://localhost:3000](http://localhost:3000) to view the landing page, or visit [http://localhost:3000/playground](http://localhost:3000/playground) to access the studio.
