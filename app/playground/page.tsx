@@ -39,14 +39,9 @@ export default function PlaygroundPage() {
                   priority
                 />
               </div>
-              <div className="min-w-0">
-                <span className="block text-sm sm:text-base font-bold tracking-tight text-white group-hover:text-primary transition-colors leading-tight">
-                  Aura Studio
-                </span>
-                <span className="block text-[10px] font-semibold uppercase tracking-widest text-primary leading-tight">
-                  AI Image Studio
-                </span>
-              </div>
+              <p className="font-mono text-xl sm:text-2xl font-bold uppercase tracking-wider text-primary truncate">
+                Aura Studio
+              </p>
             </Link>
           </div>
 
