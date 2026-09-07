@@ -166,14 +166,14 @@ export function HomeHeroSection() {
                         <CrownIcon className="size-3.5 text-primary" />
                         <span>Pro Member</span>
                       </span>
-                      <span className="sm:hidden flex items-center gap-1 rounded-full border border-primary/40 bg-primary/15 px-2 py-0.5 text-[10px] font-bold text-primary">
+                      <span className="sm:!hidden flex items-center gap-1 rounded-full border border-primary/40 bg-primary/15 px-2 py-0.5 text-[10px] font-bold text-primary">
                         <CrownIcon className="size-3 text-primary" />
                         <span>PRO</span>
                       </span>
                     </>
                   )}
 
-                  <Button variant="outline" asChild className="home-btn-studio-outline hidden xs:inline-flex">
+                  <Button variant="outline" asChild className="home-btn-studio-outline hidden sm:inline-flex">
                     <Link href="/playground" prefetch={false}>
                       Playground
                     </Link>
@@ -200,7 +200,7 @@ export function HomeHeroSection() {
                   <button
                     type="button"
                     onClick={() => setIsMobileMenuOpen((prev) => !prev)}
-                    className="flex size-8 items-center justify-center rounded-full border border-white/20 bg-white/10 text-foreground transition-colors hover:bg-white/20 md:hidden cursor-pointer"
+                    className="flex size-8 items-center justify-center rounded-full border border-white/20 bg-white/10 text-foreground transition-colors hover:bg-white/20 md:!hidden cursor-pointer"
                     aria-label="Toggle Navigation"
                   >
                     {isMobileMenuOpen ? <XIcon className="size-4" /> : <MenuIcon className="size-4" />}
@@ -225,7 +225,7 @@ export function HomeHeroSection() {
                   <button
                     type="button"
                     onClick={() => setIsMobileMenuOpen((prev) => !prev)}
-                    className="flex size-8 items-center justify-center rounded-full border border-white/20 bg-white/10 text-foreground transition-colors hover:bg-white/20 md:hidden cursor-pointer"
+                    className="flex size-8 items-center justify-center rounded-full border border-white/20 bg-white/10 text-foreground transition-colors hover:bg-white/20 md:!hidden cursor-pointer"
                     aria-label="Toggle Navigation"
                   >
                     {isMobileMenuOpen ? <XIcon className="size-4" /> : <MenuIcon className="size-4" />}
