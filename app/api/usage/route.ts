@@ -3,6 +3,8 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   try {
     const session = await getServerSession(authOptions);
@@ -28,13 +30,20 @@ export async function GET() {
     const isPro = user.plan === "PRO";
     const canUpload = isPro || user.usageCount < user.usageLimit;
 
-    return NextResponse.json({
-      usageCount: user.usageCount,
-      usageLimit: isPro ? 999999 : user.usageLimit,
-      plan: user.plan,
-      canUpload,
-      remaining: isPro ? 999999 : Math.max(0, user.usageLimit - user.usageCount),
-    });
+    return NextResponse.json(
+      {
+        usageCount: user.usageCount,
+        usageLimit: isPro ? 999999 : user.usageLimit,
+        plan: user.plan,
+        canUpload,
+        remaining: isPro ? 999999 : Math.max(0, user.usageLimit - user.usageCount),
+      },
+      {
+        headers: {
+          "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
+        },
+      }
+    );
   } catch (error) {
     console.error("Usage check error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

@@ -29,6 +29,7 @@ interface ToolControlsProps {
   onApplyTransform: () => void;
   isProcessing: boolean;
   canApply: boolean;
+  isPro?: boolean;
   usageData: {
     usageCount: number;
     usageLimit: number;
@@ -61,11 +62,12 @@ export function ToolControls({
   onApplyTransform,
   isProcessing,
   canApply,
+  isPro: isProProp,
   usageData,
   onOpenUpgradeModal,
 }: ToolControlsProps) {
   const selectedTool = STUDIO_TOOLS.find((t) => t.id === selectedToolId) || STUDIO_TOOLS[0];
-  const isPro = usageData?.plan === "PRO";
+  const isPro = Boolean(isProProp || usageData?.plan === "PRO");
 
   return (
     <div className="studio-panel flex flex-col gap-6 rounded-[2rem] border border-border/60 p-5 sm:p-7">

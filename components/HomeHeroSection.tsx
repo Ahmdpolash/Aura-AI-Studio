@@ -139,7 +139,7 @@ export function HomeHeroSection() {
             <div className="hero-demo-glass home-demo-glass-shell">
               <div className="hero-demo-glass-inner home-demo-inner">
                 <Image
-                  src="/demo.png"
+                  src="/image.png"
                   alt="Luma Studio workspace showing upload, AI tools, and interactive canvas comparison"
                   width={3290}
                   height={1872}

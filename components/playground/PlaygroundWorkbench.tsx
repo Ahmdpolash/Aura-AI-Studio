@@ -20,7 +20,7 @@ import {
 import { CheckCircleIcon, SparklesIcon } from "lucide-react";
 
 export function PlaygroundWorkbench() {
-  const { data: session, status } = useSession();
+  const { data: session, status, update } = useSession();
   const searchParams = useSearchParams();
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -49,12 +49,17 @@ export function PlaygroundWorkbench() {
 
   const [history, setHistory] = useState<GenerationItem[]>([]);
 
+  // Compute if user is PRO from either usageData or session
+  const isPro =
+    usageData?.plan === "PRO" ||
+    (session?.user as any)?.plan === "PRO";
+
   // Fetch usage stats & generation history
   const fetchUsageAndHistory = async () => {
     try {
       const [usageRes, historyRes] = await Promise.all([
-        fetch("/api/usage"),
-        fetch("/api/generations"),
+        fetch("/api/usage", { cache: "no-store" }),
+        fetch("/api/generations", { cache: "no-store" }),
       ]);
 
       if (usageRes.ok) {
@@ -80,10 +85,15 @@ export function PlaygroundWorkbench() {
       const verifySession = async () => {
         try {
           if (sessionId) {
-            await fetch(`/api/verify-checkout-session?session_id=${sessionId}`);
+            await fetch(`/api/verify-checkout-session?session_id=${sessionId}`, {
+              cache: "no-store",
+            });
           }
-          setUpgradeSuccessBanner(true);
+          if (update) {
+            await update();
+          }
           await fetchUsageAndHistory();
+          setUpgradeSuccessBanner(true);
           // Clean up URL
           router.replace("/playground");
         } catch (err) {
@@ -108,8 +118,7 @@ export function PlaygroundWorkbench() {
     }
 
     // Check if free quota exceeded
-    const isPro = usageData?.plan === "PRO";
-    if (usageData && !usageData.canUpload && !isPro) {
+    if (!isPro && usageData && !usageData.canUpload) {
       setIsUpgradeModalOpen(true);
       return;
     }
@@ -117,7 +126,7 @@ export function PlaygroundWorkbench() {
     try {
       setIsProcessing(true);
 
-      const authRes = await fetch("/api/upload-auth");
+      const authRes = await fetch("/api/upload-auth", { cache: "no-store" });
       if (!authRes.ok) throw new Error("Failed to get upload authorization");
       const authData = await authRes.json();
 
@@ -153,8 +162,7 @@ export function PlaygroundWorkbench() {
     }
 
     // Check quota limit
-    const isPro = usageData?.plan === "PRO";
-    if (usageData && !usageData.canUpload && !isPro) {
+    if (!isPro && usageData && !usageData.canUpload) {
       setIsUpgradeModalOpen(true);
       return;
     }
@@ -295,6 +303,7 @@ export function PlaygroundWorkbench() {
           onApplyTransform={handleApplyTransform}
           isProcessing={isProcessing}
           canApply={Boolean(originalImage)}
+          isPro={isPro}
           usageData={usageData}
           onOpenUpgradeModal={() => setIsUpgradeModalOpen(true)}
         />
