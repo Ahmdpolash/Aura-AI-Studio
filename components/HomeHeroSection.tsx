@@ -118,7 +118,7 @@ export function HomeHeroSection() {
           </h1>
 
           <p className="home-hero-lede">
-            Professional AI image editing powered by ImageKit. Isolate subjects, generate custom AI environments, enhance micro-details 2x, and stamp dynamic watermarks.
+            Professional AI image editing powered by Luma Neural Vision Engine. Isolate subjects, generate custom AI environments, enhance micro-details 2x, and stamp dynamic watermarks.
           </p>
 
           <div className="home-hero-ctas">

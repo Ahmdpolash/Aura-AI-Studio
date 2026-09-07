@@ -17,7 +17,7 @@ export function Footer() {
               Precision AI Background Removal, Upscaling & Watermarking.
             </h2>
             <p className="mt-4 text-sm leading-7 text-muted-foreground sm:text-base">
-              Transform your visual assets with ImageKit AI cloud pipeline. Effortlessly remove backgrounds, replace environments, upscale resolution, and brand images in real time.
+              Transform your visual assets with Luma AI Neural Pipeline. Effortlessly remove backgrounds, replace environments, upscale resolution, and brand images in real time.
             </p>
           </div>
 
@@ -75,7 +75,7 @@ export function Footer() {
 
         <div className="mt-8 flex flex-col gap-3 border-t border-border/60 pt-6 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
           <p>&copy; {year} Luma Studio. All rights reserved.</p>
-          <p>Powered by Next.js, Prisma, NextAuth & ImageKit.</p>
+          <p>Powered by Next.js, Prisma, NextAuth & Luma Neural Engine.</p>
         </div>
       </div>
     </footer>
