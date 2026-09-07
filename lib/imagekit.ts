@@ -71,7 +71,7 @@ export function getToolTransformation(toolId: TransformToolId, options?: Transfo
       const pos = options?.position || "bottom-right";
       const withBadge = options?.badgeBackground !== false;
 
-      let posParams = "lx-N30,ly-N30"; // default bottom-right
+      let posParams = "lx-N30,ly-N30";
       if (pos === "bottom-left") posParams = "lx-30,ly-N30";
       else if (pos === "top-right") posParams = "lx-N30,ly-30";
       else if (pos === "top-left") posParams = "lx-30,ly-30";

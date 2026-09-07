@@ -23,14 +23,12 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Missing session_id parameter" }, { status: 400 });
     }
 
-    // Retrieve session from Stripe directly
     const checkoutSession = await stripe.checkout.sessions.retrieve(sessionId);
 
     if (!checkoutSession) {
       return NextResponse.json({ error: "Checkout session not found" }, { status: 404 });
     }
 
-    // Verify payment was completed
     const isPaid =
       checkoutSession.payment_status === "paid" || checkoutSession.status === "complete";
 
@@ -47,7 +45,6 @@ export async function GET(request: NextRequest) {
     const customerId = checkoutSession.customer as string;
     const subscriptionId = checkoutSession.subscription as string;
 
-    // Resolve user by ID first, fallback to email
     let user = null;
     if (userId) {
       user = await prisma.user.findUnique({ where: { id: userId } });
@@ -60,7 +57,6 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "User not found for this checkout session" }, { status: 404 });
     }
 
-    // Update user in Prisma database to PRO automatically
     const updatedUser = await prisma.user.update({
       where: { id: user.id },
       data: {
@@ -70,7 +66,6 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    // If subscription was created, persist it in DB
     if (subscriptionId && customerId) {
       await prisma.subscription.upsert({
         where: { stripeSubscriptionId: subscriptionId },

@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
     const signature = request.headers.get("stripe-signature");
 
     if (!webhookSecret) {
-      console.warn("⚠️ STRIPE_WEBHOOK_SECRET is not configured in environment variables. Webhook skipped.");
+      console.warn("STRIPE_WEBHOOK_SECRET is not configured. Webhook skipped.");
       return NextResponse.json(
         { message: "Webhook secret not configured, skipping verification" },
         { status: 200 }

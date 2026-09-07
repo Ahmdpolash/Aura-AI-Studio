@@ -55,12 +55,10 @@ export function PlaygroundWorkbench() {
 
   const [history, setHistory] = useState<GenerationItem[]>([]);
 
-  // Compute if user is PRO from either usageData or session
   const isPro =
     usageData?.plan === "PRO" ||
     (session?.user as any)?.plan === "PRO";
 
-  // Fetch usage stats & generation history
   const fetchUsageAndHistory = async () => {
     try {
       const [usageRes, historyRes] = await Promise.all([
@@ -82,7 +80,6 @@ export function PlaygroundWorkbench() {
     }
   };
 
-  // Verify checkout session on redirect from Stripe
   useEffect(() => {
     const sessionId = searchParams.get("session_id");
     const isUpgraded = searchParams.get("upgraded");
@@ -100,7 +97,6 @@ export function PlaygroundWorkbench() {
           }
           await fetchUsageAndHistory();
           setUpgradeSuccessBanner(true);
-          // Clean up URL
           router.replace("/playground");
         } catch (err) {
           console.error("Error verifying checkout session:", err);
@@ -123,13 +119,11 @@ export function PlaygroundWorkbench() {
       return;
     }
 
-    // Check if free quota exceeded
     if (!isPro && usageData && !usageData.canUpload) {
       setIsUpgradeModalOpen(true);
       return;
     }
 
-    // Immediate local preview so the user feels instant responsiveness
     const localBlobUrl = URL.createObjectURL(file);
     setOriginalImage(localBlobUrl);
     setOriginalFileName(file.name);
@@ -175,7 +169,6 @@ export function PlaygroundWorkbench() {
       return;
     }
 
-    // Check quota limit
     if (!isPro && usageData && !usageData.canUpload) {
       setIsUpgradeModalOpen(true);
       return;
@@ -195,7 +188,6 @@ export function PlaygroundWorkbench() {
 
       const transformedUrl = buildTransformedImageUrl(originalImage, [transformStr]);
 
-      // Poll ImageKit URL until ready
       let isReady = false;
       let attempts = 0;
       const maxAttempts = 30;
@@ -212,14 +204,12 @@ export function PlaygroundWorkbench() {
             break;
           }
         } catch {
-          // Retry
         }
         await new Promise((resolve) => setTimeout(resolve, 2000));
       }
 
       setProcessedImage(transformedUrl);
 
-      // Increment usage count and persist generation record
       await fetch("/api/usage", { method: "POST" });
       await fetch("/api/generations", {
         method: "POST",
@@ -233,7 +223,6 @@ export function PlaygroundWorkbench() {
         }),
       });
 
-      // Refresh counters and history
       await fetchUsageAndHistory();
     } catch (err) {
       console.error("AI Transformation error:", err);
@@ -252,7 +241,6 @@ export function PlaygroundWorkbench() {
 
   return (
     <div className="w-full">
-      {/* Upgrade Success Notification Banner */}
       {upgradeSuccessBanner && (
         <div className="mb-6 flex items-center justify-between rounded-2xl border border-primary/40 bg-primary/10 p-4 text-foreground shadow-[0_0_30px_rgba(255,180,0,0.15)] backdrop-blur-md">
           <div className="flex items-center gap-3">
@@ -277,7 +265,6 @@ export function PlaygroundWorkbench() {
         </div>
       )}
 
-      {/* Hidden File Input */}
       <input
         ref={fileInputRef}
         type="file"
@@ -289,9 +276,7 @@ export function PlaygroundWorkbench() {
         }}
       />
 
-      {/* Main Grid Workbench */}
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] xl:gap-8">
-        {/* Left: Canvas Viewer with Before/After Slider */}
         <CanvasViewer
           originalImage={originalImage}
           processedImage={processedImage}
@@ -306,7 +291,6 @@ export function PlaygroundWorkbench() {
           }}
         />
 
-        {/* Right: AI Tools & Parameters Controls */}
         <ToolControls
           selectedToolId={selectedTool.id}
           onSelectTool={setSelectedTool}
@@ -331,10 +315,8 @@ export function PlaygroundWorkbench() {
         />
       </div>
 
-      {/* History Gallery */}
       <HistoryGallery history={history} onSelectResult={handleSelectHistory} />
 
-      {/* Pro Upgrade Modal */}
       <UpgradeModal
         isOpen={isUpgradeModalOpen}
         onClose={() => setIsUpgradeModalOpen(false)}

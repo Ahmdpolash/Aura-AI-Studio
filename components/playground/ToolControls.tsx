@@ -87,7 +87,6 @@ export function ToolControls({
 
   return (
     <div className="studio-panel flex flex-col gap-6 rounded-[2rem] border border-border/60 p-5 sm:p-7">
-      {/* Usage Quota Card */}
       <div className="flex flex-col gap-3 rounded-2xl border border-border/50 bg-background/35 p-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
           <div className="flex size-10 items-center justify-center rounded-xl border border-primary/30 bg-primary/10 text-primary">
@@ -116,7 +115,6 @@ export function ToolControls({
         )}
       </div>
 
-      {/* Tool Categories Selection */}
       <div>
         <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
           1. Choose AI Tool
@@ -167,7 +165,6 @@ export function ToolControls({
         </div>
       </div>
 
-      {/* Dynamic Parameters for Selected Tool */}
       <div className="rounded-2xl border border-border/40 bg-background/25 p-4">
         <div className="flex items-center gap-2">
           <SparklesIcon className="size-4 text-primary" />
@@ -177,7 +174,6 @@ export function ToolControls({
         </div>
         <p className="mt-1 text-xs text-muted-foreground">{selectedTool.description}</p>
 
-        {/* Prompt Input for Change Background or GenFill */}
         {selectedTool.requiresPrompt && (
           <div className="mt-4 space-y-3">
             <label className="text-xs font-medium text-foreground">
@@ -211,7 +207,6 @@ export function ToolControls({
           </div>
         )}
 
-        {/* Watermark & Text Overlay Controls */}
         {selectedTool.requiresTextWatermark && (
           <div className="mt-4 space-y-4">
             <div>
@@ -265,7 +260,6 @@ export function ToolControls({
                 </div>
               </div>
 
-              {/* Watermark Position Selector */}
               <div>
                 <label className="text-xs font-medium text-foreground">Watermark Position</label>
                 <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-3">
@@ -287,7 +281,6 @@ export function ToolControls({
                 </div>
               </div>
 
-              {/* Premium Glass Badge Background Toggle */}
               <div className="flex items-center justify-between rounded-xl border border-border/50 bg-card/50 p-3">
                 <div>
                   <p className="text-xs font-semibold text-foreground">Glass Badge Background</p>
@@ -313,7 +306,6 @@ export function ToolControls({
           )}
       </div>
 
-      {/* Main Action Button */}
       <Button
         onClick={onApplyTransform}
         disabled={!canApply || isProcessing}

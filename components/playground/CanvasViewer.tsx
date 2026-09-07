@@ -94,10 +94,8 @@ export function CanvasViewer({
     if (isUploading) {
       return (
         <div className="studio-panel-inset relative flex min-h-[540px] flex-col items-center justify-center overflow-hidden rounded-[2.2rem] border border-primary/40 bg-card/40 p-8 text-center sm:p-12 backdrop-blur-md">
-          {/* Ambient Glow */}
           <div className="pointer-events-none absolute -top-24 size-72 rounded-full bg-primary/15 blur-3xl animate-pulse" />
 
-          {/* Animated Spinner & Upload Icon */}
           <div className="relative mx-auto mb-6 flex size-24 items-center justify-center rounded-3xl border border-primary/40 bg-primary/15 text-primary shadow-[0_0_50px_rgba(255,180,0,0.3)]">
             <Loader2Icon className="size-12 animate-spin text-primary" />
             <UploadCloudIcon className="absolute size-6 text-primary animate-pulse" />
@@ -122,7 +120,6 @@ export function CanvasViewer({
             Synchronizing and preparing high-resolution image for AI tools. Please wait a moment...
           </p>
 
-          {/* Animated Loading Bar */}
           <div className="mt-7 w-full max-w-xs overflow-hidden rounded-full bg-border/40 p-0.5">
             <div className="h-1.5 w-full rounded-full bg-gradient-to-r from-transparent via-primary to-transparent animate-pulse" />
           </div>
@@ -222,7 +219,6 @@ export function CanvasViewer({
         </div>
       </div>
 
-      {/* Main Interactive Canvas Area with Transparency Checkered Background */}
       <div
         ref={containerRef}
         onMouseMove={handleMouseMove}
@@ -231,7 +227,6 @@ export function CanvasViewer({
         onTouchMove={handleTouchMove}
         className="transparency-checkered relative aspect-[4/3] w-full select-none overflow-hidden rounded-[2rem] border border-border/70 shadow-2xl"
       >
-        {/* Uploading Glass Overlay */}
         {isUploading && (
           <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/75 p-6 backdrop-blur-md">
             <div className="relative flex size-20 items-center justify-center rounded-3xl border border-primary/40 bg-primary/15 text-primary shadow-[0_0_50px_rgba(255,180,0,0.35)]">
@@ -251,7 +246,6 @@ export function CanvasViewer({
           </div>
         )}
 
-        {/* Processing Glass Overlay */}
         {isProcessing && (
           <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/70 p-6 backdrop-blur-md">
             <div className="flex size-16 items-center justify-center rounded-2xl border border-primary/40 bg-primary/15 text-primary shadow-[0_0_40px_rgba(255,180,0,0.3)]">
@@ -266,10 +260,8 @@ export function CanvasViewer({
           </div>
         )}
 
-        {/* Split View Slider Mode */}
         {isSplitView && processedImage ? (
           <div className="relative h-full w-full">
-            {/* Original Image Layer (Left: clipped to sliderPosition) */}
             <div
               className="absolute inset-0 flex items-center justify-center overflow-hidden p-2"
               style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
@@ -284,7 +276,6 @@ export function CanvasViewer({
               </span>
             </div>
 
-            {/* Transformed Image Layer (Right: clipped from 0 to sliderPosition) */}
             <div
               className="absolute inset-0 flex items-center justify-center overflow-hidden p-2"
               style={{ clipPath: `inset(0 0 0 ${sliderPosition}%)` }}
@@ -299,7 +290,6 @@ export function CanvasViewer({
               </span>
             </div>
 
-            {/* Draggable Divider Line and Knob */}
             <div
               onMouseDown={handleMouseDown}
               onTouchStart={handleMouseDown}
@@ -312,7 +302,6 @@ export function CanvasViewer({
             </div>
           </div>
         ) : (
-          /* Single View Mode */
           <div className="relative flex h-full w-full items-center justify-center p-2">
             <img
               src={activeImage}
