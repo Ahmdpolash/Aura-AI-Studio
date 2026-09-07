@@ -36,6 +36,8 @@ export function PlaygroundWorkbench() {
   const [watermarkColor, setWatermarkColor] = useState("#FFFFFF");
 
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadingFileName, setUploadingFileName] = useState<string | null>(null);
   const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
   const [upgradeSuccessBanner, setUpgradeSuccessBanner] = useState(false);
 
@@ -123,9 +125,15 @@ export function PlaygroundWorkbench() {
       return;
     }
 
-    try {
-      setIsProcessing(true);
+    // Immediate local preview so the user feels instant responsiveness
+    const localBlobUrl = URL.createObjectURL(file);
+    setOriginalImage(localBlobUrl);
+    setOriginalFileName(file.name);
+    setProcessedImage(null);
+    setIsUploading(true);
+    setUploadingFileName(file.name);
 
+    try {
       const authRes = await fetch("/api/upload-auth", { cache: "no-store" });
       if (!authRes.ok) throw new Error("Failed to get upload authorization");
       const authData = await authRes.json();
@@ -143,18 +151,20 @@ export function PlaygroundWorkbench() {
       if (uploadResult?.url) {
         setOriginalImage(uploadResult.url);
         setOriginalFileName(file.name);
-        setProcessedImage(null);
       }
     } catch (err) {
       console.error("Image upload failed:", err);
       alert("Failed to upload image. Please try again.");
+      setOriginalImage(null);
+      setOriginalFileName(null);
     } finally {
-      setIsProcessing(false);
+      setIsUploading(false);
+      setUploadingFileName(null);
     }
   };
 
   const handleApplyTransform = async () => {
-    if (!originalImage) return;
+    if (!originalImage || isUploading || isProcessing) return;
 
     if (!session?.user) {
       signIn("google");
@@ -280,6 +290,8 @@ export function PlaygroundWorkbench() {
           originalImage={originalImage}
           processedImage={processedImage}
           isProcessing={isProcessing}
+          isUploading={isUploading}
+          uploadingFileName={uploadingFileName}
           activeToolName={selectedTool.name}
           onUploadClick={() => fileInputRef.current?.click()}
           onSampleSelect={(url) => {
@@ -301,8 +313,8 @@ export function PlaygroundWorkbench() {
           watermarkColor={watermarkColor}
           onWatermarkColorChange={setWatermarkColor}
           onApplyTransform={handleApplyTransform}
-          isProcessing={isProcessing}
-          canApply={Boolean(originalImage)}
+          isProcessing={isProcessing || isUploading}
+          canApply={Boolean(originalImage && !isUploading && !isProcessing)}
           isPro={isPro}
           usageData={usageData}
           onOpenUpgradeModal={() => setIsUpgradeModalOpen(true)}

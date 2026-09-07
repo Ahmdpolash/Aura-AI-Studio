@@ -17,6 +17,8 @@ interface CanvasViewerProps {
   originalImage: string | null;
   processedImage: string | null;
   isProcessing: boolean;
+  isUploading?: boolean;
+  uploadingFileName?: string | null;
   activeToolName?: string;
   onUploadClick: () => void;
   onSampleSelect?: (sampleUrl: string) => void;
@@ -33,6 +35,8 @@ export function CanvasViewer({
   originalImage,
   processedImage,
   isProcessing,
+  isUploading = false,
+  uploadingFileName,
   activeToolName,
   onUploadClick,
   onSampleSelect,
@@ -87,6 +91,45 @@ export function CanvasViewer({
   };
 
   if (!originalImage) {
+    if (isUploading) {
+      return (
+        <div className="studio-panel-inset relative flex min-h-[540px] flex-col items-center justify-center overflow-hidden rounded-[2.2rem] border border-primary/40 bg-card/40 p-8 text-center sm:p-12 backdrop-blur-md">
+          {/* Ambient Glow */}
+          <div className="pointer-events-none absolute -top-24 size-72 rounded-full bg-primary/15 blur-3xl animate-pulse" />
+
+          {/* Animated Spinner & Upload Icon */}
+          <div className="relative mx-auto mb-6 flex size-24 items-center justify-center rounded-3xl border border-primary/40 bg-primary/15 text-primary shadow-[0_0_50px_rgba(255,180,0,0.3)]">
+            <Loader2Icon className="size-12 animate-spin text-primary" />
+            <UploadCloudIcon className="absolute size-6 text-primary animate-pulse" />
+          </div>
+
+          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3.5 py-1 text-xs font-semibold text-primary">
+            <span className="size-2 rounded-full bg-primary animate-ping" />
+            Uploading to ImageKit Secure CDN
+          </div>
+
+          <h3 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+            Uploading Your Image...
+          </h3>
+
+          {uploadingFileName && (
+            <p className="mt-3 max-w-sm truncate rounded-xl border border-border/60 bg-background/50 px-4 py-1.5 text-xs font-medium text-foreground">
+              📄 {uploadingFileName}
+            </p>
+          )}
+
+          <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
+            Synchronizing and preparing high-resolution image for AI tools. Please wait a moment...
+          </p>
+
+          {/* Animated Loading Bar */}
+          <div className="mt-7 w-full max-w-xs overflow-hidden rounded-full bg-border/40 p-0.5">
+            <div className="h-1.5 w-full rounded-full bg-gradient-to-r from-transparent via-primary to-transparent animate-pulse" />
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className="studio-panel-inset relative flex min-h-[540px] flex-col items-center justify-center rounded-[2.2rem] border border-dashed border-border/70 p-8 text-center sm:p-12">
         <div className="mx-auto mb-5 flex size-20 items-center justify-center rounded-3xl border border-primary/25 bg-primary/10 text-primary shadow-[0_0_35px_rgba(255,180,0,0.15)]">
@@ -188,6 +231,26 @@ export function CanvasViewer({
         onTouchMove={handleTouchMove}
         className="transparency-checkered relative aspect-[4/3] w-full select-none overflow-hidden rounded-[2rem] border border-border/70 shadow-2xl"
       >
+        {/* Uploading Glass Overlay */}
+        {isUploading && (
+          <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/75 p-6 backdrop-blur-md">
+            <div className="relative flex size-20 items-center justify-center rounded-3xl border border-primary/40 bg-primary/15 text-primary shadow-[0_0_50px_rgba(255,180,0,0.35)]">
+              <Loader2Icon className="size-10 animate-spin text-primary" />
+              <UploadCloudIcon className="absolute size-5 text-primary/80 animate-pulse" />
+            </div>
+            <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3.5 py-1 text-xs font-semibold text-primary">
+              <span className="size-2 rounded-full bg-primary animate-ping" />
+              Uploading to Cloud CDN
+            </div>
+            <p className="mt-2 max-w-xs truncate text-base font-bold text-foreground">
+              {uploadingFileName || "Uploading Image..."}
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Optimizing high-res pixels for AI pipeline...
+            </p>
+          </div>
+        )}
+
         {/* Processing Glass Overlay */}
         {isProcessing && (
           <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/70 p-6 backdrop-blur-md">
