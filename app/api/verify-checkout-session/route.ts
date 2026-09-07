@@ -38,17 +38,35 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Payment was not completed" }, { status: 400 });
     }
 
-    const customerEmail = checkoutSession.customer_email || session.user.email;
+    const customerEmail =
+      checkoutSession.metadata?.email ||
+      session.user.email ||
+      checkoutSession.customer_email ||
+      checkoutSession.customer_details?.email;
+    const userId = checkoutSession.metadata?.userId;
     const customerId = checkoutSession.customer as string;
     const subscriptionId = checkoutSession.subscription as string;
 
-    // Update user in Prisma database to PRO
+    // Resolve user by ID first, fallback to email
+    let user = null;
+    if (userId) {
+      user = await prisma.user.findUnique({ where: { id: userId } });
+    }
+    if (!user && customerEmail) {
+      user = await prisma.user.findUnique({ where: { email: customerEmail } });
+    }
+
+    if (!user) {
+      return NextResponse.json({ error: "User not found for this checkout session" }, { status: 404 });
+    }
+
+    // Update user in Prisma database to PRO automatically
     const updatedUser = await prisma.user.update({
-      where: { email: customerEmail },
+      where: { id: user.id },
       data: {
         plan: "PRO",
         usageLimit: 999999,
-        stripeCustomerId: customerId || undefined,
+        stripeCustomerId: customerId || user.stripeCustomerId || undefined,
       },
     });
 

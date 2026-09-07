@@ -13,8 +13,16 @@ export async function POST(request: NextRequest) {
     const body = await request.text();
     const signature = request.headers.get("stripe-signature");
 
-    if (!signature || !webhookSecret) {
-      return NextResponse.json({ error: "Missing webhook signature or secret" }, { status: 400 });
+    if (!webhookSecret) {
+      console.warn("⚠️ STRIPE_WEBHOOK_SECRET is not configured in environment variables. Webhook skipped.");
+      return NextResponse.json(
+        { message: "Webhook secret not configured, skipping verification" },
+        { status: 200 }
+      );
+    }
+
+    if (!signature) {
+      return NextResponse.json({ error: "Missing stripe-signature header" }, { status: 400 });
     }
 
     let event: Stripe.Event;
@@ -29,24 +37,27 @@ export async function POST(request: NextRequest) {
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session;
         const userId = session.metadata?.userId;
-        const customerEmail = session.customer_email || session.metadata?.email;
+        const customerEmail =
+          session.metadata?.email ||
+          session.customer_email ||
+          session.customer_details?.email;
+        const customerId = session.customer as string;
 
+        let user = null;
         if (userId) {
+          user = await prisma.user.findUnique({ where: { id: userId } });
+        }
+        if (!user && customerEmail) {
+          user = await prisma.user.findUnique({ where: { email: customerEmail } });
+        }
+
+        if (user) {
           await prisma.user.update({
-            where: { id: userId },
+            where: { id: user.id },
             data: {
               plan: "PRO",
               usageLimit: 999999,
-              stripeCustomerId: (session.customer as string) || undefined,
-            },
-          });
-        } else if (customerEmail) {
-          await prisma.user.update({
-            where: { email: customerEmail },
-            data: {
-              plan: "PRO",
-              usageLimit: 999999,
-              stripeCustomerId: (session.customer as string) || undefined,
+              stripeCustomerId: customerId || user.stripeCustomerId || undefined,
             },
           });
         }
@@ -55,18 +66,28 @@ export async function POST(request: NextRequest) {
 
       case "customer.subscription.created": {
         const subscription = event.data.object as Stripe.Subscription;
+        const customerId = subscription.customer as string;
         const userId = subscription.metadata?.userId;
+
+        let user = null;
         if (userId) {
+          user = await prisma.user.findUnique({ where: { id: userId } });
+        }
+        if (!user && customerId) {
+          user = await prisma.user.findFirst({ where: { stripeCustomerId: customerId } });
+        }
+
+        if (user) {
           await prisma.subscription.upsert({
             where: { stripeSubscriptionId: subscription.id },
             update: {
               status: subscription.status,
-              stripeCustomerId: subscription.customer as string,
+              stripeCustomerId: customerId,
             },
             create: {
-              userId,
+              userId: user.id,
               stripeSubscriptionId: subscription.id,
-              stripeCustomerId: subscription.customer as string,
+              stripeCustomerId: customerId,
               status: subscription.status,
             },
           });
@@ -76,23 +97,30 @@ export async function POST(request: NextRequest) {
 
       case "customer.subscription.updated": {
         const subscription = event.data.object as Stripe.Subscription;
+        const customerId = subscription.customer as string;
         const userId = subscription.metadata?.userId;
 
-        if (subscription.status === "active") {
-          if (userId) {
+        let user = null;
+        if (userId) {
+          user = await prisma.user.findUnique({ where: { id: userId } });
+        }
+        if (!user && customerId) {
+          user = await prisma.user.findFirst({ where: { stripeCustomerId: customerId } });
+        }
+
+        if (user) {
+          if (subscription.status === "active") {
             await prisma.user.update({
-              where: { id: userId },
+              where: { id: user.id },
               data: { plan: "PRO", usageLimit: 999999 },
             });
-          }
-        } else if (
-          subscription.status === "canceled" ||
-          subscription.status === "unpaid" ||
-          subscription.status === "past_due"
-        ) {
-          if (userId) {
+          } else if (
+            subscription.status === "canceled" ||
+            subscription.status === "unpaid" ||
+            subscription.status === "past_due"
+          ) {
             await prisma.user.update({
-              where: { id: userId },
+              where: { id: user.id },
               data: { plan: "FREE", usageLimit: 3 },
             });
           }
@@ -102,11 +130,20 @@ export async function POST(request: NextRequest) {
 
       case "customer.subscription.deleted": {
         const subscription = event.data.object as Stripe.Subscription;
+        const customerId = subscription.customer as string;
         const userId = subscription.metadata?.userId;
 
+        let user = null;
         if (userId) {
+          user = await prisma.user.findUnique({ where: { id: userId } });
+        }
+        if (!user && customerId) {
+          user = await prisma.user.findFirst({ where: { stripeCustomerId: customerId } });
+        }
+
+        if (user) {
           await prisma.user.update({
-            where: { id: userId },
+            where: { id: user.id },
             data: { plan: "FREE", usageLimit: 3 },
           });
           await prisma.subscription.deleteMany({

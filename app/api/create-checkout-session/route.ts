@@ -8,7 +8,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
   apiVersion: "2025-02-24.acacia" as any,
 });
 
-export async function POST() {
+export async function POST(request: Request) {
   try {
     const session = await getServerSession(authOptions);
 
@@ -31,10 +31,13 @@ export async function POST() {
       );
     }
 
-    const appUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
+    const origin =
+      request.headers.get("origin") ||
+      request.headers.get("referer")?.replace(/\/$/, "") ||
+      process.env.NEXTAUTH_URL ||
+      "http://localhost:3000";
 
-    const checkoutSession = await stripe.checkout.sessions.create({
-      customer_email: user.email,
+    const sessionConfig: Stripe.Checkout.SessionCreateParams = {
       line_items: [
         {
           price: process.env.STRIPE_PRICE_ID,
@@ -42,8 +45,8 @@ export async function POST() {
         },
       ],
       mode: "subscription",
-      success_url: `${appUrl}/playground?upgraded=true&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${appUrl}/playground?payment_canceled=true`,
+      success_url: `${origin}/playground?upgraded=true&session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${origin}/playground?payment_canceled=true`,
       metadata: {
         userId: user.id,
         email: user.email,
@@ -54,7 +57,15 @@ export async function POST() {
           email: user.email,
         },
       },
-    });
+    };
+
+    if (user.stripeCustomerId) {
+      sessionConfig.customer = user.stripeCustomerId;
+    } else {
+      sessionConfig.customer_email = user.email;
+    }
+
+    const checkoutSession = await stripe.checkout.sessions.create(sessionConfig);
 
     return NextResponse.json({
       sessionId: checkoutSession.id,
