@@ -24,10 +24,10 @@ interface HistoryGalleryProps {
 export function HistoryGallery({ history, isLoading = false, onSelectResult }: HistoryGalleryProps) {
   if (isLoading) {
     return (
-      <div className="mt-8 rounded-[2rem] border border-border/50 bg-card/30 p-5 backdrop-blur-md sm:p-7">
+      <div className="mt-8 rounded-[2rem] border border-border/50 bg-card/30 p-5 backdrop-blur-md transition-all duration-300 sm:p-7">
         <div className="mb-4 flex items-center gap-2.5">
           <div className="size-5 rounded-md bg-muted/60 animate-pulse" />
-          <div className="h-5 w-40 rounded-lg bg-muted/60 animate-pulse" />
+          <div className="h-5 w-44 rounded-lg bg-muted/60 animate-pulse" />
           <div className="h-4 w-6 rounded-full bg-muted/40 animate-pulse" />
         </div>
 
@@ -35,11 +35,11 @@ export function HistoryGallery({ history, isLoading = false, onSelectResult }: H
           {Array.from({ length: 4 }).map((_, idx) => (
             <div
               key={idx}
-              className="overflow-hidden rounded-2xl border border-border/40 bg-card/40 p-2"
+              className="overflow-hidden rounded-2xl border border-border/40 bg-background/40 p-2 shadow-sm"
             >
-              <div className="aspect-square w-full rounded-xl bg-muted/30 animate-pulse" />
+              <div className="aspect-square w-full rounded-xl bg-muted/40 animate-pulse" />
               <div className="mt-2.5 flex items-center justify-between px-1">
-                <div className="h-4 w-20 rounded-md bg-muted/40 animate-pulse" />
+                <div className="h-4 w-20 rounded-md bg-muted/50 animate-pulse" />
                 <div className="size-5 rounded-full bg-muted/30 animate-pulse" />
               </div>
             </div>
@@ -59,7 +59,7 @@ export function HistoryGallery({ history, isLoading = false, onSelectResult }: H
   };
 
   return (
-    <div className="mt-8 rounded-[2rem] border border-border/50 bg-card/30 p-5 backdrop-blur-md sm:p-7">
+    <div className="mt-8 animate-in fade-in duration-300 rounded-[2rem] border border-border/50 bg-card/30 p-5 backdrop-blur-md sm:p-7">
       <div className="mb-4 flex items-center gap-2">
         <HistoryIcon className="size-5 text-primary" />
         <h3 className="text-lg font-bold text-foreground">Recent Generations</h3>

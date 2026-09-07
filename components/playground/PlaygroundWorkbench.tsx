@@ -111,10 +111,13 @@ export function PlaygroundWorkbench() {
   }, [searchParams]);
 
   useEffect(() => {
-    if (session?.user) {
+    if (status === "authenticated") {
+      setIsLoadingHistory(true);
       fetchUsageAndHistory();
+    } else if (status === "unauthenticated") {
+      setIsLoadingHistory(false);
     }
-  }, [session]);
+  }, [status, session?.user]);
 
   const handleFileUpload = async (file: File) => {
     if (!session?.user) {
