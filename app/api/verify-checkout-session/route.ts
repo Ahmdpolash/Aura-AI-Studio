@@ -1,0 +1,85 @@
+import { NextRequest, NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import Stripe from "stripe";
+import { prisma } from "@/lib/prisma";
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
+  apiVersion: "2025-02-24.acacia" as any,
+});
+
+export async function GET(request: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions);
+
+    if (!session?.user?.email) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const searchParams = request.nextUrl.searchParams;
+    const sessionId = searchParams.get("session_id");
+
+    if (!sessionId) {
+      return NextResponse.json({ error: "Missing session_id parameter" }, { status: 400 });
+    }
+
+    // Retrieve session from Stripe directly
+    const checkoutSession = await stripe.checkout.sessions.retrieve(sessionId);
+
+    if (!checkoutSession) {
+      return NextResponse.json({ error: "Checkout session not found" }, { status: 404 });
+    }
+
+    // Verify payment was completed
+    const isPaid =
+      checkoutSession.payment_status === "paid" || checkoutSession.status === "complete";
+
+    if (!isPaid) {
+      return NextResponse.json({ error: "Payment was not completed" }, { status: 400 });
+    }
+
+    const customerEmail = checkoutSession.customer_email || session.user.email;
+    const customerId = checkoutSession.customer as string;
+    const subscriptionId = checkoutSession.subscription as string;
+
+    // Update user in Prisma database to PRO
+    const updatedUser = await prisma.user.update({
+      where: { email: customerEmail },
+      data: {
+        plan: "PRO",
+        usageLimit: 999999,
+        stripeCustomerId: customerId || undefined,
+      },
+    });
+
+    // If subscription was created, persist it in DB
+    if (subscriptionId && customerId) {
+      await prisma.subscription.upsert({
+        where: { stripeSubscriptionId: subscriptionId },
+        update: {
+          status: "active",
+          stripeCustomerId: customerId,
+        },
+        create: {
+          userId: updatedUser.id,
+          stripeSubscriptionId: subscriptionId,
+          stripeCustomerId: customerId,
+          status: "active",
+        },
+      });
+    }
+
+    return NextResponse.json({
+      success: true,
+      plan: "PRO",
+      usageLimit: 999999,
+      user: updatedUser,
+    });
+  } catch (error: any) {
+    console.error("Verify checkout session error:", error);
+    return NextResponse.json(
+      { error: error?.message || "Failed to verify session" },
+      { status: 500 }
+    );
+  }
+}
