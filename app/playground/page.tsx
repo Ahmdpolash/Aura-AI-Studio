@@ -28,20 +28,25 @@ export default function PlaygroundPage() {
               <span className="hidden sm:inline">Back Home</span>
             </Link>
 
-            <Link href="/" className="flex min-w-0 items-center gap-2 sm:gap-3">
-              <span className="relative flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center overflow-visible">
+            <Link href="/" className="group flex min-w-0 items-center gap-2.5 sm:gap-3">
+              <div className="flex size-9 sm:size-10 shrink-0 items-center justify-center rounded-xl border border-primary/40 bg-gradient-to-br from-primary/25 via-primary/10 to-transparent p-1 shadow-[0_0_15px_rgba(255,140,0,0.25)] group-hover:scale-105 group-hover:shadow-[0_0_20px_rgba(255,140,0,0.4)] transition-all overflow-hidden">
                 <Image
                   src="/logo.png"
-                  alt="Aura AI Studio"
-                  width={64}
-                  height={64}
-                  className="max-h-none max-w-none origin-left scale-[1.35] sm:scale-[1.5] object-cover"
+                  alt="Aura Studio"
+                  width={48}
+                  height={48}
+                  className="size-7 sm:size-8 object-contain scale-[1.35]"
                   priority
                 />
-              </span>
-              <p className="font-mono text-base sm:text-2xl font-bold uppercase tracking-wider text-primary truncate">
-                Aura Studio
-              </p>
+              </div>
+              <div className="min-w-0">
+                <span className="block text-sm sm:text-base font-bold tracking-tight text-white group-hover:text-primary transition-colors leading-tight">
+                  Aura Studio
+                </span>
+                <span className="block text-[10px] font-semibold uppercase tracking-widest text-primary leading-tight">
+                  AI Image Studio
+                </span>
+              </div>
             </Link>
           </div>
 
