@@ -125,7 +125,7 @@ export function HomeHeroSection() {
               <span className="relative mr-1.5 flex h-9 w-9 shrink-0 items-center justify-center overflow-visible sm:mr-2 sm:h-10 sm:w-10">
                 <Image
                   src="/logo.png"
-                  alt="Luma Studio"
+                  alt="Aura Studio"
                   width={72}
                   height={72}
                   className="h-9 w-9 max-h-none max-w-none origin-left scale-[1.5] object-cover sm:h-10 sm:w-10 sm:scale-[1.55]"
@@ -134,7 +134,7 @@ export function HomeHeroSection() {
               </span>
               <div className="min-w-0">
                 <span className="caps-2xs block text-xs font-semibold text-foreground sm:text-sm">
-                  Luma Studio
+                  Aura Studio
                 </span>
                 <span className="caps-xs block truncate text-[10px] uppercase text-primary sm:text-xs">
                   AI Image Studio
@@ -330,7 +330,7 @@ export function HomeHeroSection() {
           </h1>
 
           <p className="home-hero-lede mt-7 max-w-3xl text-pretty text-base font-normal leading-relaxed text-foreground/85 sm:text-lg md:text-[1.25rem] md:leading-relaxed [text-shadow:0_2px_20px_rgba(0,0,0,0.6)]">
-            Professional AI image editing powered by Luma Neural Vision Engine. Isolate subjects, generate custom AI environments, enhance micro-details 2x, and stamp dynamic watermarks.
+            Professional AI image editing powered by Aura Neural Vision Engine. Isolate subjects, generate custom AI environments, enhance micro-details 2x, and stamp dynamic watermarks.
           </p>
 
           <div className="mt-9 flex w-full max-w-md flex-col items-center justify-center gap-4 sm:max-w-none sm:flex-row">
@@ -358,7 +358,7 @@ export function HomeHeroSection() {
               <div className="hero-demo-glass-inner home-demo-inner">
                 <Image
                   src="/demo-home.png"
-                  alt="Luma Studio workspace showing upload, AI tools, and interactive canvas comparison"
+                  alt="Aura Studio workspace showing upload, AI tools, and interactive canvas comparison"
                   width={3290}
                   height={1872}
                   className="h-auto w-full"

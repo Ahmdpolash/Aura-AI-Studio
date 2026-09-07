@@ -1,4 +1,4 @@
-<h1 align="center">✨ Luma Studio — AI Image Processing & Transformation Suite</h1>
+<h1 align="center">✨ Aura Studio — AI Image Processing & Transformation Suite</h1>
 
 <p align="center">
   A production-grade AI-powered image editing platform built with <strong>Next.js 16</strong>, <strong>NextAuth.js</strong>, <strong>Prisma ORM</strong>, <strong>Neon PostgreSQL</strong>, <strong>ImageKit AI Transformations</strong>, and <strong>Stripe Billing</strong>.

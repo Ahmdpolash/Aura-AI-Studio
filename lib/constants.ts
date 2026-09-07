@@ -104,7 +104,7 @@ export const TESTIMONIALS: MarketingTestimonial[] = [
     role: "Digital Artist",
   },
   {
-    text: "We integrated Luma Studio into our daily visual asset workflow. The speed and quality are unmatched.",
+    text: "We integrated Aura Studio into our daily visual asset workflow. The speed and quality are unmatched.",
     image:
       "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?auto=format&fit=crop&w=200&q=80",
     name: "Zainab Hussain",
@@ -170,7 +170,7 @@ export const HOW_IT_WORKS_STEPS: HowItWorksStep[] = [
   {
     step: "Step 3",
     title: "Instant cloud magic",
-    body: "Luma Neural AI processes your image in milliseconds. Compare before/after details with the live slider and download HD.",
+    body: "Aura Neural AI processes your image in milliseconds. Compare before/after details with the live slider and download HD.",
     icon: SparklesIcon,
     featured: true,
   },

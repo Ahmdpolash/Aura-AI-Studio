@@ -78,7 +78,7 @@ export function CanvasViewer({
   const handleDownload = () => {
     const targetUrl = processedImage || originalImage;
     if (!targetUrl) return;
-    const filename = `luma-ai-${activeToolName ? activeToolName.toLowerCase().replace(/\s+/g, "-") : "edit"}-${Date.now()}.png`;
+    const filename = `aura-ai-${activeToolName ? activeToolName.toLowerCase().replace(/\s+/g, "-") : "edit"}-${Date.now()}.png`;
     saveAs(targetUrl, filename);
   };
 
@@ -103,7 +103,7 @@ export function CanvasViewer({
 
           <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3.5 py-1 text-xs font-semibold text-primary">
             <span className="size-2 rounded-full bg-primary animate-ping" />
-            Uploading to Luma Secure Cloud
+            Uploading to Aura Secure Cloud
           </div>
 
           <h3 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
@@ -252,7 +252,7 @@ export function CanvasViewer({
               <Loader2Icon className="size-8 animate-spin" />
             </div>
             <p className="mt-4 text-lg font-semibold text-foreground">
-              Transforming with Luma Neural AI...
+              Transforming with Aura Neural AI...
             </p>
             <p className="mt-1 text-sm text-muted-foreground">
               Processing in cloud pipeline. Results will appear automatically.

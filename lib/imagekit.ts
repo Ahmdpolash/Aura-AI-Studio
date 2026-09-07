@@ -65,7 +65,7 @@ export function getToolTransformation(toolId: TransformToolId, options?: Transfo
       return p ? `bg-genfill:${encodeURIComponent(p)}` : "bg-genfill";
     }
     case "text-watermark": {
-      const text = options?.watermarkText?.trim() || "Luma AI Studio";
+      const text = options?.watermarkText?.trim() || "Aura AI Studio";
       const size = options?.fontSize || 22;
       const color = (options?.fontColor || "FFFFFF").replace("#", "");
       const pos = options?.position || "bottom-right";

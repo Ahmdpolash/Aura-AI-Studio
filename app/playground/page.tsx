@@ -29,7 +29,7 @@ export default function PlaygroundPage() {
               <span className="relative mr-2 flex h-9 w-9 shrink-0 items-center justify-center overflow-visible">
                 <Image
                   src="/logo.png"
-                  alt="Luma AI Studio"
+                  alt="Aura AI Studio"
                   width={64}
                   height={64}
                   className="mt-1 mr-1 max-h-none max-w-none origin-left scale-[1.5] object-cover"
@@ -37,7 +37,7 @@ export default function PlaygroundPage() {
                 />
               </span>
               <p className="font-mono text-2xl font-bold uppercase tracking-wider text-primary sm:text-3xl">
-                Luma Studio
+                Aura Studio
               </p>
             </Link>
           </div>

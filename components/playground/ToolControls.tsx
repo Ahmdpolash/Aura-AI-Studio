@@ -94,7 +94,7 @@ export function ToolControls({
           </div>
           <div>
             <p className="text-sm font-semibold text-foreground">
-              {isPro ? "Luma Pro Active" : `${usageData?.remaining ?? 3} Free Credits Left`}
+              {isPro ? "Aura Pro Active" : `${usageData?.remaining ?? 3} Free Credits Left`}
             </p>
             <p className="text-xs text-muted-foreground">
               {isPro
@@ -215,7 +215,7 @@ export function ToolControls({
                 type="text"
                 value={watermarkText}
                 onChange={(e) => onWatermarkTextChange(e.target.value)}
-                placeholder="e.g., Luma Studio • © 2026"
+                placeholder="e.g., Aura Studio • © 2026"
                 className="mt-1 w-full rounded-xl border border-border/60 bg-card px-3.5 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none"
               />
             </div>

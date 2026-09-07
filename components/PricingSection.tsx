@@ -116,7 +116,7 @@ export function PricingSection() {
             <div>
               <div className="flex items-center justify-between">
                 <h3 className="flex items-center gap-2 text-xl font-bold text-foreground">
-                  <CrownIcon className="size-5 text-primary" /> Luma Pro
+                  <CrownIcon className="size-5 text-primary" /> Aura Pro
                 </h3>
               </div>
               <p className="mt-2 text-sm text-muted-foreground">

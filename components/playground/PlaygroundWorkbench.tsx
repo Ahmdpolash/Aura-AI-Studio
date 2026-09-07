@@ -31,7 +31,7 @@ export function PlaygroundWorkbench() {
 
   const [selectedTool, setSelectedTool] = useState<StudioTool>(STUDIO_TOOLS[0]);
   const [prompt, setPrompt] = useState("");
-  const [watermarkText, setWatermarkText] = useState("Luma AI Studio");
+  const [watermarkText, setWatermarkText] = useState("Aura AI Studio");
   const [watermarkFontSize, setWatermarkFontSize] = useState(22);
   const [watermarkColor, setWatermarkColor] = useState("#FFFFFF");
   const [watermarkPosition, setWatermarkPosition] = useState<
@@ -145,7 +145,7 @@ export function PlaygroundWorkbench() {
       const uploadResult = await upload({
         file,
         fileName: file.name,
-        folder: "luma-studio-uploads",
+        folder: "aura-studio-uploads",
         token: authData.token,
         expire: authData.expire,
         signature: authData.signature,
@@ -255,7 +255,7 @@ export function PlaygroundWorkbench() {
             </div>
             <div>
               <p className="text-sm font-bold text-foreground">
-                🎉 Welcome to Luma Pro!
+                🎉 Welcome to Aura Pro!
               </p>
               <p className="text-xs text-muted-foreground">
                 Your subscription is active. You now have unlimited high-resolution AI transformations.

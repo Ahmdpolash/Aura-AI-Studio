@@ -14,9 +14,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Luma AI Studio — AI Background Remover, Upscaler & Watermark",
+  title: "Aura AI Studio — AI Background Remover, Upscaler & Watermark",
   description:
-    "Professional AI-powered image studio. Remove backgrounds, replace environments, upscale resolution, and add watermarks instantly using Luma AI Neural Engine.",
+    "Professional AI-powered image studio. Remove backgrounds, replace environments, upscale resolution, and add watermarks instantly using Aura AI Neural Engine.",
   icons: {
     icon: [
       { url: "/favicon.ico" },

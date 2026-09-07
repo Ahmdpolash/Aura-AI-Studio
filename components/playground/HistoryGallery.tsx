@@ -55,7 +55,7 @@ export function HistoryGallery({ history, isLoading = false, onSelectResult }: H
 
   const handleDownload = (e: React.MouseEvent, item: GenerationItem) => {
     e.stopPropagation();
-    saveAs(item.resultImageUrl, `luma-${item.toolType}-${item.id.slice(0, 6)}.png`);
+    saveAs(item.resultImageUrl, `aura-${item.toolType}-${item.id.slice(0, 6)}.png`);
   };
 
   return (

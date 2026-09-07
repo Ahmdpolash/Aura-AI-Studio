@@ -46,7 +46,7 @@ export function UpgradeModal({ isOpen, onClose }: UpgradeModalProps) {
             <CrownIcon className="size-7" />
           </div>
           <DialogTitle className="text-2xl font-bold tracking-tight text-foreground">
-            Upgrade to Luma Pro
+            Upgrade to Aura Pro
           </DialogTitle>
           <DialogDescription className="text-sm text-muted-foreground">
             You've used all 3 free image credits. Upgrade to unlock unlimited creative power.
