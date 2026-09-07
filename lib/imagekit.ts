@@ -1,33 +1,92 @@
-import ImageKit, { toFile } from "@imagekit/nodejs";
+import ImageKit from "@imagekit/nodejs";
+import { getUploadAuthParams } from "@imagekit/next/server";
 
 let _client: InstanceType<typeof ImageKit> | null = null;
 
-// this is the singleton pattern which is used to create a single instance of the ImageKit client
-// so that you don't accidentally create multiple instances of the client
-function getClient() {
+export function getImageKitServerClient() {
   if (!_client) {
     _client = new ImageKit({
-      privateKey: process.env.IMAGEKIT_PRIVATE_KEY!,
+      privateKey: process.env.IMAGEKIT_PRIVATE_KEY || "",
     });
   }
   return _client;
 }
 
-export async function uploadBufferToImageKit(params: {
-  buffer: Buffer;
-  fileName: string;
-  folder: string;
-  mimeType: string;
-}) {
-  const client = getClient();
-  const file = await toFile(params.buffer, params.fileName, { type: params.mimeType });
+export function generateUploadAuth() {
+  const privateKey = process.env.IMAGEKIT_PRIVATE_KEY || "";
+  const publicKey = process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY || "";
 
-  const result = await client.files.upload({
-    file,
-    fileName: params.fileName,
-    folder: params.folder,
-    useUniqueFileName: true,
+  return getUploadAuthParams({
+    privateKey,
+    publicKey,
   });
+}
 
-  return { url: result.url!, fileId: result.fileId! };
+export type TransformToolId =
+  | "bg-remove"
+  | "bg-remove-pro"
+  | "change-bg"
+  | "upscale"
+  | "retouch"
+  | "text-watermark"
+  | "dropshadow"
+  | "genfill";
+
+export interface TransformOptions {
+  prompt?: string;
+  watermarkText?: string;
+  fontSize?: number;
+  fontColor?: string;
+  position?: string;
+}
+
+/**
+ * Generates the raw ImageKit transformation parameter string for given tool
+ */
+export function getToolTransformation(toolId: TransformToolId, options?: TransformOptions): string {
+  switch (toolId) {
+    case "bg-remove":
+      return "e-bgremove,f-png";
+    case "bg-remove-pro":
+      return "e-removedotbg,f-png";
+    case "change-bg": {
+      const p = options?.prompt?.trim();
+      return p ? `e-changebg-prompt-${encodeURIComponent(p)}` : "e-changebg";
+    }
+    case "upscale":
+      return "e-upscale";
+    case "retouch":
+      return "e-retouch";
+    case "dropshadow":
+      return "e-dropshadow,f-png";
+    case "genfill": {
+      const p = options?.prompt?.trim();
+      return p ? `bg-genfill:${encodeURIComponent(p)}` : "bg-genfill";
+    }
+    case "text-watermark": {
+      const text = options?.watermarkText?.trim() || "Luma Studio";
+      const size = options?.fontSize || 32;
+      const color = (options?.fontColor || "FFFFFF").replace("#", "");
+      // ImageKit text overlay syntax: l-text,i-[text],fs-[size],co-[color],l-end
+      return `l-text,i-${encodeURIComponent(text)},fs-${size},co-${color},l-end`;
+    }
+    default:
+      return "";
+  }
+}
+
+/**
+ * Builds the full transformed ImageKit URL by applying transforms to base image URL
+ */
+export function buildTransformedImageUrl(
+  baseImageUrl: string,
+  transformations: string[],
+): string {
+  if (!baseImageUrl) return "";
+  const cleanBase = baseImageUrl.split("?")[0];
+  const activeTransforms = transformations.filter(Boolean);
+
+  if (activeTransforms.length === 0) return cleanBase;
+
+  return `${cleanBase}?tr=${activeTransforms.join(",")}`;
 }
