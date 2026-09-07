@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import {
   ChevronDownIcon,
@@ -17,6 +17,77 @@ import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { CENTER_NAV_LINKS, HERO_VIDEO_SRC } from "@/lib/constants";
+
+function SeamlessHeroBackground() {
+  const videoRef1 = useRef<HTMLVideoElement>(null);
+  const videoRef2 = useRef<HTMLVideoElement>(null);
+  const [activeVideo, setActiveVideo] = useState<1 | 2>(1);
+  const isTransitioningRef = useRef(false);
+
+  const checkTransition = (
+    currentVideo: HTMLVideoElement,
+    otherVideo: HTMLVideoElement,
+    nextActive: 1 | 2
+  ) => {
+    if (!currentVideo || !otherVideo) return;
+    const timeLeft = currentVideo.duration - currentVideo.currentTime;
+    if (timeLeft <= 1.2 && !isTransitioningRef.current && currentVideo.duration > 2) {
+      isTransitioningRef.current = true;
+      otherVideo.currentTime = 0;
+      otherVideo.play().catch(() => {});
+      setActiveVideo(nextActive);
+
+      setTimeout(() => {
+        isTransitioningRef.current = false;
+      }, 1300);
+    }
+  };
+
+  return (
+    <div className="absolute inset-0 z-0 overflow-hidden bg-black">
+      <video
+        ref={videoRef1}
+        className={`hero-video absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-1000 ease-in-out ${
+          activeVideo === 1 ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
+        autoPlay
+        muted
+        playsInline
+        preload="auto"
+        onTimeUpdate={() => {
+          if (activeVideo === 1 && videoRef1.current && videoRef2.current) {
+            checkTransition(videoRef1.current, videoRef2.current, 2);
+          }
+        }}
+        onEnded={() => {
+          if (videoRef1.current) videoRef1.current.currentTime = 0;
+        }}
+      >
+        <source src={HERO_VIDEO_SRC} type="video/mp4" />
+      </video>
+
+      <video
+        ref={videoRef2}
+        className={`hero-video absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-1000 ease-in-out ${
+          activeVideo === 2 ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
+        muted
+        playsInline
+        preload="auto"
+        onTimeUpdate={() => {
+          if (activeVideo === 2 && videoRef2.current && videoRef1.current) {
+            checkTransition(videoRef2.current, videoRef1.current, 1);
+          }
+        }}
+        onEnded={() => {
+          if (videoRef2.current) videoRef2.current.currentTime = 0;
+        }}
+      >
+        <source src={HERO_VIDEO_SRC} type="video/mp4" />
+      </video>
+    </div>
+  );
+}
 
 export function HomeHeroSection() {
   const { data: session, status } = useSession();
@@ -43,16 +114,7 @@ export function HomeHeroSection() {
   return (
     <section className="home-hero">
       <div className="hero-surface absolute inset-0 z-10" />
-      <video
-        className="hero-video absolute inset-0 h-full w-full object-cover object-center"
-        autoPlay
-        loop
-        muted
-        playsInline
-        preload="auto"
-      >
-        <source src={HERO_VIDEO_SRC} type="video/mp4" />
-      </video>
+      <SeamlessHeroBackground />
       <div className="hero-fade pointer-events-none absolute inset-0 z-20" />
 
       <div className="home-hero-stack">
