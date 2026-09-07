@@ -26,6 +26,10 @@ interface ToolControlsProps {
   onWatermarkFontSizeChange: (size: number) => void;
   watermarkColor: string;
   onWatermarkColorChange: (color: string) => void;
+  watermarkPosition?: "bottom-right" | "bottom-left" | "top-right" | "top-left" | "center";
+  onWatermarkPositionChange?: (pos: "bottom-right" | "bottom-left" | "top-right" | "top-left" | "center") => void;
+  watermarkBadge?: boolean;
+  onWatermarkBadgeChange?: (badge: boolean) => void;
   onApplyTransform: () => void;
   isProcessing: boolean;
   canApply: boolean;
@@ -48,6 +52,14 @@ const WATERMARK_COLORS = [
   { label: "Crimson", value: "#FF0055" },
 ];
 
+const WATERMARK_POSITIONS = [
+  { id: "bottom-right", label: "Bottom Right" },
+  { id: "bottom-left", label: "Bottom Left" },
+  { id: "top-right", label: "Top Right" },
+  { id: "top-left", label: "Top Left" },
+  { id: "center", label: "Center" },
+] as const;
+
 export function ToolControls({
   selectedToolId,
   onSelectTool,
@@ -59,6 +71,10 @@ export function ToolControls({
   onWatermarkFontSizeChange,
   watermarkColor,
   onWatermarkColorChange,
+  watermarkPosition = "bottom-right",
+  onWatermarkPositionChange,
+  watermarkBadge = true,
+  onWatermarkBadgeChange,
   onApplyTransform,
   isProcessing,
   canApply,
@@ -224,32 +240,77 @@ export function ToolControls({
               />
             </div>
 
-            <div>
-              <label className="text-xs font-medium text-foreground">Color</label>
-              <div className="mt-2 flex items-center gap-2">
-                {WATERMARK_COLORS.map((color) => (
-                  <button
-                    key={color.value}
-                    type="button"
-                    onClick={() => onWatermarkColorChange(color.value)}
+              <div>
+                <label className="text-xs font-medium text-foreground">Color</label>
+                <div className="mt-2 flex items-center gap-2">
+                  {WATERMARK_COLORS.map((color) => (
+                    <button
+                      key={color.value}
+                      type="button"
+                      onClick={() => onWatermarkColorChange(color.value)}
+                      className={cn(
+                        "flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium transition-all",
+                        watermarkColor === color.value
+                          ? "border-primary bg-primary/20 text-foreground"
+                          : "border-border/60 bg-card/60 text-muted-foreground hover:border-border"
+                      )}
+                    >
+                      <span
+                        className="size-2.5 rounded-full border border-black/30"
+                        style={{ backgroundColor: color.value }}
+                      />
+                      {color.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Watermark Position Selector */}
+              <div>
+                <label className="text-xs font-medium text-foreground">Watermark Position</label>
+                <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-3">
+                  {WATERMARK_POSITIONS.map((pos) => (
+                    <button
+                      key={pos.id}
+                      type="button"
+                      onClick={() => onWatermarkPositionChange?.(pos.id)}
+                      className={cn(
+                        "rounded-xl border px-3 py-2 text-xs font-medium transition-all text-center",
+                        watermarkPosition === pos.id
+                          ? "border-primary bg-primary/20 text-foreground font-semibold shadow-sm"
+                          : "border-border/60 bg-card/60 text-muted-foreground hover:border-border hover:text-foreground"
+                      )}
+                    >
+                      {pos.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Premium Glass Badge Background Toggle */}
+              <div className="flex items-center justify-between rounded-xl border border-border/50 bg-card/50 p-3">
+                <div>
+                  <p className="text-xs font-semibold text-foreground">Glass Badge Background</p>
+                  <p className="text-[11px] text-muted-foreground">Dark semi-transparent pill behind text</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => onWatermarkBadgeChange?.(!watermarkBadge)}
+                  className={cn(
+                    "relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none",
+                    watermarkBadge ? "bg-primary" : "bg-muted"
+                  )}
+                >
+                  <span
                     className={cn(
-                      "flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium transition-all",
-                      watermarkColor === color.value
-                        ? "border-primary bg-primary/20 text-foreground"
-                        : "border-border/60 bg-card/60 text-muted-foreground hover:border-border"
+                      "pointer-events-none inline-block size-5 transform rounded-full bg-black shadow-lg ring-0 transition duration-200 ease-in-out",
+                      watermarkBadge ? "translate-x-5" : "translate-x-0"
                     )}
-                  >
-                    <span
-                      className="size-2.5 rounded-full border border-black/30"
-                      style={{ backgroundColor: color.value }}
-                    />
-                    {color.label}
-                  </button>
-                ))}
+                  />
+                </button>
               </div>
             </div>
-          </div>
-        )}
+          )}
       </div>
 
       {/* Main Action Button */}

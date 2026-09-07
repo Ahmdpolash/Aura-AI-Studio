@@ -32,8 +32,12 @@ export function PlaygroundWorkbench() {
   const [selectedTool, setSelectedTool] = useState<StudioTool>(STUDIO_TOOLS[0]);
   const [prompt, setPrompt] = useState("");
   const [watermarkText, setWatermarkText] = useState("Luma AI Studio");
-  const [watermarkFontSize, setWatermarkFontSize] = useState(32);
+  const [watermarkFontSize, setWatermarkFontSize] = useState(22);
   const [watermarkColor, setWatermarkColor] = useState("#FFFFFF");
+  const [watermarkPosition, setWatermarkPosition] = useState<
+    "bottom-right" | "bottom-left" | "top-right" | "top-left" | "center"
+  >("bottom-right");
+  const [watermarkBadge, setWatermarkBadge] = useState(true);
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -185,6 +189,8 @@ export function PlaygroundWorkbench() {
         watermarkText,
         fontSize: watermarkFontSize,
         fontColor: watermarkColor,
+        position: watermarkPosition,
+        badgeBackground: watermarkBadge,
       });
 
       const transformedUrl = buildTransformedImageUrl(originalImage, [transformStr]);
@@ -312,6 +318,10 @@ export function PlaygroundWorkbench() {
           onWatermarkFontSizeChange={setWatermarkFontSize}
           watermarkColor={watermarkColor}
           onWatermarkColorChange={setWatermarkColor}
+          watermarkPosition={watermarkPosition}
+          onWatermarkPositionChange={setWatermarkPosition}
+          watermarkBadge={watermarkBadge}
+          onWatermarkBadgeChange={setWatermarkBadge}
           onApplyTransform={handleApplyTransform}
           isProcessing={isProcessing || isUploading}
           canApply={Boolean(originalImage && !isUploading && !isProcessing)}

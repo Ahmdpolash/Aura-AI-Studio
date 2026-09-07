@@ -170,7 +170,7 @@ export const HOW_IT_WORKS_STEPS: HowItWorksStep[] = [
   {
     step: "Step 3",
     title: "Instant cloud magic",
-    body: "ImageKit AI processes your image in milliseconds. Compare before/after details with the live slider and download HD.",
+    body: "Luma Neural AI processes your image in milliseconds. Compare before/after details with the live slider and download HD.",
     icon: SparklesIcon,
     featured: true,
   },

@@ -37,7 +37,8 @@ export interface TransformOptions {
   watermarkText?: string;
   fontSize?: number;
   fontColor?: string;
-  position?: string;
+  position?: "bottom-right" | "bottom-left" | "top-right" | "top-left" | "center";
+  badgeBackground?: boolean;
 }
 
 /**
@@ -64,11 +65,31 @@ export function getToolTransformation(toolId: TransformToolId, options?: Transfo
       return p ? `bg-genfill:${encodeURIComponent(p)}` : "bg-genfill";
     }
     case "text-watermark": {
-      const text = options?.watermarkText?.trim() || "Luma Studio";
-      const size = options?.fontSize || 32;
+      const text = options?.watermarkText?.trim() || "Luma AI Studio";
+      const size = options?.fontSize || 22;
       const color = (options?.fontColor || "FFFFFF").replace("#", "");
-      // ImageKit text overlay syntax: l-text,i-[text],fs-[size],co-[color],l-end
-      return `l-text,i-${encodeURIComponent(text)},fs-${size},co-${color},l-end`;
+      const pos = options?.position || "bottom-right";
+      const withBadge = options?.badgeBackground !== false;
+
+      let posParams = "lx-N30,ly-N30"; // default bottom-right
+      if (pos === "bottom-left") posParams = "lx-30,ly-N30";
+      else if (pos === "top-right") posParams = "lx-N30,ly-30";
+      else if (pos === "top-left") posParams = "lx-30,ly-30";
+      else if (pos === "center") posParams = "";
+
+      const bgParams = withBadge ? "bg-000000B0,pa-10_20,r-16" : "";
+
+      const parts = [
+        "l-text",
+        `i-${encodeURIComponent(text)}`,
+        `fs-${size}`,
+        `co-${color}`,
+        bgParams,
+        posParams,
+        "l-end",
+      ].filter(Boolean);
+
+      return parts.join(",");
     }
     default:
       return "";
