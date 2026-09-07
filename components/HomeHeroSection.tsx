@@ -1,7 +1,17 @@
 "use client";
 
+import React, { useState, useEffect } from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
-import { ChevronDownIcon, LogInIcon, LogOutIcon, SparklesIcon, Wand2Icon } from "lucide-react";
+import {
+  ChevronDownIcon,
+  CrownIcon,
+  LogInIcon,
+  LogOutIcon,
+  MenuIcon,
+  SparklesIcon,
+  Wand2Icon,
+  XIcon,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -11,6 +21,24 @@ import { CENTER_NAV_LINKS, HERO_VIDEO_SRC } from "@/lib/constants";
 export function HomeHeroSection() {
   const { data: session, status } = useSession();
   const user = session?.user as any;
+  const [isPro, setIsPro] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    if (session?.user) {
+      if ((session.user as any)?.plan === "PRO") {
+        setIsPro(true);
+      }
+      fetch("/api/usage", { cache: "no-store" })
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          if (data?.plan === "PRO") {
+            setIsPro(true);
+          }
+        })
+        .catch(() => {});
+    }
+  }, [session]);
 
   return (
     <section className="home-hero">
@@ -32,21 +60,21 @@ export function HomeHeroSection() {
           <div className="home-nav-beam" />
           <nav className="home-nav">
             <Link href="/" className="home-brand">
-              <span className="relative mr-2 flex h-10 w-10 shrink-0 items-center justify-center overflow-visible">
+              <span className="relative mr-1.5 flex h-9 w-9 shrink-0 items-center justify-center overflow-visible sm:mr-2 sm:h-10 sm:w-10">
                 <Image
                   src="/logo.png"
                   alt="Luma Studio"
                   width={72}
                   height={72}
-                  className="h-10 w-10 max-h-none max-w-none origin-left scale-[1.55] object-cover"
+                  className="h-9 w-9 max-h-none max-w-none origin-left scale-[1.5] object-cover sm:h-10 sm:w-10 sm:scale-[1.55]"
                   priority
                 />
               </span>
               <div className="min-w-0">
-                <span className="caps-2xs block text-sm font-semibold text-foreground">
+                <span className="caps-2xs block text-xs font-semibold text-foreground sm:text-sm">
                   Luma Studio
                 </span>
-                <span className="caps-xs block truncate text-xs uppercase text-primary">
+                <span className="caps-xs block truncate text-[10px] uppercase text-primary sm:text-xs">
                   AI Image Studio
                 </span>
               </div>
@@ -69,28 +97,52 @@ export function HomeHeroSection() {
 
             <div className="home-nav-auth">
               {status === "authenticated" && user ? (
-                <div className="flex items-center gap-3">
-                  <Button variant="outline" asChild className="home-btn-studio-outline">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  {isPro && (
+                    <>
+                      <span className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/15 px-3 py-1 text-xs font-semibold text-primary shadow-[0_0_15px_rgba(255,180,0,0.2)]">
+                        <CrownIcon className="size-3.5 text-primary" />
+                        <span>Pro Member</span>
+                      </span>
+                      <span className="sm:hidden flex items-center gap-1 rounded-full border border-primary/40 bg-primary/15 px-2 py-0.5 text-[10px] font-bold text-primary">
+                        <CrownIcon className="size-3 text-primary" />
+                        <span>PRO</span>
+                      </span>
+                    </>
+                  )}
+
+                  <Button variant="outline" asChild className="home-btn-studio-outline hidden xs:inline-flex">
                     <Link href="/playground" prefetch={false}>
                       Playground
                     </Link>
                   </Button>
+
                   {user.image && (
                     <img
                       src={user.image}
                       alt={user.name || "User"}
-                      className="size-8 rounded-full border border-border/60 object-cover"
+                      className="size-7 rounded-full border border-border/60 object-cover sm:size-8"
                     />
                   )}
+
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={() => signOut()}
-                    className="size-8 rounded-full p-0 text-muted-foreground hover:text-foreground"
+                    className="hidden sm:flex size-8 rounded-full p-0 text-muted-foreground hover:text-foreground cursor-pointer"
                     title="Sign Out"
                   >
                     <LogOutIcon className="size-4" />
                   </Button>
+
+                  <button
+                    type="button"
+                    onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+                    className="flex size-8 items-center justify-center rounded-full border border-white/20 bg-white/10 text-foreground transition-colors hover:bg-white/20 md:hidden cursor-pointer"
+                    aria-label="Toggle Navigation"
+                  >
+                    {isMobileMenuOpen ? <XIcon className="size-4" /> : <MenuIcon className="size-4" />}
+                  </button>
                 </div>
               ) : (
                 <div className="flex items-center gap-2">
@@ -99,17 +151,109 @@ export function HomeHeroSection() {
                     variant="outline"
                     size="sm"
                     onClick={() => signIn("google")}
-                    className="home-btn-signin"
+                    className="home-btn-signin hidden sm:inline-flex"
                   >
                     <LogInIcon className="mr-1.5 size-3.5" /> Sign In
                   </Button>
+
                   <Button asChild className="home-btn-nav-primary">
                     <Link href="/playground">Launch Studio</Link>
                   </Button>
+
+                  <button
+                    type="button"
+                    onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+                    className="flex size-8 items-center justify-center rounded-full border border-white/20 bg-white/10 text-foreground transition-colors hover:bg-white/20 md:hidden cursor-pointer"
+                    aria-label="Toggle Navigation"
+                  >
+                    {isMobileMenuOpen ? <XIcon className="size-4" /> : <MenuIcon className="size-4" />}
+                  </button>
                 </div>
               )}
             </div>
           </nav>
+
+          {/* Mobile Drawer */}
+          {isMobileMenuOpen && (
+            <div className="relative z-10 border-t border-white/10 bg-background/95 px-5 py-4 backdrop-blur-3xl md:hidden animate-in fade-in slide-in-from-top-2 duration-200">
+              <div className="flex flex-col gap-3">
+                {CENTER_NAV_LINKS.map((link) => (
+                  <Link
+                    key={link.label}
+                    href={link.href}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="flex items-center justify-between rounded-xl px-3 py-2 text-sm font-medium text-foreground/80 transition-colors hover:bg-white/5 hover:text-white"
+                  >
+                    <span>{link.label}</span>
+                    {link.hasDropdown && <ChevronDownIcon className="size-4 opacity-50" />}
+                  </Link>
+                ))}
+
+                <div className="my-1 border-t border-white/10" />
+
+                {status === "authenticated" && user ? (
+                  <div className="flex flex-col gap-3">
+                    <div className="flex items-center justify-between px-2 py-1">
+                      <div className="flex items-center gap-2.5">
+                        {user.image && (
+                          <img
+                            src={user.image}
+                            alt={user.name || "User"}
+                            className="size-8 rounded-full border border-border/60 object-cover"
+                          />
+                        )}
+                        <div className="min-w-0">
+                          <p className="truncate text-xs font-semibold text-foreground">{user.name}</p>
+                          <p className="truncate text-[10px] text-muted-foreground">{user.email}</p>
+                        </div>
+                      </div>
+                      {isPro && (
+                        <span className="flex items-center gap-1 rounded-full border border-primary/40 bg-primary/15 px-2 py-0.5 text-[10px] font-bold text-primary">
+                          <CrownIcon className="size-3" /> PRO
+                        </span>
+                      )}
+                    </div>
+
+                    <Button asChild className="home-btn-nav-primary w-full">
+                      <Link href="/playground" onClick={() => setIsMobileMenuOpen(false)}>
+                        Open AI Playground
+                      </Link>
+                    </Button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsMobileMenuOpen(false);
+                        signOut();
+                      }}
+                      className="flex w-full items-center justify-center gap-2 rounded-full border border-border/60 bg-card/40 py-2 text-xs font-medium text-muted-foreground hover:bg-card hover:text-foreground cursor-pointer"
+                    >
+                      <LogOutIcon className="size-3.5" /> Sign Out
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => {
+                        setIsMobileMenuOpen(false);
+                        signIn("google");
+                      }}
+                      className="w-full rounded-full border border-white/20 bg-white/10 py-2 text-xs font-medium text-foreground cursor-pointer"
+                    >
+                      <LogInIcon className="mr-2 size-3.5" /> Sign In with Google
+                    </Button>
+                    <Button asChild className="home-btn-nav-primary w-full">
+                      <Link href="/playground" onClick={() => setIsMobileMenuOpen(false)}>
+                        Launch AI Studio
+                      </Link>
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="home-hero-copy">

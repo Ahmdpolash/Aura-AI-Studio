@@ -571,7 +571,7 @@
   .home-nav {
     position: relative;
     z-index: 1;
-    @apply grid w-full grid-cols-2 items-center gap-3 px-4 py-3 sm:grid-cols-[1fr_auto_1fr] sm:px-6 sm:py-3.5;
+    @apply flex w-full items-center justify-between px-3.5 py-2.5 sm:px-6 sm:py-3.5;
     border-radius: calc(2rem - 1.5px);
     background: linear-gradient(135deg, rgba(28, 24, 36, 0.88) 0%, rgba(18, 17, 24, 0.92) 40%, rgba(12, 12, 16, 0.96) 100%);
     border: 1px solid rgba(255, 255, 255, 0.12);
@@ -581,11 +581,11 @@
   }
 
   .home-brand {
-    @apply flex min-w-0 items-center gap-3 justify-self-start cursor-pointer;
+    @apply flex min-w-0 items-center gap-2 sm:gap-3 cursor-pointer;
   }
 
   .home-nav-center {
-    @apply col-span-2 hidden items-center justify-center gap-7 border-t border-border/40 pt-3 sm:col-span-1 sm:border-t-0 sm:pt-0 md:flex;
+    @apply hidden items-center justify-center gap-6 md:flex lg:gap-8;
   }
 
   .home-nav-auth {
