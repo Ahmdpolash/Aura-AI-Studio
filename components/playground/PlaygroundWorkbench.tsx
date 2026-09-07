@@ -291,6 +291,7 @@ export function PlaygroundWorkbench() {
           uploadingFileName={uploadingFileName}
           activeToolName={selectedTool.name}
           onUploadClick={() => fileInputRef.current?.click()}
+          onDropFile={handleFileUpload}
           onSampleSelect={(url) => {
             setOriginalImage(url);
             setProcessedImage(null);
