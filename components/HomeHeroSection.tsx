@@ -28,86 +28,89 @@ export function HomeHeroSection() {
       <div className="hero-fade pointer-events-none absolute inset-0 z-20" />
 
       <div className="home-hero-stack">
-        <nav className="hero-pill home-nav">
-          <Link href="/" className="home-brand">
-            <span className="relative mr-2 flex h-10 w-10 shrink-0 items-center justify-center overflow-visible">
-              <Image
-                src="/logo.png"
-                alt="Luma Studio"
-                width={72}
-                height={72}
-                className="h-10 w-10 max-h-none max-w-none origin-left scale-[1.55] object-cover"
-                priority
-              />
-            </span>
-            <div className="min-w-0">
-              <span className="caps-2xs block text-sm font-semibold text-foreground">
-                Luma Studio
+        <div className="home-nav-border-wrapper">
+          <div className="home-nav-beam" />
+          <nav className="home-nav">
+            <Link href="/" className="home-brand">
+              <span className="relative mr-2 flex h-10 w-10 shrink-0 items-center justify-center overflow-visible">
+                <Image
+                  src="/logo.png"
+                  alt="Luma Studio"
+                  width={72}
+                  height={72}
+                  className="h-10 w-10 max-h-none max-w-none origin-left scale-[1.55] object-cover"
+                  priority
+                />
               </span>
-              <span className="caps-xs block truncate text-xs uppercase text-primary">
-                AI Image Studio
-              </span>
+              <div className="min-w-0">
+                <span className="caps-2xs block text-sm font-semibold text-foreground">
+                  Luma Studio
+                </span>
+                <span className="caps-xs block truncate text-xs uppercase text-primary">
+                  AI Image Studio
+                </span>
+              </div>
+            </Link>
+
+            <div className="home-nav-center">
+              {CENTER_NAV_LINKS.map((link) => (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className="hero-nav-link inline-flex items-center gap-1"
+                >
+                  {link.label}
+                  {link.hasDropdown ? (
+                    <ChevronDownIcon className="home-nav-chevron" aria-hidden />
+                  ) : null}
+                </Link>
+              ))}
             </div>
-          </Link>
 
-          <div className="home-nav-center">
-            {CENTER_NAV_LINKS.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                className="hero-nav-link inline-flex items-center gap-1"
-              >
-                {link.label}
-                {"chevron" in link && link.chevron ? (
-                  <ChevronDownIcon className="home-nav-chevron" aria-hidden />
-                ) : null}
-              </Link>
-            ))}
-          </div>
-
-          <div className="home-nav-auth">
-            {status === "authenticated" && user ? (
-              <div className="flex items-center gap-3">
-                <Button variant="outline" asChild className="home-btn-studio-outline">
-                  <Link href="/playground" prefetch={false}>
-                    Playground
-                  </Link>
-                </Button>
-                {user.image && (
-                  <img
-                    src={user.image}
-                    alt={user.name || "User"}
-                    className="size-8 rounded-full border border-border/60 object-cover"
-                  />
-                )}
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => signOut()}
-                  className="size-8 rounded-full p-0 text-muted-foreground hover:text-foreground"
-                  title="Sign Out"
-                >
-                  <LogOutIcon className="size-4" />
-                </Button>
-              </div>
-            ) : (
-              <div className="flex items-center gap-2">
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => signIn("google")}
-                  className="home-btn-signin"
-                >
-                  <LogInIcon className="mr-1.5 size-3.5" /> Sign In
-                </Button>
-                <Button asChild className="home-btn-nav-primary">
-                  <Link href="/playground">Launch Studio</Link>
-                </Button>
-              </div>
-            )}
-          </div>
-        </nav>
+            <div className="home-nav-auth">
+              {status === "authenticated" && user ? (
+                <div className="flex items-center gap-3">
+                  <Button variant="outline" asChild className="home-btn-studio-outline">
+                    <Link href="/playground" prefetch={false}>
+                      Playground
+                    </Link>
+                  </Button>
+                  {user.image && (
+                    <img
+                      src={user.image}
+                      alt={user.name || "User"}
+                      className="size-8 rounded-full border border-border/60 object-cover"
+                    />
+                  )}
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => signOut()}
+                    className="size-8 rounded-full p-0 text-muted-foreground hover:text-foreground"
+                    title="Sign Out"
+                  >
+                    <LogOutIcon className="size-4" />
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => signIn("google")}
+                    className="home-btn-signin"
+                  >
+                    <LogInIcon className="mr-1.5 size-3.5" /> Sign In
+                  </Button>
+                  <Button asChild className="home-btn-nav-primary">
+                    <Link href="/playground">Launch Studio</Link>
+                  </Button>
+                </div>
+              )}
+            </div>
+          </nav>
+        </div>
 
         <div className="home-hero-copy">
           <h1 className="hero-title home-hero-title">
