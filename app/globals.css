@@ -657,3 +657,35 @@
     @apply size-3.5 opacity-60;
   }
 }
+
+@keyframes glassShimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-glass-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.animate-glass-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 140, 0, 0.08) 25%,
+    rgba(255, 255, 255, 0.16) 50%,
+    rgba(255, 140, 0, 0.08) 75%,
+    transparent 100%
+  );
+  animation: glassShimmer 1.8s infinite cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
