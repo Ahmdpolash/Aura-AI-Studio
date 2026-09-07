@@ -115,12 +115,15 @@ export function HomeHeroSection() {
         <div className="home-hero-copy">
           <h1 className="hero-title home-hero-title">
             <span className="block">Next-Gen AI Image Studio.</span>
-            <span className="home-hero-tagline">
+            <span
+              style={{ fontFamily: 'Georgia, "Merriweather", "Times New Roman", serif' }}
+              className="mt-3 block font-serif text-2xl font-normal italic tracking-tight text-white/95 sm:mt-4 sm:text-3xl md:text-4xl lg:text-[3.25rem] lg:leading-[1.2] [text-shadow:0_4px_30px_rgba(0,0,0,0.8),0_0_45px_rgba(255,140,0,0.25)]"
+            >
               Remove Backgrounds, Replace Scenes & Upscale in Real-time.
             </span>
           </h1>
 
-          <p className="home-hero-lede">
+          <p className="home-hero-lede mt-7 max-w-3xl text-pretty text-base font-normal leading-relaxed text-foreground/85 sm:text-lg md:text-[1.25rem] md:leading-relaxed [text-shadow:0_2px_20px_rgba(0,0,0,0.6)]">
             Professional AI image editing powered by Luma Neural Vision Engine. Isolate subjects, generate custom AI environments, enhance micro-details 2x, and stamp dynamic watermarks.
           </p>
 
