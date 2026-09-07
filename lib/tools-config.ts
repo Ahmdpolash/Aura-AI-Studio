@@ -80,6 +80,14 @@ export const STUDIO_TOOLS: StudioTool[] = [
     transform: "e-retouch",
   },
   {
+    id: "dropshadow",
+    name: "Realistic Drop Shadow",
+    category: "overlay",
+    description: "Generate natural dynamic 3D shadow under isolated subjects.",
+    icon: LayersIcon,
+    transform: "e-dropshadow",
+  },
+  {
     id: "text-watermark",
     name: "Watermark & Text Overlay",
     category: "overlay",
@@ -87,14 +95,6 @@ export const STUDIO_TOOLS: StudioTool[] = [
     icon: TypeIcon,
     transform: "text-overlay",
     requiresTextWatermark: true,
-  },
-  {
-    id: "dropshadow",
-    name: "Realistic Drop Shadow",
-    category: "overlay",
-    description: "Generate natural dynamic 3D shadow under isolated subjects.",
-    icon: LayersIcon,
-    transform: "e-dropshadow",
   },
   {
     id: "genfill",
