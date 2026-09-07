@@ -54,6 +54,7 @@ export function PlaygroundWorkbench() {
   } | null>(null);
 
   const [history, setHistory] = useState<GenerationItem[]>([]);
+  const [isLoadingHistory, setIsLoadingHistory] = useState(true);
 
   const isPro =
     usageData?.plan === "PRO" ||
@@ -77,6 +78,8 @@ export function PlaygroundWorkbench() {
       }
     } catch (err) {
       console.error("Failed to load initial studio data:", err);
+    } finally {
+      setIsLoadingHistory(false);
     }
   };
 
@@ -315,7 +318,11 @@ export function PlaygroundWorkbench() {
         />
       </div>
 
-      <HistoryGallery history={history} onSelectResult={handleSelectHistory} />
+      <HistoryGallery
+        history={history}
+        isLoading={isLoadingHistory}
+        onSelectResult={handleSelectHistory}
+      />
 
       <UpgradeModal
         isOpen={isUpgradeModalOpen}

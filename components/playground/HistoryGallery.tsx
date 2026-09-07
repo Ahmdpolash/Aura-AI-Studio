@@ -17,10 +17,38 @@ export interface GenerationItem {
 
 interface HistoryGalleryProps {
   history: GenerationItem[];
+  isLoading?: boolean;
   onSelectResult: (originalUrl: string, resultUrl: string, toolType: string) => void;
 }
 
-export function HistoryGallery({ history, onSelectResult }: HistoryGalleryProps) {
+export function HistoryGallery({ history, isLoading = false, onSelectResult }: HistoryGalleryProps) {
+  if (isLoading) {
+    return (
+      <div className="mt-8 rounded-[2rem] border border-border/50 bg-card/30 p-5 backdrop-blur-md sm:p-7">
+        <div className="mb-4 flex items-center gap-2.5">
+          <div className="size-5 rounded-md bg-muted/60 animate-pulse" />
+          <div className="h-5 w-40 rounded-lg bg-muted/60 animate-pulse" />
+          <div className="h-4 w-6 rounded-full bg-muted/40 animate-pulse" />
+        </div>
+
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+          {Array.from({ length: 4 }).map((_, idx) => (
+            <div
+              key={idx}
+              className="overflow-hidden rounded-2xl border border-border/40 bg-card/40 p-2"
+            >
+              <div className="aspect-square w-full rounded-xl bg-muted/30 animate-pulse" />
+              <div className="mt-2.5 flex items-center justify-between px-1">
+                <div className="h-4 w-20 rounded-md bg-muted/40 animate-pulse" />
+                <div className="size-5 rounded-full bg-muted/30 animate-pulse" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   if (history.length === 0) {
     return null;
   }
