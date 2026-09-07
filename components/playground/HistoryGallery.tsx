@@ -92,7 +92,7 @@ export function HistoryGallery({ history, isLoading = false, onSelectResult }: H
                 <button
                   type="button"
                   onClick={(e) => handleDownload(e, item)}
-                  className="rounded-full p-1 text-muted-foreground hover:bg-muted hover:text-foreground"
+                  className="rounded-full p-1 text-muted-foreground hover:bg-muted hover:text-foreground cursor-pointer"
                   title="Download Image"
                 >
                   <DownloadIcon className="size-3.5" />

@@ -108,7 +108,7 @@ export function ToolControls({
           <Button
             size="sm"
             onClick={onOpenUpgradeModal}
-            className="studio-primary-action h-8 rounded-full px-4 text-xs font-semibold"
+            className="studio-primary-action h-8 rounded-full px-4 text-xs font-semibold cursor-pointer"
           >
             Upgrade to Pro
           </Button>
@@ -130,7 +130,7 @@ export function ToolControls({
                 type="button"
                 onClick={() => onSelectTool(tool)}
                 className={cn(
-                  "group relative flex flex-col items-start gap-2 rounded-2xl border p-3.5 text-left transition-all",
+                  "group relative flex flex-col items-start gap-2 rounded-2xl border p-3.5 text-left transition-all cursor-pointer",
                   isSelected
                     ? "border-primary bg-primary/10 text-foreground shadow-[0_0_20px_rgba(255,180,0,0.15)]"
                     : "border-border/50 bg-card/40 text-muted-foreground hover:border-border hover:bg-card/70 hover:text-foreground"
@@ -196,7 +196,7 @@ export function ToolControls({
                       key={quick}
                       type="button"
                       onClick={() => onPromptChange(quick)}
-                      className="rounded-lg border border-border/50 bg-card/50 px-2.5 py-1 text-[11px] text-muted-foreground transition-colors hover:border-primary hover:text-foreground"
+                      className="cursor-pointer rounded-lg border border-border/50 bg-card/50 px-2.5 py-1 text-[11px] text-muted-foreground transition-colors hover:border-primary hover:text-foreground"
                     >
                       {quick}
                     </button>
@@ -244,7 +244,7 @@ export function ToolControls({
                       type="button"
                       onClick={() => onWatermarkColorChange(color.value)}
                       className={cn(
-                        "flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium transition-all",
+                        "flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium transition-all cursor-pointer",
                         watermarkColor === color.value
                           ? "border-primary bg-primary/20 text-foreground"
                           : "border-border/60 bg-card/60 text-muted-foreground hover:border-border"
@@ -269,7 +269,7 @@ export function ToolControls({
                       type="button"
                       onClick={() => onWatermarkPositionChange?.(pos.id)}
                       className={cn(
-                        "rounded-xl border px-3 py-2 text-xs font-medium transition-all text-center",
+                        "rounded-xl border px-3 py-2 text-xs font-medium transition-all text-center cursor-pointer",
                         watermarkPosition === pos.id
                           ? "border-primary bg-primary/20 text-foreground font-semibold shadow-sm"
                           : "border-border/60 bg-card/60 text-muted-foreground hover:border-border hover:text-foreground"
@@ -309,7 +309,7 @@ export function ToolControls({
       <Button
         onClick={onApplyTransform}
         disabled={!canApply || isProcessing}
-        className="studio-primary-action h-14 w-full rounded-full text-base font-semibold shadow-lg"
+        className="studio-primary-action h-14 w-full rounded-full text-base font-semibold shadow-lg cursor-pointer disabled:cursor-not-allowed"
       >
         {isProcessing ? (
           <>

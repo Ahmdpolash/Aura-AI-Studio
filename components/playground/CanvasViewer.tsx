@@ -142,7 +142,7 @@ export function CanvasViewer({
 
         <Button
           onClick={onUploadClick}
-          className="studio-primary-action mt-6 rounded-full px-8 py-6 text-base font-semibold"
+          className="studio-primary-action mt-6 rounded-full px-8 py-6 text-base font-semibold cursor-pointer"
         >
           <ImageIcon className="mr-2 size-5" /> Select Image from Device
         </Button>
@@ -158,7 +158,7 @@ export function CanvasViewer({
                   key={sample.name}
                   type="button"
                   onClick={() => onSampleSelect(sample.url)}
-                  className="rounded-full border border-border/60 bg-card/60 px-3.5 py-1.5 text-xs font-medium text-foreground transition-colors hover:border-primary hover:bg-primary/10"
+                  className="rounded-full border border-border/60 bg-card/60 px-3.5 py-1.5 text-xs font-medium text-foreground transition-colors hover:border-primary hover:bg-primary/10 cursor-pointer"
                 >
                   {sample.name}
                 </button>
@@ -182,7 +182,7 @@ export function CanvasViewer({
               variant="outline"
               size="sm"
               onClick={() => setIsSplitView(!isSplitView)}
-              className="studio-pill rounded-full text-xs font-medium"
+              className="studio-pill rounded-full text-xs font-medium cursor-pointer"
             >
               <SplitIcon className="mr-1.5 size-3.5" />
               {isSplitView ? "Split Slider On" : "Show Result Only"}
@@ -201,7 +201,7 @@ export function CanvasViewer({
             variant="outline"
             size="sm"
             onClick={handleCopyLink}
-            className="studio-pill rounded-full text-xs"
+            className="studio-pill rounded-full text-xs cursor-pointer"
           >
             <Share2Icon className="mr-1.5 size-3.5" />
             {copied ? "Copied!" : "Copy Link"}
@@ -211,7 +211,7 @@ export function CanvasViewer({
             size="sm"
             onClick={handleDownload}
             disabled={isProcessing}
-            className="studio-primary-action rounded-full px-4 text-xs font-semibold"
+            className="studio-primary-action rounded-full px-4 text-xs font-semibold cursor-pointer disabled:cursor-not-allowed"
           >
             <DownloadIcon className="mr-1.5 size-3.5" />
             Download HD

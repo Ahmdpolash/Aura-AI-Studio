@@ -121,16 +121,22 @@ export function HomeHeroSection() {
             Professional AI image editing powered by Luma Neural Vision Engine. Isolate subjects, generate custom AI environments, enhance micro-details 2x, and stamp dynamic watermarks.
           </p>
 
-          <div className="home-hero-ctas">
-            <Button asChild className="home-btn-hero-primary">
-              <Link href="/playground" prefetch={false}>
-                <Wand2Icon className="mr-2 size-5" /> Open AI Playground
-              </Link>
-            </Button>
+          <div className="mt-9 flex w-full max-w-md flex-col items-center justify-center gap-4 sm:max-w-none sm:flex-row">
+            <Link
+              href="/playground"
+              prefetch={false}
+              className="group inline-flex h-13 sm:h-14 items-center justify-center gap-2.5 rounded-full bg-gradient-to-r from-primary via-orange-500 to-amber-500 px-8 py-3.5 text-base font-semibold text-white shadow-[0_4px_28px_rgba(255,90,20,0.4)] transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_8px_38px_rgba(255,90,20,0.65)] active:scale-[0.98] cursor-pointer"
+            >
+              <Wand2Icon className="size-5 transition-transform duration-300 group-hover:rotate-12" />
+              <span>Open AI Playground</span>
+            </Link>
 
-            <Button asChild variant="ghost" className="hero-pill home-btn-hero-ghost">
-              <a href="#how-it-works">See How It Works</a>
-            </Button>
+            <a
+              href="#how-it-works"
+              className="inline-flex h-13 sm:h-14 items-center justify-center rounded-full border border-border/80 bg-card/40 px-8 py-3.5 text-base font-medium text-foreground/90 backdrop-blur-md shadow-sm transition-all duration-300 hover:scale-[1.04] hover:border-primary/50 hover:bg-card/80 hover:text-foreground hover:shadow-[0_0_25px_rgba(255,180,0,0.18)] active:scale-[0.98] cursor-pointer"
+            >
+              See How It Works
+            </a>
           </div>
         </div>
 
