@@ -174,47 +174,50 @@ export function CanvasViewer({
 
   return (
     <div className="space-y-4">
-      {/* Top Toolbar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border/40 bg-card/40 px-4 py-2.5 backdrop-blur-md">
-        <div className="flex items-center gap-2">
+      {/* Top Toolbar - Responsive Single Row */}
+      <div className="flex items-center justify-between gap-2 rounded-2xl border border-white/15 bg-white/[0.035] px-3 py-2 sm:px-4 sm:py-2.5 backdrop-blur-xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)]">
+        <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
           {processedImage && (
             <Button
               variant="outline"
               size="sm"
               onClick={() => setIsSplitView(!isSplitView)}
-              className="studio-pill rounded-full text-xs font-medium cursor-pointer"
+              className="rounded-full border-white/15 bg-white/5 h-8 px-2.5 sm:px-3.5 text-xs font-medium text-foreground hover:bg-white/10 hover:border-primary/40 cursor-pointer transition-all shrink-0"
+              title="Toggle Split Comparison"
             >
-              <SplitIcon className="mr-1.5 size-3.5" />
-              {isSplitView ? "Split Slider On" : "Show Result Only"}
+              <SplitIcon className="size-3.5 text-primary sm:mr-1.5" />
+              <span className="hidden xs:inline">{isSplitView ? "Split On" : "Result Only"}</span>
             </Button>
           )}
 
           {activeToolName && (
-            <span className="rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+            <span className="truncate rounded-full border border-primary/30 bg-primary/15 px-2.5 py-1 text-xs font-semibold text-primary shadow-[0_0_10px_rgba(255,140,0,0.15)]">
               ⚡ {activeToolName}
             </span>
           )}
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           <Button
             variant="outline"
             size="sm"
             onClick={handleCopyLink}
-            className="studio-pill rounded-full text-xs cursor-pointer"
+            className="rounded-full border-white/15 bg-white/5 h-8 px-2.5 sm:px-3 text-xs text-muted-foreground hover:bg-white/10 hover:text-foreground cursor-pointer transition-all"
+            title="Copy Image Link"
           >
-            <Share2Icon className="mr-1.5 size-3.5" />
-            {copied ? "Copied!" : "Copy Link"}
+            <Share2Icon className="size-3.5 sm:mr-1.5" />
+            <span className="hidden sm:inline">{copied ? "Copied!" : "Copy Link"}</span>
           </Button>
 
           <Button
             size="sm"
             onClick={handleDownload}
             disabled={isProcessing}
-            className="studio-primary-action rounded-full px-4 text-xs font-semibold cursor-pointer disabled:cursor-not-allowed"
+            className="studio-primary-action h-8 rounded-full px-3.5 sm:px-4 text-xs font-semibold shadow-md cursor-pointer disabled:cursor-not-allowed"
           >
-            <DownloadIcon className="mr-1.5 size-3.5" />
-            Download HD
+            <DownloadIcon className="size-3.5 sm:mr-1.5" />
+            <span>Download</span>
+            <span className="hidden sm:inline ml-0.5">HD</span>
           </Button>
         </div>
       </div>

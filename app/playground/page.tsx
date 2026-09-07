@@ -15,69 +15,80 @@ export default function PlaygroundPage() {
   return (
     <main className="studio-shell min-h-screen px-4 py-4 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-[1440px]">
-        {/* Header Bar */}
-        <header className="mb-6 flex flex-col gap-4 sm:mb-8 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-4">
+        {/* Header Bar - Responsive Single Row */}
+        <header className="mb-5 flex items-center justify-between gap-2 sm:mb-8">
+          {/* Left: Back Home + Logo */}
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
             <Link
               href="/"
-              className="flex items-center gap-2 rounded-full border border-border/50 bg-card/40 px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:border-primary hover:text-foreground"
+              className="flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-2.5 py-1.5 text-xs text-muted-foreground transition-all hover:border-primary/50 hover:bg-white/10 hover:text-foreground shrink-0"
+              title="Back Home"
             >
-              <ArrowLeftIcon className="size-3.5" /> Back Home
+              <ArrowLeftIcon className="size-3.5" />
+              <span className="hidden sm:inline">Back Home</span>
             </Link>
 
-            <Link href="/" className="flex min-w-0 items-center gap-3">
-              <span className="relative mr-2 flex h-9 w-9 shrink-0 items-center justify-center overflow-visible">
+            <Link href="/" className="flex min-w-0 items-center gap-2 sm:gap-3">
+              <span className="relative flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center overflow-visible">
                 <Image
                   src="/logo.png"
                   alt="Aura AI Studio"
                   width={64}
                   height={64}
-                  className="mt-1 mr-1 max-h-none max-w-none origin-left scale-[1.5] object-cover"
+                  className="max-h-none max-w-none origin-left scale-[1.35] sm:scale-[1.5] object-cover"
                   priority
                 />
               </span>
-              <p className="font-mono text-2xl font-bold uppercase tracking-wider text-primary sm:text-3xl">
+              <p className="font-mono text-base sm:text-2xl font-bold uppercase tracking-wider text-primary truncate">
                 Aura Studio
               </p>
             </Link>
           </div>
 
-          <div className="flex items-center gap-3 self-end sm:self-auto">
+          {/* Right: User status & actions */}
+          <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
             {isPro ? (
-              <span className="flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/10 px-3.5 py-1.5 text-xs font-semibold text-primary">
-                <CrownIcon className="size-3.5" /> Pro Member
-              </span>
+              <>
+                <span className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary shadow-[0_0_12px_rgba(255,140,0,0.2)]">
+                  <CrownIcon className="size-3.5" /> Pro Member
+                </span>
+                <span className="sm:hidden inline-flex items-center gap-1 rounded-full border border-primary/40 bg-primary/15 px-2 py-0.5 text-[10px] font-bold text-primary">
+                  <CrownIcon className="size-3" /> PRO
+                </span>
+              </>
             ) : (
-              <span className="studio-pill-strong rounded-full border px-3.5 py-1.5 text-xs font-medium text-muted-foreground">
-                <SparklesIcon className="mr-1 inline size-3 text-primary" /> AI Playground
+              <span className="studio-pill-strong hidden sm:inline-flex rounded-full border px-3 py-1 text-xs font-medium text-muted-foreground">
+                <SparklesIcon className="mr-1 inline size-3 text-primary" /> AI Studio
               </span>
             )}
 
             {status === "authenticated" && user ? (
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-1.5 sm:gap-3">
                 {user.image && (
                   <img
                     src={user.image}
                     alt={user.name || "User"}
-                    className="size-8 rounded-full border border-border/60 object-cover"
+                    className="size-7 sm:size-8 rounded-full border border-white/20 object-cover shadow-sm"
                   />
                 )}
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={() => signOut()}
-                  className="studio-pill h-8 rounded-full px-3 text-xs"
+                  className="rounded-full border-white/15 bg-white/5 h-7 sm:h-8 px-2 sm:px-3 text-xs text-muted-foreground hover:bg-white/10 hover:text-foreground cursor-pointer"
+                  title="Sign Out"
                 >
-                  <LogOutIcon className="mr-1.5 size-3" /> Sign Out
+                  <LogOutIcon className="size-3.5 sm:mr-1.5" />
+                  <span className="hidden sm:inline">Sign Out</span>
                 </Button>
               </div>
             ) : (
               <Button
                 size="sm"
                 onClick={() => signIn("google")}
-                className="studio-primary-action h-8 rounded-full px-4 text-xs font-semibold"
+                className="studio-primary-action h-7 sm:h-8 rounded-full px-3 sm:px-4 text-xs font-semibold"
               >
-                <LogInIcon className="mr-1.5 size-3" /> Sign In with Google
+                <LogInIcon className="mr-1 size-3" /> Sign In
               </Button>
             )}
           </div>
