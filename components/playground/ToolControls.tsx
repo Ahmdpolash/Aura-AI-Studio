@@ -172,7 +172,7 @@ export function ToolControls({
         </div>
 
         {/* Concept 1: Category Pills Bar */}
-        <div className="mt-3 grid grid-cols-3 gap-1.5 rounded-2xl border border-white/10 bg-background/50 p-1.5 backdrop-blur-md shadow-inner">
+        <div className="mt-3 grid grid-cols-3 gap-1.5 rounded-2xl border border-white/12 bg-white/[0.03] p-1.5 backdrop-blur-xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)]">
           {CATEGORIES.map((cat) => {
             const isActive = activeCategory === cat.id;
             const CatIcon = cat.icon;
@@ -183,17 +183,17 @@ export function ToolControls({
                 type="button"
                 onClick={() => handleCategoryClick(cat.id)}
                 className={cn(
-                  "flex items-center justify-center gap-1.5 rounded-xl py-2 px-2 text-xs font-semibold transition-all duration-200 cursor-pointer",
+                  "relative flex items-center justify-center gap-1.5 rounded-xl py-2 px-2 text-xs font-semibold transition-all duration-200 cursor-pointer",
                   isActive
-                    ? "bg-gradient-to-r from-primary via-orange-500 to-amber-500 text-white shadow-[0_2px_14px_rgba(255,90,20,0.4)] scale-[1.02]"
-                    : "text-muted-foreground hover:bg-white/5 hover:text-foreground"
+                    ? "border border-primary/50 bg-gradient-to-r from-primary via-orange-500 to-amber-500 text-white shadow-[0_2px_16px_rgba(255,90,20,0.5),inset_0_1px_0_0_rgba(255,255,255,0.3)] scale-[1.02]"
+                    : "border border-transparent text-muted-foreground/80 hover:text-foreground hover:bg-white/[0.06] hover:border-white/10"
                 )}
               >
                 <CatIcon className="size-3.5 shrink-0" />
                 <span>{cat.label}</span>
                 <span
                   className={cn(
-                    "ml-0.5 rounded-full px-1.5 py-0.2 text-[10px] font-bold",
+                    "ml-0.5 rounded-full px-1.5 py-0.2 text-[10px] font-bold transition-colors",
                     isActive ? "bg-black/25 text-white" : "bg-white/10 text-muted-foreground"
                   )}
                 >
@@ -204,8 +204,8 @@ export function ToolControls({
           })}
         </div>
 
-        {/* Concept 1: Filtered Category Tools Grid */}
-        <div className="mt-3 grid grid-cols-2 gap-2.5 sm:grid-cols-2 animate-in fade-in duration-200">
+        {/* Concept 1: Filtered Category Tools Grid with Frosted Glass Cards */}
+        <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-2 animate-in fade-in duration-200">
           {filteredTools.map((tool) => {
             const Icon = tool.icon;
             const isSelected = tool.id === selectedToolId;
@@ -216,32 +216,51 @@ export function ToolControls({
                 type="button"
                 onClick={() => onSelectTool(tool)}
                 className={cn(
-                  "group relative flex flex-col items-start gap-2.5 rounded-2xl border p-3.5 text-left transition-all duration-200 cursor-pointer",
+                  "group relative flex flex-col items-start gap-2.5 rounded-2xl p-4 text-left transition-all duration-300 cursor-pointer backdrop-blur-xl",
                   isSelected
-                    ? "border-primary bg-primary/10 text-foreground shadow-[0_0_24px_rgba(255,140,0,0.22)] ring-1 ring-primary/40 scale-[1.01]"
-                    : "border-border/50 bg-card/40 text-muted-foreground hover:border-border hover:bg-card/70 hover:text-foreground"
+                    ? "border-2 border-primary bg-gradient-to-b from-primary/20 via-primary/10 to-primary/5 text-foreground shadow-[0_0_30px_rgba(255,100,20,0.3),inset_0_1px_1px_rgba(255,255,255,0.25)] scale-[1.02] ring-1 ring-primary/50"
+                    : "border border-white/15 bg-white/[0.04] text-muted-foreground shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08),0_4px_16px_rgba(0,0,0,0.25)] hover:border-primary/60 hover:bg-white/[0.08] hover:text-foreground hover:shadow-[0_6px_26px_rgba(255,140,0,0.2),inset_0_1px_0_0_rgba(255,255,255,0.18)] hover:-translate-y-1 active:translate-y-0"
                 )}
               >
                 {tool.badge && (
-                  <span className="absolute right-2.5 top-2.5 rounded-md bg-primary/20 border border-primary/30 px-1.5 py-0.5 text-[10px] font-semibold text-primary">
+                  <span
+                    className={cn(
+                      "absolute right-3 top-3 rounded-md border px-2 py-0.5 text-[10px] font-semibold transition-colors",
+                      isSelected
+                        ? "bg-primary/25 border-primary/50 text-primary shadow-sm"
+                        : "bg-white/10 border-white/15 text-muted-foreground group-hover:border-primary/40 group-hover:text-primary group-hover:bg-primary/15"
+                    )}
+                  >
                     {tool.badge}
                   </span>
                 )}
 
                 <div
                   className={cn(
-                    "flex size-8 items-center justify-center rounded-xl border transition-colors",
+                    "flex size-9 items-center justify-center rounded-xl border transition-all duration-300",
                     isSelected
-                      ? "border-primary/60 bg-primary/20 text-primary shadow-[0_0_12px_rgba(255,140,0,0.25)]"
-                      : "border-border/50 bg-background/40 text-muted-foreground group-hover:text-primary group-hover:border-primary/30"
+                      ? "border-primary/70 bg-primary/25 text-primary shadow-[0_0_16px_rgba(255,140,0,0.35)] scale-105"
+                      : "border-white/15 bg-white/5 text-foreground/75 group-hover:border-primary/50 group-hover:bg-primary/15 group-hover:text-primary group-hover:scale-110 group-hover:shadow-[0_0_14px_rgba(255,140,0,0.25)]"
                   )}
                 >
-                  <Icon className="size-4" />
+                  <Icon className="size-4.5" />
                 </div>
 
                 <div>
-                  <p className="text-sm font-semibold text-foreground tracking-tight">{tool.name}</p>
-                  <p className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">
+                  <div className="flex items-center gap-1.5">
+                    <p
+                      className={cn(
+                        "text-sm font-semibold tracking-tight transition-colors",
+                        isSelected ? "text-white font-bold" : "text-foreground group-hover:text-white"
+                      )}
+                    >
+                      {tool.name}
+                    </p>
+                    {isSelected && (
+                      <span className="size-1.5 rounded-full bg-primary animate-pulse" />
+                    )}
+                  </div>
+                  <p className="mt-1 line-clamp-2 text-xs text-muted-foreground/80 leading-relaxed group-hover:text-muted-foreground">
                     {tool.description}
                   </p>
                 </div>
@@ -251,7 +270,7 @@ export function ToolControls({
         </div>
       </div>
 
-      <div className="rounded-2xl border border-border/40 bg-background/25 p-4">
+      <div className="rounded-2xl border border-white/12 bg-white/[0.03] p-5 backdrop-blur-xl shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06),0_4px_20px_rgba(0,0,0,0.2)]">
         <div className="flex items-center gap-2">
           <SparklesIcon className="size-4 text-primary" />
           <h4 className="text-sm font-semibold text-foreground">
