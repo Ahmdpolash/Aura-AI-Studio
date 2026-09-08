@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "motion/react";
@@ -13,6 +14,84 @@ const FEATURE_TAGS: Record<string, { badge: string; desc: string }> = {
   "Change Background": { badge: "GenAI", desc: "Lighting blend" },
   "Text Watermark": { badge: "Pro", desc: "Dynamic branding" },
 };
+
+function InteractiveGalleryCard({
+  image,
+  index,
+}: {
+  image: (typeof GALLERY_IMAGES)[number];
+  index: number;
+}) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  const tagLabels = [
+    "⚡ Background Cutout",
+    "✦ AI Scene Replace",
+    "👑 4K Detail Upscaled",
+    "★ Dynamic Watermark",
+  ];
+  const tagLabel = tagLabels[index % tagLabels.length];
+
+  return (
+    <div
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className={`group relative rounded-2xl sm:rounded-[1.8rem] p-[1.5px] transition-all duration-500 ${
+        index % 2 === 1 ? "translate-y-3 sm:translate-y-6" : ""
+      }`}
+    >
+      {/* Subtle border outline with smooth hover tint */}
+      <div className="pointer-events-none absolute inset-0 rounded-2xl sm:rounded-[1.8rem] border border-white/10 group-hover:border-primary/40 transition-colors duration-300" />
+
+      {/* Inner Image Container */}
+      <div className="relative overflow-hidden rounded-[calc(1rem-1.5px)] sm:rounded-[calc(1.8rem-1.5px)] bg-card shadow-lg">
+        {/* Subtle dark vignette overlay */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-black/20 z-10 opacity-70 group-hover:opacity-30 transition-opacity duration-500" />
+
+        {/* 2. Ultra-Smooth Neural Laser Scan Line on Hover */}
+        {isHovered && (
+          <motion.div
+            initial={{ top: "-15%", opacity: 0 }}
+            animate={{ top: "115%", opacity: [0, 1, 1, 0.9, 0] }}
+            transition={{
+              duration: 1.5,
+              ease: [0.22, 1, 0.36, 1],
+              repeat: Infinity,
+              repeatDelay: 1.1,
+            }}
+            className="pointer-events-none absolute inset-x-0 z-20 flex flex-col"
+          >
+            {/* Trailing soft laser glow haze */}
+            <div className="h-10 w-full bg-gradient-to-b from-transparent via-amber-500/15 to-transparent blur-[2px]" />
+            {/* Intense precision laser beam line */}
+            <div className="h-[2px] w-full bg-gradient-to-r from-transparent via-amber-200 to-transparent shadow-[0_0_10px_#ff9500,0_0_20px_#ff5a14]" />
+          </motion.div>
+        )}
+
+        {/* The Image */}
+        <Image
+          src={image.src}
+          alt={image.alt}
+          width={900}
+          height={1200}
+          className="h-full w-full object-cover aspect-[3/4] transition-transform duration-700 ease-out group-hover:scale-[1.035]"
+          priority={index < 2}
+        />
+
+        {/* Bottom Floating Feature Pill */}
+        <div className="absolute inset-x-2.5 bottom-2.5 sm:inset-x-3 sm:bottom-3 z-20 flex items-center justify-between pointer-events-none">
+          <div className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-black/75 px-2.5 py-1 text-[10px] sm:text-xs font-medium text-white/95 shadow-[0_4px_16px_rgba(0,0,0,0.6)] backdrop-blur-xl opacity-80 sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-300 sm:translate-y-1 sm:group-hover:translate-y-0">
+            <span>{tagLabel}</span>
+          </div>
+
+          <div className="hidden sm:inline-flex size-6 items-center justify-center rounded-full border border-white/20 bg-black/75 text-white/80 shadow-md backdrop-blur-xl opacity-0 group-hover:opacity-100 transition-all duration-300">
+            <ArrowRightIcon className="size-3 text-primary group-hover:translate-x-0.5 transition-transform" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export function GalleryShowcaseSection() {
   return (
@@ -170,21 +249,7 @@ export function GalleryShowcaseSection() {
           {/* 2 items in a row on mobile, masonry stagger */}
           <div className="grid grid-cols-2 gap-2.5 sm:gap-4">
             {GALLERY_IMAGES.map((image, index) => (
-              <div
-                key={image.src}
-                className={`showcase-image-card overflow-hidden rounded-2xl sm:rounded-[1.8rem] border border-border/60 ${
-                  index % 2 === 1 ? "translate-y-3 sm:translate-y-6" : ""
-                }`}
-              >
-                <Image
-                  src={image.src}
-                  alt={image.alt}
-                  width={900}
-                  height={1200}
-                  className="h-full w-full object-cover aspect-[3/4]"
-                  priority={index < 2}
-                />
-              </div>
+              <InteractiveGalleryCard key={image.src} image={image} index={index} />
             ))}
           </div>
         </motion.div>
