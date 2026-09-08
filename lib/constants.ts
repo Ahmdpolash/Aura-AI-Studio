@@ -40,12 +40,12 @@ export const HERO_VIDEO_SRC = "https://ik.imagekit.io/gcunh6w0m/hero.mp4";
 export const SHOWCASE_BG_VIDEO_SRC =
   "https://ik.imagekit.io/gcunh6w0m/kling_20260321_%E4%BD%9C%E5%93%81_shot_1_5s__55_0%20(1).mp4";
 
-export const CENTER_NAV_LINKS = [
+export const CENTER_NAV_LINKS: { label: string; href: string; hasDropdown?: boolean }[] = [
   { label: "Home", href: "/" },
   { label: "Playground", href: "/playground" },
   { label: "How it works", href: "#how-it-works" },
   { label: "Pricing", href: "#pricing" },
-] as const;
+];
 
 export const FOOTER_QUICK_LINKS = [
   { label: "Home", href: "/" },
@@ -156,21 +156,21 @@ export type HowItWorksStep = {
 
 export const HOW_IT_WORKS_STEPS: HowItWorksStep[] = [
   {
-    step: "Step 1",
-    title: "Upload your image",
-    body: "Upload any portrait, product photo, or landscape in JPG, PNG, or WebP format with secure cloud encryption.",
+    step: "01",
+    title: "Upload Any Photo",
+    body: "Drop portraits, product shots, or landscapes in PNG, JPG, or WebP up to 25MB. Instant client-side decode with zero pre-compression.",
     icon: ImagePlusIcon,
   },
   {
-    step: "Step 2",
-    title: "Choose an AI tool",
-    body: "Select Background Removal, AI Scene Replacement, 2x Super-Resolution Upscaling, or Watermark Overlay.",
+    step: "02",
+    title: "Select AI Transformation",
+    body: "Choose sub-pixel background cutout, generative AI scene replacement from prompts, 4K upscaling, or custom watermark overlay.",
     icon: Wand2Icon,
   },
   {
-    step: "Step 3",
-    title: "Instant cloud magic",
-    body: "Aura Neural AI processes your image in milliseconds. Compare before/after details with the live slider and download HD.",
+    step: "03",
+    title: "Inspect & Lossless Export",
+    body: "Compare original and processed images side-by-side with the real-time split slider, then export uncompressed 4K transparent assets.",
     icon: SparklesIcon,
     featured: true,
   },

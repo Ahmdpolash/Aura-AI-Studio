@@ -1,156 +1,300 @@
-import { ImagePlusIcon, PaletteIcon, SparklesIcon } from "lucide-react";
+"use client";
 
+import Link from "next/link";
+import { motion } from "motion/react";
+import {
+  ArrowRightIcon,
+  CheckCircle2Icon,
+  DownloadIcon,
+  ImagePlusIcon,
+  Maximize2Icon,
+  ScissorsIcon,
+  SlidersHorizontalIcon,
+  SparklesIcon,
+  TypeIcon,
+  Wand2Icon,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { GridBackground } from "@/components/GridBackground";
-import { HOW_IT_WORKS_STEPS, WORKFLOW_STYLE_PREVIEW } from "@/lib/constants";
-import { cn } from "@/lib/utils";
+import { HOW_IT_WORKS_STEPS } from "@/lib/constants";
 
 export function HowItWorksSection() {
   return (
-    <GridBackground className="section-shell mt-6 px-5 py-16 sm:px-8 sm:py-20 lg:px-12">
-      <section id="how-it-works" className="relative z-10 mx-auto max-w-7xl">
-        <div className="mx-auto max-w-3xl text-center">
-          <div className="hero-pill caps-md inline-flex items-center rounded-full px-4 py-2 text-xs font-medium uppercase text-primary">
-            How it works
+    <section
+      id="how-it-works"
+      className="section-shell relative mt-6 overflow-hidden px-5 py-16 sm:px-8 sm:py-20 lg:px-12"
+    >
+      {/* Ambient background glow */}
+      <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 size-[32rem] rounded-full bg-primary/10 blur-[140px] -z-10" />
+
+      <div className="relative z-10 mx-auto max-w-7xl">
+        {/* Section Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="mx-auto max-w-3xl text-center"
+        >
+          <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3.5 py-1 text-xs font-semibold text-primary backdrop-blur-md">
+            <SparklesIcon className="size-3.5 text-primary" />
+            <span className="uppercase tracking-widest text-[11px]">Streamlined Workflow</span>
           </div>
 
-          <h2 className="mt-6 font-sans text-4xl font-medium tracking-tight text-foreground sm:text-5xl lg:text-6xl">
-            From original photo to art-directed result.
+          <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-white sm:text-5xl leading-tight">
+            From raw capture to{" "}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-orange-400 to-amber-300">
+              production ready.
+            </span>
           </h2>
 
-          <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">
-            A clean four-step workflow designed to feel fast, premium, and predictable from the
-            first upload to the final export.
+          <p className="mx-auto mt-4 max-w-2xl text-base text-muted-foreground leading-relaxed sm:text-lg">
+            A transparent three-step pipeline engineered for sub-pixel precision, real-time comparison, and lossless 4K export.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="mt-14 grid gap-6 lg:grid-cols-12 lg:grid-rows-[1.05fr_0.95fr]">
-          <article className="workflow-panel group relative overflow-hidden rounded-[2rem] border border-border/70 p-6 sm:p-8 lg:col-span-5 lg:row-span-2">
-            <div className="relative z-10 flex h-full flex-col">
-              <div className="mb-8 flex items-start justify-between gap-4">
-                <div>
-                  <p className="text-sm font-medium tracking-wide text-primary">
-                    {HOW_IT_WORKS_STEPS[0].step}
-                  </p>
-                  <h3 className="mt-3 text-3xl font-semibold tracking-tight text-foreground">
-                    {HOW_IT_WORKS_STEPS[0].title}
-                  </h3>
-                </div>
-                <div className="how-icon-ring flex size-14 items-center justify-center rounded-2xl bg-primary text-primary-foreground">
-                  <ImagePlusIcon className="size-6" />
+        {/* 3 Step Pipeline Cards */}
+        <div className="mt-14 grid gap-6 md:grid-cols-3 lg:gap-8">
+          {/* Card 1: Upload */}
+          <motion.div
+            initial={{ opacity: 0, y: 32 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            whileHover={{ y: -6, transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] } }}
+            transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            className="group relative flex flex-col justify-between rounded-[2rem] border border-white/10 bg-card/40 p-6 sm:p-8 backdrop-blur-2xl transition-colors duration-300 hover:border-white/20 hover:shadow-[0_20px_50px_rgba(0,0,0,0.8)]"
+          >
+            {/* Top specular highlight edge line */}
+            <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
+
+            <div>
+              {/* Step & Icon Header */}
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold tracking-widest uppercase text-primary/90 rounded-full border border-primary/20 bg-primary/10 px-2.5 py-1">
+                  Step 01
+                </span>
+                <div className="flex size-11 items-center justify-center rounded-xl bg-primary/15 border border-primary/25 text-primary shadow-sm">
+                  <ImagePlusIcon className="size-5" />
                 </div>
               </div>
 
-              <div className="relative mb-8 flex min-h-[17rem] flex-1 items-center justify-center overflow-hidden rounded-[1.75rem] border border-border/60 bg-card">
-                <div className="absolute size-56 rounded-full border border-border/25" />
-                <div className="absolute inset-8 rounded-[1.5rem] border border-dashed border-border/30" />
-                <div className="how-icon-ring relative flex size-24 items-center justify-center rounded-full bg-primary text-primary-foreground">
-                  <ImagePlusIcon className="size-10" />
-                </div>
-              </div>
-
-              <p className="max-w-md text-base leading-7 text-muted-foreground">
+              <h3 className="mt-5 text-xl font-bold tracking-tight text-white">
+                {HOW_IT_WORKS_STEPS[0].title}
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                 {HOW_IT_WORKS_STEPS[0].body}
               </p>
             </div>
-          </article>
 
-          <article className="workflow-panel relative overflow-hidden rounded-[2rem] border border-border/70 p-6 sm:p-8 lg:col-span-7">
-            <div className="relative z-10">
-              <div className="mb-8 flex items-start justify-between gap-4">
-                <div>
-                  <p className="text-sm font-medium tracking-wide text-primary">
-                    {HOW_IT_WORKS_STEPS[1].step}
-                  </p>
-                  <h3 className="mt-3 text-3xl font-semibold tracking-tight text-foreground">
-                    {HOW_IT_WORKS_STEPS[1].title}
-                  </h3>
+            {/* Visual Micro-UI Demonstration */}
+            <div className="mt-8 rounded-2xl border border-white/10 bg-black/40 p-4 relative overflow-hidden">
+              {/* Soft upload dropzone */}
+              <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-primary/30 bg-primary/[0.03] py-5 px-3 text-center transition-colors duration-300 group-hover:border-primary/50">
+                <div className="flex size-10 items-center justify-center rounded-full bg-primary/20 text-primary mb-2 shadow-inner">
+                  <ImagePlusIcon className="size-5" />
                 </div>
-                <div className="how-icon-ring flex size-14 items-center justify-center rounded-2xl bg-secondary text-secondary-foreground">
-                  <PaletteIcon className="size-6" />
+                <p className="text-xs font-semibold text-white/90">Drop file or browse</p>
+                <div className="mt-2 flex items-center gap-1.5 text-[10px] text-muted-foreground font-mono">
+                  <span className="rounded bg-white/5 px-1.5 py-0.5 border border-white/10">PNG</span>
+                  <span className="rounded bg-white/5 px-1.5 py-0.5 border border-white/10">JPG</span>
+                  <span className="rounded bg-white/5 px-1.5 py-0.5 border border-white/10">WEBP</span>
+                  <span>• 25MB Max</span>
                 </div>
               </div>
 
-              <div className="grid gap-3 sm:grid-cols-3">
-                {WORKFLOW_STYLE_PREVIEW.map((style, index) => (
-                  <div
-                    key={style}
-                    className={cn(
-                      "rounded-[1.5rem] border border-border/60 px-4 py-4",
-                      index === 0 ? "bg-secondary shadow-lg shadow-primary/10" : "bg-card",
-                    )}
-                  >
-                    <div className="flex items-center justify-between gap-2">
-                      <p className="text-sm font-semibold text-foreground">{style}</p>
-                      {index === 0 ? (
-                        <span className="rounded-full bg-primary px-2.5 py-1 text-xs font-semibold text-primary-foreground">
-                          Selected
-                        </span>
-                      ) : (
-                        <span className="rounded-full border border-border/60 px-2.5 py-1 text-xs text-muted-foreground">
-                          Preset
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                ))}
+              {/* Ingested Status Pill */}
+              <div className="mt-3 flex items-center justify-between rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-xs">
+                <div className="flex items-center gap-2 truncate">
+                  <span className="size-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="truncate font-mono text-[11px] text-zinc-300">sample_portrait.png</span>
+                </div>
+                <span className="text-[10px] font-semibold text-emerald-400 shrink-0 ml-2">Ready</span>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Card 2: Select Tool */}
+          <motion.div
+            initial={{ opacity: 0, y: 32 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            whileHover={{ y: -6, transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] } }}
+            transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            className="group relative flex flex-col justify-between rounded-[2rem] border border-primary/40 bg-card/75 p-6 sm:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.7),0_0_40px_rgba(255,90,20,0.18)] backdrop-blur-2xl transition-colors duration-300 hover:border-primary hover:shadow-[0_25px_70px_rgba(0,0,0,0.85),0_0_55px_rgba(255,90,20,0.28)]"
+          >
+            {/* Top specular amber edge line */}
+            <div className="absolute inset-x-0 top-0 h-[1.5px] bg-gradient-to-r from-transparent via-amber-400 to-transparent pointer-events-none" />
+
+            <div>
+              {/* Step & Icon Header */}
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold tracking-widest uppercase text-amber-300 rounded-full border border-amber-400/30 bg-amber-400/10 px-2.5 py-1">
+                  Step 02
+                </span>
+                <div className="flex size-11 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-orange-500 text-white shadow-md">
+                  <Wand2Icon className="size-5" />
+                </div>
               </div>
 
-              <p className="mt-6 max-w-2xl text-base leading-7 text-muted-foreground">
+              <h3 className="mt-5 text-xl font-bold tracking-tight text-white">
+                {HOW_IT_WORKS_STEPS[1].title}
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                 {HOW_IT_WORKS_STEPS[1].body}
               </p>
             </div>
-          </article>
 
-          <article className="workflow-panel workflow-panel-featured relative overflow-hidden rounded-[2rem] border border-border/70 p-6 sm:p-8 lg:col-span-7">
-            <div className="relative z-10">
-              <div className="mb-8 flex items-start justify-between gap-4">
-                <div>
-                  <p className="text-sm font-medium tracking-wide text-primary">
-                    {HOW_IT_WORKS_STEPS[2].step}
-                  </p>
-                  <h3 className="mt-3 text-3xl font-semibold tracking-tight text-foreground">
-                    {HOW_IT_WORKS_STEPS[2].title}
-                  </h3>
+            {/* Visual Micro-UI Demonstration (The 4 Real Aura AI Tools) */}
+            <div className="mt-8 grid grid-cols-2 gap-2">
+              {/* Tool 1: Cutout (Active) */}
+              <div className="flex flex-col justify-between rounded-xl border border-primary/50 bg-primary/15 p-2.5 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <ScissorsIcon className="size-4 text-primary" />
+                  <span className="text-[9px] font-bold uppercase tracking-wider text-amber-300">Active</span>
                 </div>
-                <div className="how-icon-ring flex size-14 items-center justify-center rounded-2xl bg-primary text-primary-foreground">
-                  <SparklesIcon className="size-6" />
+                <div className="mt-2">
+                  <p className="text-xs font-bold text-white">Cutout BG</p>
+                  <p className="text-[10px] text-zinc-400">Sub-pixel edge</p>
                 </div>
               </div>
 
-              <div className="rounded-[1.75rem] border border-border/60 bg-card p-5">
-                <div className="flex flex-wrap items-center justify-between gap-4">
-                  <div>
-                    <p className="caps-sm text-sm uppercase text-muted-foreground">Engine status</p>
-                    <p className="mt-2 text-2xl font-semibold tracking-tight text-foreground">
-                      Protecting identity and composition
-                    </p>
-                  </div>
-                  <Button
-                    size="sm"
-                    className="pointer-events-none rounded-full shadow-lg shadow-primary/20"
-                    tabIndex={-1}
-                    type="button"
-                  >
-                    AI Rendering
-                  </Button>
+              {/* Tool 2: Scene Replacer */}
+              <div className="flex flex-col justify-between rounded-xl border border-white/10 bg-white/[0.03] p-2.5 hover:border-white/20 transition-colors">
+                <div className="flex items-center justify-between">
+                  <SparklesIcon className="size-4 text-zinc-400" />
+                  <span className="text-[9px] font-semibold text-zinc-500">GenAI</span>
                 </div>
-
-                <div className="mt-6 grid gap-4 sm:grid-cols-[1fr_auto] sm:items-center">
-                  <div className="h-3 overflow-hidden rounded-full bg-secondary/70">
-                    <div className="h-full w-[78%] rounded-full bg-primary" />
-                  </div>
-                  <div className="text-sm text-muted-foreground">78% complete</div>
+                <div className="mt-2">
+                  <p className="text-xs font-semibold text-zinc-200">Scene Gen</p>
+                  <p className="text-[10px] text-zinc-400">Prompt studio</p>
                 </div>
               </div>
 
-              <p className="mt-6 max-w-2xl text-base leading-7 text-muted-foreground">
+              {/* Tool 3: 4K Upscale */}
+              <div className="flex flex-col justify-between rounded-xl border border-white/10 bg-white/[0.03] p-2.5 hover:border-white/20 transition-colors">
+                <div className="flex items-center justify-between">
+                  <Maximize2Icon className="size-4 text-zinc-400" />
+                  <span className="text-[9px] font-semibold text-zinc-500">4K HD</span>
+                </div>
+                <div className="mt-2">
+                  <p className="text-xs font-semibold text-zinc-200">AI Upscale</p>
+                  <p className="text-[10px] text-zinc-400">2x & 4x super-res</p>
+                </div>
+              </div>
+
+              {/* Tool 4: Watermark */}
+              <div className="flex flex-col justify-between rounded-xl border border-white/10 bg-white/[0.03] p-2.5 hover:border-white/20 transition-colors">
+                <div className="flex items-center justify-between">
+                  <TypeIcon className="size-4 text-zinc-400" />
+                  <span className="text-[9px] font-semibold text-zinc-500">Overlay</span>
+                </div>
+                <div className="mt-2">
+                  <p className="text-xs font-semibold text-zinc-200">Watermark</p>
+                  <p className="text-[10px] text-zinc-400">Custom branding</p>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Card 3: Inspect & Export */}
+          <motion.div
+            initial={{ opacity: 0, y: 32 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            whileHover={{ y: -6, transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] } }}
+            transition={{ duration: 0.7, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            className="group relative flex flex-col justify-between rounded-[2rem] border border-white/10 bg-card/40 p-6 sm:p-8 backdrop-blur-2xl transition-colors duration-300 hover:border-white/20 hover:shadow-[0_20px_50px_rgba(0,0,0,0.8)]"
+          >
+            {/* Top specular highlight edge line */}
+            <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
+
+            <div>
+              {/* Step & Icon Header */}
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold tracking-widest uppercase text-primary/90 rounded-full border border-primary/20 bg-primary/10 px-2.5 py-1">
+                  Step 03
+                </span>
+                <div className="flex size-11 items-center justify-center rounded-xl bg-primary/15 border border-primary/25 text-primary shadow-sm">
+                  <SlidersHorizontalIcon className="size-5" />
+                </div>
+              </div>
+
+              <h3 className="mt-5 text-xl font-bold tracking-tight text-white">
+                {HOW_IT_WORKS_STEPS[2].title}
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                 {HOW_IT_WORKS_STEPS[2].body}
               </p>
             </div>
-          </article>
+
+            {/* Visual Micro-UI Demonstration (Split Comparison & Lossless Export) */}
+            <div className="mt-8 rounded-2xl border border-white/10 bg-black/40 p-3.5 relative overflow-hidden">
+              {/* Mini Split Canvas Mockup */}
+              <div className="relative h-20 w-full overflow-hidden rounded-xl border border-white/10 flex">
+                {/* Left side: Original */}
+                <div className="w-1/2 bg-gradient-to-br from-zinc-800 to-zinc-900 flex items-center justify-center relative">
+                  <span className="absolute left-2 top-2 text-[9px] font-mono uppercase bg-black/70 px-1.5 py-0.5 rounded text-zinc-400">
+                    Original
+                  </span>
+                </div>
+                {/* Divider Line */}
+                <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-[2px] bg-primary shadow-[0_0_10px_#ff5a14] z-10 flex items-center justify-center">
+                  <div className="size-4 rounded-full bg-primary text-black flex items-center justify-center text-[8px] font-bold shadow-md">
+                    ↔
+                  </div>
+                </div>
+                {/* Right side: Transparent Cutout Result */}
+                <div className="w-1/2 bg-[radial-gradient(#ffffff12_1px,transparent_1px)] [background-size:8px_8px] bg-card flex items-center justify-center relative">
+                  <span className="absolute right-2 top-2 text-[9px] font-mono uppercase bg-primary/20 border border-primary/30 px-1.5 py-0.5 rounded text-primary">
+                    Cutout 4K
+                  </span>
+                </div>
+              </div>
+
+              {/* Export Info & Action */}
+              <div className="mt-3 flex items-center justify-between rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-xs">
+                <div className="flex items-center gap-1.5 text-zinc-300">
+                  <CheckCircle2Icon className="size-3.5 text-emerald-400" />
+                  <span className="text-[11px] font-medium">Lossless PNG Export</span>
+                </div>
+                <span className="inline-flex items-center gap-1 rounded bg-primary/20 px-2 py-0.5 text-[10px] font-bold text-primary">
+                  <DownloadIcon className="size-3" />
+                  <span>4K Ready</span>
+                </span>
+              </div>
+            </div>
+          </motion.div>
         </div>
-      </section>
-    </GridBackground>
+
+        {/* Bottom Quick Action Banner */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ duration: 0.6, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
+          className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/[0.02] p-5 sm:p-6 backdrop-blur-xl"
+        >
+          <div className="flex items-center gap-3 text-center sm:text-left">
+            <div className="flex size-3 relative">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex size-3 rounded-full bg-emerald-500" />
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-white">Experience the full pipeline in real time</p>
+              <p className="text-xs text-muted-foreground">Test background removal, upscaling, and generative replacement with 3 free trial credits.</p>
+            </div>
+          </div>
+
+          <Button
+            asChild
+            className="rounded-full bg-gradient-to-r from-primary via-orange-500 to-amber-500 px-6 font-semibold text-white shadow-[0_4px_20px_rgba(255,90,20,0.35)] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_6px_28px_rgba(255,90,20,0.6)] cursor-pointer shrink-0"
+          >
+            <Link href="/playground" className="inline-flex items-center gap-2">
+              <span>Open AI Playground</span>
+              <ArrowRightIcon className="size-4" />
+            </Link>
+          </Button>
+        </motion.div>
+      </div>
+    </section>
   );
 }
