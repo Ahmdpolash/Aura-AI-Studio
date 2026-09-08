@@ -3,10 +3,9 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import Stripe from "stripe";
 import { prisma } from "@/lib/prisma";
+import { getStripe } from "@/lib/stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
-  apiVersion: "2025-02-24.acacia" as any,
-});
+export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
   try {
@@ -22,6 +21,13 @@ export async function POST(request: Request) {
 
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    if (!process.env.STRIPE_SECRET_KEY) {
+      return NextResponse.json(
+        { error: "Stripe Secret Key is not configured." },
+        { status: 500 }
+      );
     }
 
     if (!process.env.STRIPE_PRICE_ID) {
@@ -65,6 +71,7 @@ export async function POST(request: Request) {
       sessionConfig.customer_email = user.email;
     }
 
+    const stripe = getStripe();
     const checkoutSession = await stripe.checkout.sessions.create(sessionConfig);
 
     return NextResponse.json({

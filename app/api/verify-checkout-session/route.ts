@@ -1,12 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import Stripe from "stripe";
 import { prisma } from "@/lib/prisma";
+import { getStripe } from "@/lib/stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
-  apiVersion: "2025-02-24.acacia" as any,
-});
+export const dynamic = "force-dynamic";
 
 export async function GET(request: NextRequest) {
   try {
@@ -23,6 +21,11 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Missing session_id parameter" }, { status: 400 });
     }
 
+    if (!process.env.STRIPE_SECRET_KEY) {
+      return NextResponse.json({ error: "Stripe Secret Key not configured" }, { status: 500 });
+    }
+
+    const stripe = getStripe();
     const checkoutSession = await stripe.checkout.sessions.retrieve(sessionId);
 
     if (!checkoutSession) {

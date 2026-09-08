@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useSession, signIn, signOut } from "next-auth/react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { PlaygroundWorkbench } from "@/components/playground/PlaygroundWorkbench";
 import { ApiConfigModal } from "@/components/modals/ApiConfigModal";
@@ -113,7 +113,15 @@ export default function PlaygroundPage() {
         </header>
 
         {/* Studio Workbench */}
-        <PlaygroundWorkbench />
+        <Suspense
+          fallback={
+            <div className="flex min-h-[500px] w-full items-center justify-center">
+              <div className="size-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+            </div>
+          }
+        >
+          <PlaygroundWorkbench />
+        </Suspense>
 
         <ApiConfigModal
           isOpen={isConfigModalOpen}
