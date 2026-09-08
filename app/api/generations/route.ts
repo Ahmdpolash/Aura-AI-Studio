@@ -53,6 +53,7 @@ export async function POST(request: Request) {
     }
 
     const isPro = user.plan === "PRO";
+    const PRO_HOURLY_LIMIT = 8;
     const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
     const hourlyCount = await prisma.generation.count({
       where: {
@@ -61,9 +62,9 @@ export async function POST(request: Request) {
       },
     });
 
-    if (isPro && hourlyCount >= 15) {
+    if (isPro && hourlyCount >= PRO_HOURLY_LIMIT) {
       return NextResponse.json(
-        { error: "Hourly rate limit reached (15 generations/hour). Please wait for the window to reset." },
+        { error: `Hourly rate limit reached (${PRO_HOURLY_LIMIT} generations/hour). Please wait for the window to reset.` },
         { status: 429 }
       );
     }

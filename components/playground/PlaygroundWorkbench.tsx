@@ -215,7 +215,7 @@ export function PlaygroundWorkbench() {
 
     if (isPro && usageData?.isHourlyCapped) {
       const waitMin = usageData.resetInMinutes || 1;
-      toast.warning(`Hourly limit reached (${usageData.hourlyLimit || 15} edits/hr). Resets in ${waitMin}m.`);
+      toast.warning(`Hourly limit reached (${usageData.hourlyLimit || 8} edits/hr). Resets in ${waitMin}m.`);
       return;
     }
 

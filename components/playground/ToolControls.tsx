@@ -205,8 +205,8 @@ export function ToolControls({
             <p className="text-xs text-muted-foreground">
               {isPro
                 ? usageData?.isHourlyCapped
-                  ? `15/15 hourly edits used. Unlocks in ${usageData?.resetInMinutes || 1}m`
-                  : `${usageData?.hourlyRemaining ?? 15} of 15 hourly edits available`
+                  ? `${usageData?.hourlyLimit ?? 8}/${usageData?.hourlyLimit ?? 8} hourly edits used. Unlocks in ${usageData?.resetInMinutes || 1}m`
+                  : `${usageData?.hourlyRemaining ?? 8} of ${usageData?.hourlyLimit ?? 8} hourly edits available`
                 : `${usageData?.usageCount ?? 0} of ${usageData?.usageLimit ?? 3} free edits used`}
             </p>
           </div>

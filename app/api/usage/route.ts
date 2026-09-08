@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
-const PRO_HOURLY_LIMIT = 15;
+const PRO_HOURLY_LIMIT = 8;
 const WINDOW_DURATION_MS = 60 * 60 * 1000; // 1 hour rolling window
 
 export async function GET() {
