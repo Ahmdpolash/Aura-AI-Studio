@@ -1,16 +1,37 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSession, signIn } from "next-auth/react";
 import Link from "next/link";
 import { motion } from "motion/react";
-import { ArrowRightIcon, CheckIcon, CrownIcon, Loader2Icon, SparklesIcon, ZapIcon } from "lucide-react";
+import {
+  ArrowRightIcon,
+  CheckIcon,
+  CrownIcon,
+  KeyRoundIcon,
+  Loader2Icon,
+  SparklesIcon,
+  ZapIcon,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { ApiConfigModal } from "@/components/modals/ApiConfigModal";
+import { getCustomImageKitConfig, BYOK_CHANGE_EVENT } from "@/lib/byok-storage";
 
 export function PricingSection() {
   const { data: session } = useSession();
   const [isLoading, setIsLoading] = useState(false);
+  const [isApiConfigOpen, setIsApiConfigOpen] = useState(false);
+  const [hasCustomKey, setHasCustomKey] = useState(false);
+
+  useEffect(() => {
+    const updateKeyStatus = () => {
+      setHasCustomKey(Boolean(getCustomImageKitConfig()));
+    };
+    updateKeyStatus();
+    window.addEventListener(BYOK_CHANGE_EVENT, updateKeyStatus);
+    return () => window.removeEventListener(BYOK_CHANGE_EVENT, updateKeyStatus);
+  }, []);
 
   const handleCheckout = async () => {
     if (!session?.user) {
@@ -231,6 +252,79 @@ export function PricingSection() {
             </Button>
           </motion.div>
         </div>
+
+        {/* BYOK (Bring Your Own Key) Sleek Glass Banner */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ duration: 0.6, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+          className="group relative mt-10 overflow-hidden rounded-[2rem] border border-white/12 bg-gradient-to-r from-card/85 via-white/[0.03] to-card/85 p-6 sm:p-8 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.7)] transition-all duration-300 hover:border-primary/40 hover:shadow-[0_24px_60px_rgba(255,140,0,0.12)]"
+        >
+          {/* Ambient Glow Orbs */}
+          <div className="pointer-events-none absolute -left-12 -top-12 size-48 rounded-full bg-primary/15 blur-3xl" />
+          <div className="pointer-events-none absolute -right-12 -bottom-12 size-48 rounded-full bg-amber-500/10 blur-3xl" />
+
+          {/* Top specular edge highlight */}
+          <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
+
+          <div className="relative flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
+            <div className="flex items-start gap-4 sm:gap-5">
+              <div className="flex size-12 sm:size-14 shrink-0 items-center justify-center rounded-2xl border border-primary/40 bg-gradient-to-br from-primary/25 via-primary/10 to-transparent text-primary shadow-[0_0_24px_rgba(255,140,0,0.25)]">
+                <KeyRoundIcon className="size-6 sm:size-7" />
+              </div>
+
+              <div className="space-y-1.5">
+                <div className="flex flex-wrap items-center gap-2.5">
+                  <h4 className="text-base sm:text-lg font-bold tracking-tight text-white">
+                    Bring Your Own Key (BYOK)
+                  </h4>
+                  {hasCustomKey ? (
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-2.5 py-0.5 text-[10px] font-bold text-emerald-400 shadow-sm">
+                      <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" /> Active Key Connected
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-1 rounded-full border border-primary/30 bg-primary/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-primary">
+                      Quota-Free Alternative
+                    </span>
+                  )}
+                </div>
+
+                <p className="max-w-2xl text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                  Want unlimited transformations without upgrading? Connect your personal free ImageKit API credentials to process studio edits with zero rate limits directly from your browser.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex w-full shrink-0 flex-col sm:w-auto sm:flex-row items-center gap-3">
+              <Button
+                type="button"
+                onClick={() => setIsApiConfigOpen(true)}
+                className="w-full sm:w-auto rounded-full border border-primary/40 bg-primary/15 px-5 py-2.5 text-xs sm:text-sm font-semibold text-primary shadow-[0_0_16px_rgba(255,140,0,0.15)] transition-all hover:bg-primary hover:text-black hover:shadow-[0_0_25px_rgba(255,140,0,0.4)] cursor-pointer"
+              >
+                <KeyRoundIcon className="mr-1.5 size-4" />
+                {hasCustomKey ? "Manage API Keys" : "Configure Free Key"}
+              </Button>
+
+              <Button
+                asChild
+                variant="ghost"
+                className="w-full sm:w-auto rounded-full px-4 py-2.5 text-xs sm:text-sm font-medium text-foreground/80 hover:bg-white/5 hover:text-white cursor-pointer"
+              >
+                <Link href="/playground">
+                  <span>Open Studio</span>
+                  <ArrowRightIcon className="ml-1 size-3.5" />
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* BYOK Config Modal */}
+        <ApiConfigModal
+          isOpen={isApiConfigOpen}
+          onClose={() => setIsApiConfigOpen(false)}
+        />
       </div>
     </section>
   );

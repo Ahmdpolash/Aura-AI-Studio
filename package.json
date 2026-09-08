@@ -2,6 +2,12 @@
   "name": "aura-studio",
   "version": "0.1.0",
   "private": true,
+  "author": {
+    "name": "Polash Ahmed",
+    "email": "talk.polsh@gmail.com",
+    "github": "https://github.com/ahmdpolash",
+    "linkedin": "https://linkedin.com/in/polashahmed"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && next build",

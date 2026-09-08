@@ -17,15 +17,12 @@ import {
 import {
   KeyRoundIcon,
   BookOpenIcon,
-  CheckCircle2Icon,
   ExternalLinkIcon,
   EyeIcon,
   EyeOffIcon,
   RotateCcwIcon,
   SaveIcon,
   ShieldCheckIcon,
-  SparklesIcon,
-  ZapIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "motion/react";
@@ -39,10 +36,8 @@ export function ApiConfigModal({ isOpen, onClose }: ApiConfigModalProps) {
   const [activeTab, setActiveTab] = useState<"keys" | "guide">("keys");
   const [publicKey, setPublicKey] = useState("");
   const [privateKey, setPrivateKey] = useState("");
-  const [urlEndpoint, setUrlEndpoint] = useState("");
   const [showPrivateKey, setShowPrivateKey] = useState(false);
   const [hasCustomConfig, setHasCustomConfig] = useState(false);
-  const [isTesting, setIsTesting] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -50,12 +45,10 @@ export function ApiConfigModal({ isOpen, onClose }: ApiConfigModalProps) {
       if (config) {
         setPublicKey(config.publicKey);
         setPrivateKey(config.privateKey);
-        setUrlEndpoint(config.urlEndpoint);
         setHasCustomConfig(true);
       } else {
         setPublicKey("");
         setPrivateKey("");
-        setUrlEndpoint("");
         setHasCustomConfig(false);
       }
     }
@@ -64,25 +57,23 @@ export function ApiConfigModal({ isOpen, onClose }: ApiConfigModalProps) {
   const handleSave = () => {
     const trimmedPub = publicKey.trim();
     const trimmedPriv = privateKey.trim();
-    const trimmedUrl = urlEndpoint.trim().replace(/\/$/, "");
 
-    if (!trimmedPub || !trimmedPriv || !trimmedUrl) {
-      toast.error("Please fill in Public Key, Private Key, and URL Endpoint.");
+    if (!trimmedPub || !trimmedPriv) {
+      toast.error("Please fill in both Public Key and Private Key.");
       return;
     }
 
-    if (
-      !trimmedUrl.startsWith("http://") &&
-      !trimmedUrl.startsWith("https://")
-    ) {
-      toast.error("URL Endpoint must start with https:// or http://");
-      return;
+    if (!trimmedPub.startsWith("public_")) {
+      toast.warning("ImageKit Public Keys usually start with 'public_'");
+    }
+
+    if (!trimmedPriv.startsWith("private_")) {
+      toast.warning("ImageKit Private Keys usually start with 'private_'");
     }
 
     saveCustomImageKitConfig({
       publicKey: trimmedPub,
       privateKey: trimmedPriv,
-      urlEndpoint: trimmedUrl,
     });
 
     setHasCustomConfig(true);
@@ -94,27 +85,8 @@ export function ApiConfigModal({ isOpen, onClose }: ApiConfigModalProps) {
     clearCustomImageKitConfig();
     setPublicKey("");
     setPrivateKey("");
-    setUrlEndpoint("");
     setHasCustomConfig(false);
     toast.info("Switched back to Aura default cloud credentials.");
-  };
-
-  const handleTestConnection = async () => {
-    const trimmedUrl = urlEndpoint.trim().replace(/\/$/, "");
-    if (!trimmedUrl) {
-      toast.error("Please enter a URL Endpoint to test.");
-      return;
-    }
-
-    try {
-      setIsTesting(true);
-      const res = await fetch(trimmedUrl, { method: "HEAD", mode: "no-cors" });
-      toast.success("Endpoint reachable! Your ImageKit host is online.");
-    } catch {
-      toast.error("Could not reach endpoint. Please double check the URL.");
-    } finally {
-      setIsTesting(false);
-    }
   };
 
   return (
@@ -176,7 +148,7 @@ export function ApiConfigModal({ isOpen, onClose }: ApiConfigModalProps) {
         </div>
 
         {/* Tab Content */}
-        <div className="mt-4 min-h-[290px]">
+        <div className="mt-4 min-h-[240px]">
           <AnimatePresence mode="wait">
             {activeTab === "keys" ? (
               <motion.div
@@ -197,14 +169,14 @@ export function ApiConfigModal({ isOpen, onClose }: ApiConfigModalProps) {
                     value={publicKey}
                     onChange={(e) => setPublicKey(e.target.value)}
                     placeholder="public_xxxxxxxxxxxxxxxxxx"
-                    className="w-full rounded-xl border border-white/10 bg-background/60 px-3.5 py-2 text-xs text-foreground placeholder:text-muted-foreground/50 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary font-mono"
+                    className="w-full rounded-xl border border-white/10 bg-background/60 px-3.5 py-2.5 text-xs text-foreground placeholder:text-muted-foreground/50 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary font-mono"
                   />
                 </div>
 
                 {/* Private Key */}
                 <div>
                   <label className="block text-xs font-medium text-foreground mb-1.5">
-                    ImageKit Private Key
+                    ImageKit Private Key (Secret Key)
                   </label>
                   <div className="relative">
                     <input
@@ -212,7 +184,7 @@ export function ApiConfigModal({ isOpen, onClose }: ApiConfigModalProps) {
                       value={privateKey}
                       onChange={(e) => setPrivateKey(e.target.value)}
                       placeholder="private_xxxxxxxxxxxxxxxxxx"
-                      className="w-full rounded-xl border border-white/10 bg-background/60 px-3.5 py-2 pr-10 text-xs text-foreground placeholder:text-muted-foreground/50 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary font-mono"
+                      className="w-full rounded-xl border border-white/10 bg-background/60 px-3.5 py-2.5 pr-10 text-xs text-foreground placeholder:text-muted-foreground/50 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary font-mono"
                     />
                     <button
                       type="button"
@@ -226,30 +198,15 @@ export function ApiConfigModal({ isOpen, onClose }: ApiConfigModalProps) {
                       )}
                     </button>
                   </div>
-                  <p className="mt-1 text-[10px] text-muted-foreground flex items-center gap-1">
-                    <ShieldCheckIcon className="size-3 text-emerald-400" />
-                    Stored locally in your browser session. Never saved on our
-                    database.
+                  <p className="mt-2 text-[10px] text-muted-foreground flex items-center gap-1.5">
+                    <ShieldCheckIcon className="size-3.5 text-emerald-400 shrink-0" />
+                    <span>Stored securely in your local browser session. Never saved to our database.</span>
                   </p>
                 </div>
 
-                {/* URL Endpoint */}
-                <div>
-                  <label className="block text-xs font-medium text-foreground mb-1.5">
-                    URL Endpoint
-                  </label>
-                  <input
-                    type="text"
-                    value={urlEndpoint}
-                    onChange={(e) => setUrlEndpoint(e.target.value)}
-                    placeholder="https://ik.imagekit.io/your_imagekit_id"
-                    className="w-full rounded-xl border border-white/10 bg-background/60 px-3.5 py-2 text-xs text-foreground placeholder:text-muted-foreground/50 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary font-mono"
-                  />
-                </div>
-
                 {/* Actions Row */}
-                <div className="pt-2 flex items-center justify-between gap-2 border-t border-white/8">
-                  <div className="flex items-center gap-2">
+                <div className="pt-3 flex items-center justify-between gap-2 border-t border-white/8">
+                  <div>
                     {hasCustomConfig && (
                       <Button
                         type="button"
@@ -262,23 +219,12 @@ export function ApiConfigModal({ isOpen, onClose }: ApiConfigModalProps) {
                         Reset Default
                       </Button>
                     )}
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={handleTestConnection}
-                      disabled={isTesting || !urlEndpoint}
-                      className="rounded-xl text-xs border-white/12 bg-white/5 h-9 px-3 cursor-pointer"
-                    >
-                      <ZapIcon className="mr-1.5 size-3.5" />
-                      {isTesting ? "Testing..." : "Test Endpoint"}
-                    </Button>
                   </div>
 
                   <Button
                     type="button"
                     onClick={handleSave}
-                    className="studio-primary-action rounded-xl text-xs font-semibold h-9 px-4 cursor-pointer"
+                    className="studio-primary-action rounded-xl text-xs font-semibold h-9 px-5 cursor-pointer"
                   >
                     <SaveIcon className="mr-1.5 size-3.5" />
                     Save & Activate
@@ -301,7 +247,7 @@ export function ApiConfigModal({ isOpen, onClose }: ApiConfigModalProps) {
                     </div>
                     <div>
                       <h4 className="font-semibold text-foreground">
-                        Sign Up for ImageKit
+                        Sign Up for Free at ImageKit
                       </h4>
                       <p className="text-muted-foreground mt-0.5 leading-relaxed">
                         Create a free account at imagekit.io. The free tier
@@ -328,7 +274,7 @@ export function ApiConfigModal({ isOpen, onClose }: ApiConfigModalProps) {
                     </div>
                     <div>
                       <h4 className="font-semibold text-foreground">
-                        Navigate to API Keys
+                        Navigate to Developer Options
                       </h4>
                       <p className="text-muted-foreground mt-0.5 leading-relaxed">
                         In your ImageKit dashboard, open the left navigation
@@ -346,13 +292,11 @@ export function ApiConfigModal({ isOpen, onClose }: ApiConfigModalProps) {
                     </div>
                     <div>
                       <h4 className="font-semibold text-foreground">
-                        Copy Keys & URL Endpoint
+                        Copy Public & Private Keys
                       </h4>
                       <p className="text-muted-foreground mt-0.5 leading-relaxed">
-                        Copy your <strong>Public Key</strong>,{" "}
-                        <strong>Private Key</strong>, and{" "}
-                        <strong>URL-Endpoint</strong> (starts with{" "}
-                        <code>https://ik.imagekit.io/...</code>).
+                        Copy your <strong>Public Key</strong> (starts with <code>public_</code>) and{" "}
+                        <strong>Private Key</strong> (starts with <code>private_</code>).
                       </p>
                     </div>
                   </div>
@@ -369,9 +313,9 @@ export function ApiConfigModal({ isOpen, onClose }: ApiConfigModalProps) {
                       </h4>
                       <p className="text-muted-foreground mt-0.5 leading-relaxed">
                         Switch to the <strong>API Credentials</strong> tab
-                        above, paste the values, and click{" "}
-                        <strong>Save & Activate</strong>. All operations will
-                        now run directly through your account.
+                        above, paste both keys, and click{" "}
+                        <strong>Save & Activate</strong>. All image uploads and transformations will
+                        now run directly through your own ImageKit quota.
                       </p>
                     </div>
                   </div>

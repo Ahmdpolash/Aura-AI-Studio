@@ -1,7 +1,6 @@
 export interface CustomImageKitConfig {
   publicKey: string;
   privateKey: string;
-  urlEndpoint: string;
 }
 
 const STORAGE_KEY = "aura_custom_imagekit_config";
@@ -13,8 +12,11 @@ export function getCustomImageKitConfig(): CustomImageKitConfig | null {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw);
-    if (parsed.publicKey && parsed.privateKey && parsed.urlEndpoint) {
-      return parsed;
+    if (parsed.publicKey && parsed.privateKey) {
+      return {
+        publicKey: parsed.publicKey,
+        privateKey: parsed.privateKey,
+      };
     }
     return null;
   } catch {
