@@ -24,10 +24,10 @@ function InteractiveGalleryCard({
   const [isHovered, setIsHovered] = useState(false);
 
   const tagLabels = [
-    "⚡ Background Cutout",
-    "✦ AI Scene Replace",
-    "👑 4K Detail Upscaled",
-    "★ Dynamic Watermark",
+    "Background Cutout",
+    "AI Scene Replace",
+    "4K Detail Upscaled",
+    "Dynamic Watermark",
   ];
   const tagLabel = tagLabels[index % tagLabels.length];
 

@@ -169,8 +169,9 @@ export function CanvasViewer({
           </h3>
 
           {uploadingFileName && (
-            <p className="mt-3 max-w-sm truncate rounded-xl border border-white/15 bg-black/40 px-4 py-1.5 text-xs font-medium text-foreground shadow-inner">
-              📄 {uploadingFileName}
+            <p className="mt-3 inline-flex items-center gap-1.5 max-w-sm truncate rounded-xl border border-white/15 bg-black/40 px-4 py-1.5 text-xs font-medium text-foreground shadow-inner">
+              <ImageIcon className="size-3.5 text-primary shrink-0" />
+              <span className="truncate">{uploadingFileName}</span>
             </p>
           )}
 
@@ -260,7 +261,7 @@ export function CanvasViewer({
                   onClick={() => onSampleSelect(sample.url)}
                   className="rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs font-semibold text-foreground/90 transition-all hover:border-primary/70 hover:bg-primary/15 hover:text-white cursor-pointer shadow-sm"
                 >
-                  ⚡ {sample.name}
+                  {sample.name}
                 </button>
               ))}
             </div>
@@ -295,7 +296,7 @@ export function CanvasViewer({
 
           {activeToolName && (
             <span className="truncate rounded-full border border-primary/40 bg-primary/15 px-3 py-1 text-xs font-semibold text-primary shadow-[0_0_12px_rgba(255,140,0,0.2)]">
-              ⚡ {activeToolName}
+              {activeToolName}
             </span>
           )}
         </div>
