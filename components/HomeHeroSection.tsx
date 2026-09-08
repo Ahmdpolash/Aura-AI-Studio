@@ -30,11 +30,15 @@ function SeamlessHeroBackground() {
   const checkTransition = (
     currentVideo: HTMLVideoElement,
     otherVideo: HTMLVideoElement,
-    nextActive: 1 | 2
+    nextActive: 1 | 2,
   ) => {
     if (!currentVideo || !otherVideo) return;
     const timeLeft = currentVideo.duration - currentVideo.currentTime;
-    if (timeLeft <= 1.2 && !isTransitioningRef.current && currentVideo.duration > 2) {
+    if (
+      timeLeft <= 1.2 &&
+      !isTransitioningRef.current &&
+      currentVideo.duration > 2
+    ) {
       isTransitioningRef.current = true;
       otherVideo.currentTime = 0;
       otherVideo.play().catch(() => {});
@@ -156,7 +160,10 @@ export function HomeHeroSection() {
                     {link.label}
                   </span>
                   {link.hasDropdown ? (
-                    <ChevronDownIcon className="home-nav-chevron transition-transform duration-200 group-hover:rotate-180" aria-hidden />
+                    <ChevronDownIcon
+                      className="home-nav-chevron transition-transform duration-200 group-hover:rotate-180"
+                      aria-hidden
+                    />
                   ) : null}
                   {/* Subtle amber bottom sheen line on hover */}
                   <span className="absolute inset-x-3 -bottom-0.5 h-[1.5px] rounded-full bg-gradient-to-r from-transparent via-primary/80 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 pointer-events-none" />
@@ -180,7 +187,11 @@ export function HomeHeroSection() {
                     </>
                   )}
 
-                  <Button variant="outline" asChild className="home-btn-studio-outline hidden sm:inline-flex">
+                  <Button
+                    variant="outline"
+                    asChild
+                    className="home-btn-studio-outline hidden sm:inline-flex"
+                  >
                     <Link href="/playground" prefetch={false}>
                       Playground
                     </Link>
@@ -210,7 +221,11 @@ export function HomeHeroSection() {
                     className="flex size-8 items-center justify-center rounded-full border border-white/20 bg-white/10 text-foreground transition-colors hover:bg-white/20 md:!hidden cursor-pointer"
                     aria-label="Toggle Navigation"
                   >
-                    {isMobileMenuOpen ? <XIcon className="size-4" /> : <MenuIcon className="size-4" />}
+                    {isMobileMenuOpen ? (
+                      <XIcon className="size-4" />
+                    ) : (
+                      <MenuIcon className="size-4" />
+                    )}
                   </button>
                 </div>
               ) : (
@@ -235,7 +250,11 @@ export function HomeHeroSection() {
                     className="flex size-8 items-center justify-center rounded-full border border-white/20 bg-white/10 text-foreground transition-colors hover:bg-white/20 md:!hidden cursor-pointer"
                     aria-label="Toggle Navigation"
                   >
-                    {isMobileMenuOpen ? <XIcon className="size-4" /> : <MenuIcon className="size-4" />}
+                    {isMobileMenuOpen ? (
+                      <XIcon className="size-4" />
+                    ) : (
+                      <MenuIcon className="size-4" />
+                    )}
                   </button>
                 </div>
               )}
@@ -254,7 +273,9 @@ export function HomeHeroSection() {
                     className="flex items-center justify-between rounded-xl px-3 py-2 text-sm font-medium text-foreground/80 transition-colors hover:bg-white/5 hover:text-white"
                   >
                     <span>{link.label}</span>
-                    {link.hasDropdown && <ChevronDownIcon className="size-4 opacity-50" />}
+                    {link.hasDropdown && (
+                      <ChevronDownIcon className="size-4 opacity-50" />
+                    )}
                   </Link>
                 ))}
 
@@ -272,8 +293,12 @@ export function HomeHeroSection() {
                           />
                         )}
                         <div className="min-w-0">
-                          <p className="truncate text-xs font-semibold text-foreground">{user.name}</p>
-                          <p className="truncate text-[10px] text-muted-foreground">{user.email}</p>
+                          <p className="truncate text-xs font-semibold text-foreground">
+                            {user.name}
+                          </p>
+                          <p className="truncate text-[10px] text-muted-foreground">
+                            {user.email}
+                          </p>
                         </div>
                       </div>
                       {isPro && (
@@ -284,7 +309,10 @@ export function HomeHeroSection() {
                     </div>
 
                     <Button asChild className="home-btn-nav-primary w-full">
-                      <Link href="/playground" onClick={() => setIsMobileMenuOpen(false)}>
+                      <Link
+                        href="/playground"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
                         Open AI Playground
                       </Link>
                     </Button>
@@ -311,10 +339,14 @@ export function HomeHeroSection() {
                       }}
                       className="w-full rounded-full border border-white/20 bg-white/10 py-2 text-xs font-medium text-foreground cursor-pointer"
                     >
-                      <LogInIcon className="mr-2 size-3.5" /> Sign In with Google
+                      <LogInIcon className="mr-2 size-3.5" /> Sign In with
+                      Google
                     </Button>
                     <Button asChild className="home-btn-nav-primary w-full">
-                      <Link href="/playground" onClick={() => setIsMobileMenuOpen(false)}>
+                      <Link
+                        href="/playground"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
                         Launch AI Studio
                       </Link>
                     </Button>
@@ -329,7 +361,9 @@ export function HomeHeroSection() {
           <h1 className="hero-title home-hero-title">
             <span className="block">Next-Gen AI Image Studio.</span>
             <span
-              style={{ fontFamily: 'Georgia, "Merriweather", "Times New Roman", serif' }}
+              style={{
+                fontFamily: 'Georgia, "Merriweather", "Times New Roman", serif',
+              }}
               className="mt-3 block font-serif text-2xl font-normal italic tracking-tight text-white/95 sm:mt-4 sm:text-3xl md:text-4xl lg:text-[3.25rem] lg:leading-[1.2] [text-shadow:0_4px_30px_rgba(0,0,0,0.8),0_0_45px_rgba(255,140,0,0.25)]"
             >
               Remove Backgrounds, Replace Scenes & Upscale in Real-time.
@@ -337,7 +371,9 @@ export function HomeHeroSection() {
           </h1>
 
           <p className="home-hero-lede mt-7 max-w-3xl text-pretty text-base font-normal leading-relaxed text-foreground/85 sm:text-lg md:text-[1.25rem] md:leading-relaxed [text-shadow:0_2px_20px_rgba(0,0,0,0.6)]">
-            Professional AI image editing powered by Aura Neural Vision Engine. Isolate subjects, generate custom AI environments, enhance micro-details 2x, and stamp dynamic watermarks.
+            Professional AI image editing powered by Aura Neural Vision Engine.
+            Isolate subjects, generate custom AI environments, enhance
+            micro-details 2x, and stamp dynamic watermarks.
           </p>
 
           <div className="mt-9 flex w-full max-w-md flex-col items-center justify-center gap-4 sm:max-w-none sm:flex-row">
@@ -375,52 +411,6 @@ export function HomeHeroSection() {
 
           {/* Perspective Container */}
           <div className="home-demo-shift group/demo relative !translate-y-0">
-            {/* Floating Feature Glass Badges - Anchored to window corners */}
-            {/* Badge 1: Top Right - Neural Execution Speed */}
-            <motion.div
-              animate={{ y: [0, -7, 0], rotate: [0, 0.8, 0] }}
-              transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
-              className="pointer-events-none select-none absolute -top-4 right-3 sm:-top-5 sm:right-6 lg:-top-6 lg:right-8 z-40 hidden sm:flex items-center gap-2.5 rounded-2xl border border-white/20 bg-black/80 px-3.5 py-2 shadow-[0_16px_36px_rgba(0,0,0,0.7),0_0_25px_rgba(255,140,0,0.25)] backdrop-blur-2xl"
-            >
-              <div className="flex size-7 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 text-black shadow-[0_0_12px_rgba(255,180,0,0.5)]">
-                <ZapIcon className="size-4 fill-black text-black" />
-              </div>
-              <div>
-                <div className="text-[11px] font-semibold text-white tracking-wide">0.8s Neural Cutout</div>
-                <div className="text-[10px] text-zinc-400 font-medium">Zero-latency edge detection</div>
-              </div>
-            </motion.div>
-
-            {/* Badge 2: Bottom Left - Interactive Split Comparison */}
-            <motion.div
-              animate={{ y: [0, 7, 0], rotate: [0, -0.8, 0] }}
-              transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
-              className="pointer-events-none select-none absolute -bottom-4 left-3 sm:-bottom-5 sm:left-6 lg:-bottom-6 lg:left-8 z-40 hidden sm:flex items-center gap-2.5 rounded-2xl border border-white/20 bg-black/80 px-3.5 py-2 shadow-[0_16px_36px_rgba(0,0,0,0.7),0_0_25px_rgba(255,90,20,0.25)] backdrop-blur-2xl"
-            >
-              <div className="flex size-7 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-rose-500 text-white shadow-[0_0_12px_rgba(255,90,20,0.5)]">
-                <SparklesIcon className="size-4 text-white" />
-              </div>
-              <div>
-                <div className="text-[11px] font-semibold text-white tracking-wide">Interactive Dual Canvas</div>
-                <div className="text-[10px] text-zinc-400 font-medium">Real-time split slider preview</div>
-              </div>
-            </motion.div>
-
-            {/* Badge 3: Center Right - 4K Lossless Canvas */}
-            <motion.div
-              animate={{ y: [0, -6, 0] }}
-              transition={{ repeat: Infinity, duration: 5.5, ease: "easeInOut" }}
-              className="pointer-events-none select-none absolute top-1/2 -right-3 sm:-right-4 -translate-y-1/2 z-40 hidden lg:flex items-center gap-2 rounded-2xl border border-white/20 bg-black/80 px-3.5 py-2 shadow-[0_14px_30px_rgba(0,0,0,0.7),0_0_20px_rgba(255,180,0,0.2)] backdrop-blur-2xl"
-            >
-              <div className="flex size-6 items-center justify-center rounded-lg bg-gradient-to-br from-amber-400/20 to-orange-500/20 border border-amber-400/30 text-amber-300">
-                <CrownIcon className="size-3.5 text-amber-400" />
-              </div>
-              <div className="text-[11px] font-semibold text-white/95">
-                4K Ultra-HD Output
-              </div>
-            </motion.div>
-
-            {/* Outer Border Beam Light Shell */}
             <div className="relative rounded-[1.65rem] sm:rounded-[2rem] lg:rounded-[2.25rem] p-[2px] sm:p-[2.5px] overflow-hidden bg-gradient-to-b from-white/30 via-white/10 to-white/5 shadow-[0_30px_100px_rgba(0,0,0,0.9),0_0_60px_rgba(255,90,20,0.25)]">
               {/* Rotating conic light beam (Tailwind + Motion native) */}
               <motion.div
@@ -493,7 +483,6 @@ export function HomeHeroSection() {
                   {/* Hover Center Interactive Call-to-Action Pill */}
                   <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/25 opacity-0 backdrop-blur-[2px] transition-all duration-300 group-hover/preview:opacity-100">
                     <div className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/85 px-5 py-2.5 text-xs sm:text-sm font-semibold text-white shadow-[0_10px_30px_rgba(0,0,0,0.8),0_0_24px_rgba(255,90,20,0.45)] backdrop-blur-xl transition-all duration-300 group-hover/preview:scale-105">
-                      <SparklesIcon className="size-4 text-amber-400" />
                       <span>Open Interactive AI Playground</span>
                       <ArrowUpRightIcon className="size-4 text-primary" />
                     </div>

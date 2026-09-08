@@ -146,7 +146,7 @@ export function ToolControls({
   type CategoryId = "background" | "enhance" | "overlay";
 
   const [activeCategory, setActiveCategory] = useState<CategoryId>(
-    (selectedTool.category as CategoryId) || "enhance",
+    (selectedTool.category as CategoryId) || "background",
   );
 
   // Sync category if tool is selected externally
