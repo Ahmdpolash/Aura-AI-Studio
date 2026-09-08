@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { motion } from "motion/react";
 import {
   CheckCircle2Icon,
   DownloadIcon,
@@ -11,6 +12,7 @@ import {
   SparklesIcon,
   SplitIcon,
   UploadCloudIcon,
+  Wand2Icon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -50,8 +52,29 @@ export function CanvasViewer({
   const [isSplitView, setIsSplitView] = useState(true);
   const [copied, setCopied] = useState(false);
   const [isDragOver, setIsDragOver] = useState(false);
+  const [processingStep, setProcessingStep] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
+
+  // Dynamic progressive stages during AI image generation
+  useEffect(() => {
+    if (!isProcessing) {
+      setProcessingStep(0);
+      return;
+    }
+    const interval = setInterval(() => {
+      setProcessingStep((prev) => (prev < 3 ? prev + 1 : prev));
+    }, 2800);
+    return () => clearInterval(interval);
+  }, [isProcessing]);
+
+  const toolTitle = activeToolName || "AI Transformation";
+  const processingStages = [
+    { step: "01", title: "Scanning Pixel Grid", desc: "Analyzing subject contours, alpha mask boundaries, and lighting...", progress: 28 },
+    { step: "02", title: `Executing ${toolTitle}`, desc: "Running hardware-accelerated neural weights on cloud GPU pipeline...", progress: 58 },
+    { step: "03", title: "Synthesizing Micro-Textures", desc: "Reconstructing high-frequency edge details and specular highlights...", progress: 84 },
+    { step: "04", title: "Finalizing Lossless 4K Pass", desc: "Color grading and rendering lossless transparent canvas...", progress: 96 },
+  ];
 
   const handleMove = useCallback((clientX: number) => {
     if (!containerRef.current) return;
@@ -331,16 +354,81 @@ export function CanvasViewer({
         )}
 
         {isProcessing && (
-          <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/75 p-6 backdrop-blur-md">
-            <div className="flex size-16 items-center justify-center rounded-2xl border border-primary/40 bg-primary/15 text-primary shadow-[0_0_40px_rgba(255,180,0,0.35)]">
-              <Loader2Icon className="size-8 animate-spin" />
-            </div>
-            <p className="mt-4 text-lg font-semibold text-foreground">
-              Transforming with Aura Neural AI...
-            </p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Processing in cloud pipeline. Results will appear automatically.
-            </p>
+          <div className="absolute inset-0 z-30 flex flex-col items-center justify-center p-4 backdrop-blur-md overflow-hidden bg-black/75">
+            {/* Background Laser Scanning Beam traversing across the image */}
+            <motion.div
+              initial={{ top: "0%" }}
+              animate={{ top: ["0%", "100%", "0%"] }}
+              transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
+              className="pointer-events-none absolute inset-x-0 z-10 flex flex-col"
+            >
+              <div className="h-16 w-full bg-gradient-to-b from-transparent via-amber-500/15 to-transparent blur-sm" />
+              <div className="h-[2px] w-full bg-gradient-to-r from-transparent via-amber-300 to-transparent shadow-[0_0_15px_#ff9500,0_0_30px_#ff5a14]" />
+            </motion.div>
+
+            {/* Neural Holographic HUD Card */}
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0, y: 12 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              className="relative z-20 flex flex-col items-center max-w-sm w-full rounded-3xl border border-primary/40 bg-card/90 p-6 sm:p-7 backdrop-blur-2xl shadow-[0_25px_70px_rgba(0,0,0,0.95),0_0_50px_rgba(255,90,20,0.28)] text-center overflow-hidden"
+            >
+              {/* Top specular golden line */}
+              <div className="absolute inset-x-0 top-0 h-[1.5px] bg-gradient-to-r from-transparent via-amber-400 to-transparent pointer-events-none" />
+
+              {/* Ambient warm corner glow */}
+              <div className="pointer-events-none absolute -right-12 -top-12 size-36 rounded-full bg-primary/25 blur-3xl" />
+
+              {/* Multi-Ring Glowing Neural Core */}
+              <div className="relative flex size-20 items-center justify-center mb-4">
+                {/* Ping wave */}
+                <div className="absolute size-20 rounded-full bg-primary/20 animate-ping" />
+                {/* Rotating dashed ring */}
+                <div className="absolute size-20 rounded-full border border-dashed border-primary/50 animate-[spin_8s_linear_infinite]" />
+                {/* Counter-rotating segmented ring */}
+                <div className="absolute size-14 rounded-full border-t-2 border-b-2 border-amber-400 animate-[spin_3s_linear_infinite_reverse]" />
+                {/* Glowing center orb */}
+                <div className="relative flex size-12 items-center justify-center rounded-2xl bg-gradient-to-br from-primary via-orange-500 to-amber-500 text-white shadow-[0_0_25px_rgba(255,90,20,0.6)]">
+                  <Wand2Icon className="size-6 animate-pulse" />
+                </div>
+              </div>
+
+              {/* Status Pill Badge */}
+              <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3.5 py-1 text-[11px] font-semibold text-primary backdrop-blur-md">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-amber-400 opacity-75" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-amber-500" />
+                </span>
+                <span className="uppercase tracking-wider">Aura Neural Vision Engine</span>
+              </div>
+
+              {/* Dynamic Phase Title & Description */}
+              <h4 className="mt-3.5 text-base sm:text-lg font-bold text-white tracking-tight">
+                {processingStages[processingStep].title}
+              </h4>
+              <p className="mt-1 text-xs text-muted-foreground leading-relaxed min-h-[32px] flex items-center justify-center">
+                {processingStages[processingStep].desc}
+              </p>
+
+              {/* Live Animated Progress Bar */}
+              <div className="mt-4 w-full">
+                <div className="flex items-center justify-between text-[10px] font-mono text-zinc-400 mb-1.5">
+                  <span>STAGE {processingStages[processingStep].step} OF 04</span>
+                  <span className="text-amber-300 font-bold">{processingStages[processingStep].progress}%</span>
+                </div>
+                <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/10 p-[1px]">
+                  <motion.div
+                    animate={{ width: `${processingStages[processingStep].progress}%` }}
+                    transition={{ duration: 0.8, ease: "easeOut" }}
+                    className="h-full rounded-full bg-gradient-to-r from-primary via-orange-500 to-amber-400 shadow-[0_0_12px_#ff5a14]"
+                  />
+                </div>
+              </div>
+
+              {/* Security & Quality Tag */}
+              <p className="mt-3 text-[10px] text-zinc-500 font-medium">
+                Hardware-accelerated cloud GPU pipeline • 100% Lossless
+              </p>
+            </motion.div>
           </div>
         )}
 

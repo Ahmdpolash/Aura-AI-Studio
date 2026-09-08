@@ -45,11 +45,27 @@ export async function POST(request: Request) {
 
     const user = await prisma.user.findUnique({
       where: { email: session.user.email },
-      select: { id: true },
+      select: { id: true, plan: true, usageCount: true, usageLimit: true },
     });
 
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    const isPro = user.plan === "PRO";
+    const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
+    const hourlyCount = await prisma.generation.count({
+      where: {
+        userId: user.id,
+        createdAt: { gte: oneHourAgo },
+      },
+    });
+
+    if (isPro && hourlyCount >= 15) {
+      return NextResponse.json(
+        { error: "Hourly rate limit reached (15 generations/hour). Please wait for the window to reset." },
+        { status: 429 }
+      );
     }
 
     const body = await request.json();

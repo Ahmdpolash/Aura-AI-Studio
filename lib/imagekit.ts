@@ -12,9 +12,9 @@ export function getImageKitServerClient() {
   return _client;
 }
 
-export function generateUploadAuth() {
-  const privateKey = process.env.IMAGEKIT_PRIVATE_KEY || "";
-  const publicKey = process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY || "";
+export function generateUploadAuth(customPrivateKey?: string, customPublicKey?: string) {
+  const privateKey = customPrivateKey || process.env.IMAGEKIT_PRIVATE_KEY || "";
+  const publicKey = customPublicKey || process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY || "";
 
   return getUploadAuthParams({
     privateKey,
@@ -23,14 +23,19 @@ export function generateUploadAuth() {
 }
 
 export type TransformToolId =
-  | "bg-remove"
-  | "bg-remove-pro"
-  | "change-bg"
+  | "clarity"
   | "upscale"
   | "retouch"
-  | "text-watermark"
   | "dropshadow"
-  | "genfill";
+  | "sharpen"
+  | "noir"
+  | "vignette"
+  | "sepia"
+  | "avatar"
+  | "text-watermark"
+  | "bg-remove"
+  | "bg-remove-pro"
+  | "change-bg";
 
 export interface TransformOptions {
   prompt?: string;
@@ -46,6 +51,24 @@ export interface TransformOptions {
  */
 export function getToolTransformation(toolId: TransformToolId, options?: TransformOptions): string {
   switch (toolId) {
+    case "clarity":
+      return "e-contrast,e-usm-2-1-0.05";
+    case "upscale":
+      return "w-iw_mul_2,q-95,e-sharpen-5";
+    case "retouch":
+      return "e-contrast,e-usm-1-1-0.05,q-95";
+    case "dropshadow":
+      return "e-shadow-bl-15_st-40_x-10_y-10";
+    case "sharpen":
+      return "e-sharpen-10";
+    case "noir":
+      return "e-grayscale,e-contrast";
+    case "vignette":
+      return "e-vignette,e-contrast";
+    case "sepia":
+      return "e-sepia,e-contrast";
+    case "avatar":
+      return "r-max,c-maintain_ratio";
     case "bg-remove":
       return "e-bgremove,f-png";
     case "bg-remove-pro":
@@ -53,16 +76,6 @@ export function getToolTransformation(toolId: TransformToolId, options?: Transfo
     case "change-bg": {
       const p = options?.prompt?.trim();
       return p ? `e-changebg-prompt-${encodeURIComponent(p)}` : "e-changebg";
-    }
-    case "upscale":
-      return "e-upscale";
-    case "retouch":
-      return "e-retouch";
-    case "dropshadow":
-      return "e-dropshadow,f-png";
-    case "genfill": {
-      const p = options?.prompt?.trim();
-      return p ? `bg-genfill:${encodeURIComponent(p)}` : "bg-genfill";
     }
     case "text-watermark": {
       const text = options?.watermarkText?.trim() || "Aura AI Studio";

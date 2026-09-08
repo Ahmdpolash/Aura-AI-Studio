@@ -6,6 +6,7 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import { ArrowRightIcon, CheckIcon, CrownIcon, Loader2Icon, SparklesIcon, ZapIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 export function PricingSection() {
   const { data: session } = useSession();
@@ -32,7 +33,7 @@ export function PricingSection() {
         window.location.href = data.url;
       }
     } catch (err: any) {
-      alert(err?.message || "Something went wrong.");
+      toast.error(err?.message || "Something went wrong.");
       setIsLoading(false);
     }
   };

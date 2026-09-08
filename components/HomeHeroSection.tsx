@@ -145,17 +145,21 @@ export function HomeHeroSection() {
               </div>
             </Link>
 
-            <div className="home-nav-center">
+            <div className="hidden md:flex items-center justify-center gap-1.5 lg:gap-2.5">
               {CENTER_NAV_LINKS.map((link) => (
                 <Link
                   key={link.label}
                   href={link.href}
-                  className="hero-nav-link inline-flex items-center gap-1"
+                  className="group relative inline-flex items-center gap-1 rounded-full px-4 py-1.5 text-[15px] font-medium text-zinc-300/90 transition-all duration-300 hover:bg-white/[0.08] hover:text-white hover:scale-[1.03] hover:shadow-[0_0_16px_rgba(255,90,20,0.18)] active:scale-[0.98] cursor-pointer"
                 >
-                  {link.label}
+                  <span className="relative z-10 transition-colors duration-200 group-hover:text-white">
+                    {link.label}
+                  </span>
                   {link.hasDropdown ? (
-                    <ChevronDownIcon className="home-nav-chevron" aria-hidden />
+                    <ChevronDownIcon className="home-nav-chevron transition-transform duration-200 group-hover:rotate-180" aria-hidden />
                   ) : null}
+                  {/* Subtle amber bottom sheen line on hover */}
+                  <span className="absolute inset-x-3 -bottom-0.5 h-[1.5px] rounded-full bg-gradient-to-r from-transparent via-primary/80 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 pointer-events-none" />
                 </Link>
               ))}
             </div>

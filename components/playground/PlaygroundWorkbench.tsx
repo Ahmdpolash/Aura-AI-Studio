@@ -8,6 +8,11 @@ import { CanvasViewer } from "./CanvasViewer";
 import { ToolControls } from "./ToolControls";
 import { HistoryGallery, type GenerationItem } from "./HistoryGallery";
 import { UpgradeModal } from "@/components/modals/UpgradeModal";
+import { ApiConfigModal } from "@/components/modals/ApiConfigModal";
+import {
+  getCustomImageKitConfig,
+  BYOK_CHANGE_EVENT,
+} from "@/lib/byok-storage";
 import {
   STUDIO_TOOLS,
   type StudioTool,
@@ -18,6 +23,7 @@ import {
   type TransformToolId,
 } from "@/lib/imagekit";
 import { CheckCircleIcon, SparklesIcon } from "lucide-react";
+import { toast } from "sonner";
 
 export function PlaygroundWorkbench() {
   const { data: session, status, update } = useSession();
@@ -43,7 +49,18 @@ export function PlaygroundWorkbench() {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadingFileName, setUploadingFileName] = useState<string | null>(null);
   const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
+  const [isConfigModalOpen, setIsConfigModalOpen] = useState(false);
+  const [hasCustomConfig, setHasCustomConfig] = useState(false);
   const [upgradeSuccessBanner, setUpgradeSuccessBanner] = useState(false);
+
+  useEffect(() => {
+    const checkConfig = () => {
+      setHasCustomConfig(Boolean(getCustomImageKitConfig()));
+    };
+    checkConfig();
+    window.addEventListener(BYOK_CHANGE_EVENT, checkConfig);
+    return () => window.removeEventListener(BYOK_CHANGE_EVENT, checkConfig);
+  }, []);
 
   const [usageData, setUsageData] = useState<{
     usageCount: number;
@@ -51,6 +68,11 @@ export function PlaygroundWorkbench() {
     plan: string;
     canUpload: boolean;
     remaining: number;
+    hourlyCount?: number;
+    hourlyLimit?: number;
+    hourlyRemaining?: number;
+    isHourlyCapped?: boolean;
+    resetInMinutes?: number;
   } | null>(null);
 
   const [history, setHistory] = useState<GenerationItem[]>([]);
@@ -138,7 +160,17 @@ export function PlaygroundWorkbench() {
     setUploadingFileName(file.name);
 
     try {
-      const authRes = await fetch("/api/upload-auth", { cache: "no-store" });
+      const customConfig = getCustomImageKitConfig();
+      const authHeaders: Record<string, string> = {};
+      if (customConfig?.publicKey && customConfig?.privateKey) {
+        authHeaders["x-custom-public-key"] = customConfig.publicKey;
+        authHeaders["x-custom-private-key"] = customConfig.privateKey;
+      }
+
+      const authRes = await fetch("/api/upload-auth", {
+        cache: "no-store",
+        headers: authHeaders,
+      });
       if (!authRes.ok) throw new Error("Failed to get upload authorization");
       const authData = await authRes.json();
 
@@ -155,10 +187,11 @@ export function PlaygroundWorkbench() {
       if (uploadResult?.url) {
         setOriginalImage(uploadResult.url);
         setOriginalFileName(file.name);
+        toast.success("Image uploaded successfully!");
       }
     } catch (err) {
       console.error("Image upload failed:", err);
-      alert("Failed to upload image. Please try again.");
+      toast.error("Failed to upload image. Please try again.");
       setOriginalImage(null);
       setOriginalFileName(null);
     } finally {
@@ -177,6 +210,12 @@ export function PlaygroundWorkbench() {
 
     if (!isPro && usageData && !usageData.canUpload) {
       setIsUpgradeModalOpen(true);
+      return;
+    }
+
+    if (isPro && usageData?.isHourlyCapped) {
+      const waitMin = usageData.resetInMinutes || 1;
+      toast.warning(`Hourly limit reached (${usageData.hourlyLimit || 15} edits/hr). Resets in ${waitMin}m.`);
       return;
     }
 
@@ -209,14 +248,36 @@ export function PlaygroundWorkbench() {
             isReady = true;
             break;
           }
+          if (checkRes.status === 403 || checkRes.status === 400) {
+            let errorDetail = "Image processing service rejected this transformation.";
+            try {
+              const errBodyRes = await fetch(transformedUrl);
+              const errBody = await errBodyRes.text();
+              if (errBody) errorDetail = errBody;
+            } catch {}
+            toast.error(`Transformation rejected (${checkRes.status}): ${errorDetail}`);
+            return;
+          }
         } catch {
         }
         await new Promise((resolve) => setTimeout(resolve, 2000));
       }
 
+      if (!isReady) {
+        toast.error("Transformation timed out. Please try a different tool or prompt.");
+        return;
+      }
+
       setProcessedImage(transformedUrl);
 
-      await fetch("/api/usage", { method: "POST" });
+      const usageRes = await fetch("/api/usage", { method: "POST" });
+      if (usageRes.status === 429) {
+        const errJson = await usageRes.json();
+        toast.warning(errJson.error || "Hourly limit reached. Please wait before generating again.");
+        await fetchUsageAndHistory();
+        return;
+      }
+
       await fetch("/api/generations", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -230,9 +291,10 @@ export function PlaygroundWorkbench() {
       });
 
       await fetchUsageAndHistory();
+      toast.success(`${selectedTool.name} applied successfully!`);
     } catch (err) {
       console.error("AI Transformation error:", err);
-      alert("Transformation error. Please try again.");
+      toast.error("Transformation error. Please try again.");
     } finally {
       setIsProcessing(false);
     }
@@ -255,10 +317,10 @@ export function PlaygroundWorkbench() {
             </div>
             <div>
               <p className="text-sm font-bold text-foreground">
-                🎉 Welcome to Aura Pro!
+                Welcome to Aura Pro
               </p>
               <p className="text-xs text-muted-foreground">
-                Your subscription is active. You now have unlimited high-resolution AI transformations.
+                Your subscription is active. You have 15 high-speed generations per hour.
               </p>
             </div>
           </div>
@@ -319,6 +381,8 @@ export function PlaygroundWorkbench() {
           isPro={isPro}
           usageData={usageData}
           onOpenUpgradeModal={() => setIsUpgradeModalOpen(true)}
+          onOpenConfigModal={() => setIsConfigModalOpen(true)}
+          hasCustomConfig={hasCustomConfig}
         />
       </div>
 
@@ -331,6 +395,11 @@ export function PlaygroundWorkbench() {
       <UpgradeModal
         isOpen={isUpgradeModalOpen}
         onClose={() => setIsUpgradeModalOpen(false)}
+      />
+
+      <ApiConfigModal
+        isOpen={isConfigModalOpen}
+        onClose={() => setIsConfigModalOpen(false)}
       />
     </div>
   );

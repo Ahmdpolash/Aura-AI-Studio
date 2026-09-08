@@ -1,82 +1,116 @@
-<h1 align="center">✨ Aura Studio — AI Image Processing & Transformation Suite</h1>
+# Aura Studio
 
-<p align="center">
-  A production-grade AI-powered image editing platform built with <strong>Next.js 16</strong>, <strong>NextAuth.js</strong>, <strong>Prisma ORM</strong>, <strong>Neon PostgreSQL</strong>, <strong>ImageKit AI Transformations</strong>, and <strong>Stripe Billing</strong>.
-</p>
+A high-performance web platform for AI-powered image isolation, prompt-guided background generation, super-resolution upscaling, and dynamic branding overlays.
 
----
+Built with Next.js App Router, ImageKit Transformation Engine, PostgreSQL via Prisma ORM, NextAuth, and Stripe subscription billing.
 
-## 🚀 Key Features
+## Overview
 
-- **🪄 AI Background Removal**: Instant subject isolation with edge detection and hair transparency (`e-bgremove` & `e-removedotbg`).
-- **🌄 AI Background Replacer**: Synthesize custom realistic backgrounds using text prompts (`e-changebg`).
-- **⚡ AI Super-Resolution Upscaling**: 2x resolution upscaling with high-frequency micro-texture enhancement (`e-upscale` & `e-retouch`).
-- **✍️ Watermark & Typography Overlay**: Real-time customizable text and branding watermarks with custom fonts, colors, and positioning.
-- **🎛️ Interactive Split Comparison Canvas**: Real-time draggable before-and-after comparison slider to inspect fine edge details.
-- **🔐 Google OAuth Authentication**: Effortless sign-in and session management via NextAuth.js.
-- **📊 Usage Quotas & Limiting**: 3 free uploads/transformations for new users, automatically tracked in PostgreSQL.
-- **💳 Stripe Subscription Integration**: Pro upgrade flow ($19/mo) with webhook-driven unlimited credit provisioning.
-- **📂 Cloud Image Delivery**: Client-side signed direct uploads to ImageKit with global CDN delivery.
+Aura Studio provides a suite of image processing tools accessible through an interactive dual-canvas workbench:
 
----
+- **Background Removal**: Automated subject isolation with sub-pixel edge detection and alpha mask transparency.
+- **Scene Replacement**: Generative AI background replacement driven by user text prompts.
+- **Super-Resolution Upscaling**: 2x and 4x detail enhancement with micro-texture reconstruction.
+- **Watermark Engine**: Custom text and branding overlays with controllable positioning, sizing, and color.
+- **Split-View Canvas**: Draggable before-and-after comparison slider for real-time edge inspection.
+- **Credit & Subscription Pipeline**: Free tier usage tracking (3 complimentary transformations) with automated upgrade provisioning via Stripe Checkout and webhooks.
 
-## 🛠️ Architecture & Tech Stack
+## Architecture & Technologies
 
-- **Framework**: Next.js 16 (App Router, Turbopack)
-- **Language**: TypeScript
-- **Database & ORM**: PostgreSQL (Neon Serverless) + Prisma ORM
-- **Authentication**: NextAuth.js (Google OAuth Provider)
-- **Image Pipeline**: ImageKit Next.js SDK & Real-time Transformation Engine
-- **Payments**: Stripe Checkout & Webhooks
-- **Styling**: Tailwind CSS v4, Lucide Icons, Radix UI Primitives
+- **Frontend**: Next.js 16 (App Router, Server & Client Components, Turbopack)
+- **Styling & Motion**: Tailwind CSS v4, Framer Motion, Radix UI Primitives, Lucide Icons
+- **Image Pipeline**: ImageKit Media Services with signed client-side upload tokens and on-the-fly transformation pipelines
+- **Database & State**: PostgreSQL (Neon Serverless) managed through Prisma ORM
+- **Authentication**: NextAuth.js with Google OAuth provider
+- **Billing**: Stripe Checkout Sessions and signed webhook handlers
 
----
+## Project Structure
 
-## ⚙️ Environment Variables
-
-Create a `.env` file with the following variables:
-
-```env
-# Database (Neon PostgreSQL)
-DATABASE_URL="postgresql://user:password@endpoint.neon.tech/neondb?sslmode=require"
-
-# NextAuth
-NEXTAUTH_URL="http://localhost:3000"
-NEXTAUTH_SECRET="your-generated-secret-key"
-
-# Google OAuth
-GOOGLE_CLIENT_ID="your-google-client-id"
-GOOGLE_CLIENT_SECRET="your-google-client-secret"
-
-# ImageKit
-NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY="public_..."
-IMAGEKIT_PRIVATE_KEY="private_..."
-
-# Stripe
-STRIPE_SECRET_KEY="sk_test_..."
-STRIPE_PUBLISHABLE_KEY="pk_test_..."
-STRIPE_PRICE_ID="price_..."
-STRIPE_WEBHOOK_SECRET="whsec_..."
+```
+├── app/
+│   ├── api/                       # Backend routes (auth, checkout, imagekit auth)
+│   ├── playground/                # Interactive canvas & workbench interface
+│   ├── layout.tsx                 # Root layout & providers
+│   └── page.tsx                   # Marketing landing page
+├── components/
+│   ├── playground/                # Studio tools, canvas inspector, split slider
+│   ├── ui/                        # Base interface primitives (buttons, dialogs)
+│   ├── HomeHeroSection.tsx        # Landing hero with video & interactive showcase
+│   ├── GalleryShowcaseSection.tsx # Technical benchmarks & masonry gallery
+│   ├── HowItWorksSection.tsx      # Step-by-step processing workflow
+│   ├── PricingSection.tsx         # Free vs Pro subscription cards
+│   └── Footer.tsx                 # Navigation, brand identity, and platform links
+├── lib/
+│   ├── constants.ts               # Static application constants and feature definitions
+│   ├── imagekit.ts                # Transformation URL generators and client configuration
+│   ├── prisma.ts                  # Prisma database client singleton
+│   └── utils.ts                   # Class merger and formatting utilities
+└── prisma/
+    └── schema.prisma              # User, account, session, and credit tracking models
 ```
 
----
+## Getting Started
 
-## 🏃 Getting Started
+### Prerequisites
 
-1. **Install dependencies:**
+- Node.js 20+ or Bun runtime
+- PostgreSQL database instance (local or hosted on Neon)
+- Google Cloud Console project with OAuth credentials
+- ImageKit account with public and private keys
+- Stripe account for subscription testing
+
+### Installation
+
+1. Clone the repository:
    ```bash
-   bun install
-   # or npm install
+   git clone https://github.com/Ahmdpolash/Aura-AI-Studio.git
+   cd Aura-AI-Studio
    ```
 
-2. **Sync database schema:**
+2. Install dependencies:
    ```bash
-   bun x prisma db push
+   npm install
+   # or bun install
    ```
 
-3. **Start development server:**
-   ```bash
-   bun run dev
+3. Configure environment variables:
+   Create a `.env` file in the project root:
+   ```env
+   # Database
+   DATABASE_URL="postgresql://user:password@endpoint.neon.tech/neondb?sslmode=require"
+
+   # NextAuth
+   NEXTAUTH_URL="http://localhost:3000"
+   NEXTAUTH_SECRET="your-generated-nextauth-secret"
+
+   # Google OAuth
+   GOOGLE_CLIENT_ID="your-google-client-id"
+   GOOGLE_CLIENT_SECRET="your-google-client-secret"
+
+   # ImageKit
+   NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY="public_..."
+   NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT="https://ik.imagekit.io/your_id"
+   IMAGEKIT_PRIVATE_KEY="private_..."
+
+   # Stripe
+   STRIPE_SECRET_KEY="sk_test_..."
+   STRIPE_PUBLISHABLE_KEY="pk_test_..."
+   STRIPE_PRICE_ID="price_..."
+   STRIPE_WEBHOOK_SECRET="whsec_..."
    ```
 
-4. Open [http://localhost:3000](http://localhost:3000) to view the landing page, or visit [http://localhost:3000/playground](http://localhost:3000/playground) to access the studio.
+4. Push database migrations:
+   ```bash
+   npx prisma db push
+   ```
+
+5. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+The application will be accessible at `http://localhost:3000`. The image editor workbench is located at `/playground`.
+
+## License
+
+This project is licensed under the MIT License.

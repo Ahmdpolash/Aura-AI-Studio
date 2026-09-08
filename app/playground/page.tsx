@@ -3,14 +3,28 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useSession, signIn, signOut } from "next-auth/react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { PlaygroundWorkbench } from "@/components/playground/PlaygroundWorkbench";
-import { ArrowLeftIcon, CrownIcon, LogInIcon, LogOutIcon, SparklesIcon } from "lucide-react";
+import { ApiConfigModal } from "@/components/modals/ApiConfigModal";
+import { getCustomImageKitConfig, BYOK_CHANGE_EVENT } from "@/lib/byok-storage";
+import { ArrowLeftIcon, CrownIcon, KeyRoundIcon, LogInIcon, LogOutIcon, SparklesIcon } from "lucide-react";
 
 export default function PlaygroundPage() {
   const { data: session, status } = useSession();
   const user = session?.user as any;
   const isPro = user?.plan === "PRO";
+  const [isConfigModalOpen, setIsConfigModalOpen] = useState(false);
+  const [hasCustomConfig, setHasCustomConfig] = useState(false);
+
+  useEffect(() => {
+    const checkConfig = () => {
+      setHasCustomConfig(Boolean(getCustomImageKitConfig()));
+    };
+    checkConfig();
+    window.addEventListener(BYOK_CHANGE_EVENT, checkConfig);
+    return () => window.removeEventListener(BYOK_CHANGE_EVENT, checkConfig);
+  }, []);
 
   return (
     <main className="studio-shell min-h-screen px-4 py-4 sm:px-6 lg:px-8">
@@ -37,6 +51,20 @@ export default function PlaygroundPage() {
 
           {/* Right: User status & actions */}
           <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
+            {/* BYOK ImageKit Configuration Button */}
+            <button
+              type="button"
+              onClick={() => setIsConfigModalOpen(true)}
+              className="flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/10 px-2.5 sm:px-3 py-1 text-xs font-semibold text-primary transition-all hover:bg-primary/20 hover:border-primary/50 shadow-[0_0_15px_rgba(255,140,0,0.12)] cursor-pointer"
+              title="Configure custom ImageKit API credentials"
+            >
+              <KeyRoundIcon className="size-3.5" />
+              <span className="hidden sm:inline">
+                {hasCustomConfig ? "Custom Keys Active" : "API Config"}
+              </span>
+              <span className="sm:hidden">Keys</span>
+            </button>
+
             {isPro ? (
               <>
                 <span className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary shadow-[0_0_12px_rgba(255,140,0,0.2)]">
@@ -86,6 +114,11 @@ export default function PlaygroundPage() {
 
         {/* Studio Workbench */}
         <PlaygroundWorkbench />
+
+        <ApiConfigModal
+          isOpen={isConfigModalOpen}
+          onClose={() => setIsConfigModalOpen(false)}
+        />
       </div>
     </main>
   );
