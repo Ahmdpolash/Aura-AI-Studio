@@ -5,7 +5,14 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { GALLERY_IMAGES, GALLERY_STATS, HIGHLIGHTS, SHOWCASE_BG_VIDEO_SRC } from "@/lib/constants";
-import { Wand2Icon } from "lucide-react";
+import { ArrowRightIcon, CheckCircle2Icon, SparklesIcon, Wand2Icon } from "lucide-react";
+
+const FEATURE_TAGS: Record<string, { badge: string; desc: string }> = {
+  "AI Background Remove": { badge: "0.8s Fast", desc: "Sub-pixel edges" },
+  "AI Upscale 2x": { badge: "4K Detail", desc: "Micro-texture restore" },
+  "Change Background": { badge: "GenAI", desc: "Lighting blend" },
+  "Text Watermark": { badge: "Pro", desc: "Dynamic branding" },
+};
 
 export function GalleryShowcaseSection() {
   return (
@@ -34,61 +41,123 @@ export function GalleryShowcaseSection() {
       />
 
       <div className="relative z-10 mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
-        <div className="showcase-panel relative overflow-hidden rounded-[2rem] border border-border/70 p-6 sm:p-8 lg:p-10">
-          <div className="showcase-glow absolute -left-14 top-8 size-36 rounded-full blur-3xl" />
+        <div className="showcase-panel relative overflow-hidden rounded-[2rem] border border-white/15 bg-gradient-to-b from-card/85 via-card/70 to-card/50 p-6 sm:p-8 lg:p-10 backdrop-blur-2xl shadow-[0_24px_60px_rgba(0,0,0,0.8),0_0_40px_rgba(255,90,20,0.1)]">
+          {/* Specular top border light */}
+          <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/30 to-transparent pointer-events-none z-20" />
+          <div className="showcase-glow absolute -left-14 top-8 size-48 rounded-full blur-3xl bg-primary/20 pointer-events-none" />
 
           <div className="relative z-10">
-            <div className="grid gap-3 sm:grid-cols-4">
+            {/* Top Interactive Feature Modules Grid */}
+            <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4 sm:gap-3">
               {HIGHLIGHTS.map((item) => {
                 const Icon = item.icon;
+                const meta = FEATURE_TAGS[item.label] || { badge: "AI Core", desc: "Instant tool" };
 
                 return (
-                  <div
+                  <Link
                     key={item.label}
-                    className="rounded-[1.4rem] border border-border/60 bg-card px-4 py-5 text-center"
+                    href="/playground"
+                    className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] p-3 sm:p-3.5 transition-all duration-300 hover:-translate-y-1 hover:border-primary/50 hover:bg-white/[0.07] hover:shadow-[0_10px_25px_rgba(255,90,20,0.18)] backdrop-blur-md"
                   >
-                    <div className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-primary/14 text-primary">
-                      <Icon className="size-5" />
+                    <div className="flex items-center justify-between">
+                      <div className="flex size-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary/20 via-orange-500/15 to-transparent text-primary border border-primary/25 shadow-sm transition-transform duration-300 group-hover:scale-110 group-hover:text-amber-300">
+                        <Icon className="size-4" />
+                      </div>
+                      <span className="rounded-md border border-white/10 bg-white/5 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-zinc-400 group-hover:border-primary/30 group-hover:text-primary transition-colors">
+                        {meta.badge}
+                      </span>
                     </div>
-                    <p className="mt-4 text-xs font-semibold tracking-wide text-foreground">{item.label}</p>
-                  </div>
+
+                    <div className="mt-3">
+                      <p className="text-xs font-semibold tracking-tight text-white/95 group-hover:text-primary transition-colors">
+                        {item.label}
+                      </p>
+                      <p className="mt-0.5 text-[10px] text-zinc-400 line-clamp-1">
+                        {meta.desc}
+                      </p>
+                    </div>
+
+                    {/* Subtle corner light sheen on hover */}
+                    <div className="absolute -right-8 -top-8 size-16 rounded-full bg-primary/20 blur-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100 pointer-events-none" />
+                  </Link>
                 );
               })}
             </div>
 
-            <div className="mt-10">
-              <p className="caps-lg font-mono text-xs font-medium uppercase tracking-[0.24em] text-primary sm:text-sm">
-                AI Precision Suite
-              </p>
-              <h2 className="mt-5 font-mono text-5xl font-normal leading-[1.02] tracking-[-0.03em] text-foreground sm:text-6xl lg:text-7xl">
-                Transform <span className="font-medium text-primary">photos</span>
+            {/* Typography & Value Proposition */}
+            <div className="mt-8 sm:mt-10">
+              <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3.5 py-1 text-xs font-semibold text-primary backdrop-blur-md">
+                <SparklesIcon className="size-3.5 text-primary" />
+                <span className="uppercase tracking-widest text-[10px] sm:text-[11px]">AI Precision Vision Engine</span>
+              </div>
+
+              <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-[3.25rem] leading-[1.08]">
+                Transform <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-orange-400 to-amber-300">photos</span>
                 <br />
-                instantly.
+                <span
+                  style={{ fontFamily: 'Georgia, "Merriweather", "Times New Roman", serif' }}
+                  className="italic font-normal text-white/95"
+                >
+                  with surgical precision.
+                </span>
               </h2>
-              <p className="mt-6 max-w-xl font-mono text-[0.9375rem] leading-relaxed text-muted-foreground sm:text-base">
-                Isolate subjects with surgical edge precision, synthesize natural backgrounds, upscale micro-textures, and brand with customized watermarks.
+
+              <p className="mt-4 max-w-xl text-sm sm:text-base leading-relaxed text-muted-foreground font-normal">
+                Isolate intricate hair and edges with sub-pixel edge detection, synthesize photorealistic neural backgrounds, upscale textures without blur, and stamp dynamic branding.
               </p>
+
+              {/* Capability feature chips - clean, realistic developer/creator features */}
+              <div className="mt-5 flex flex-wrap gap-2">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[11px] font-medium text-zinc-300">
+                  <CheckCircle2Icon className="size-3 text-emerald-400" /> Sub-Pixel Alpha Masking
+                </span>
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[11px] font-medium text-zinc-300">
+                  <CheckCircle2Icon className="size-3 text-amber-400" /> Dual-Canvas Real-Time Split
+                </span>
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[11px] font-medium text-zinc-300">
+                  <CheckCircle2Icon className="size-3 text-primary" /> Lossless 4K PNG Export
+                </span>
+              </div>
             </div>
 
-            <div className="mt-10 grid gap-4 border-y border-border/60 py-6 sm:grid-cols-3">
-              {GALLERY_STATS.map((stat) => (
-                <div key={stat.label} className="space-y-2">
-                  <p className="text-4xl font-semibold tracking-tight text-primary">{stat.value}</p>
-                  <p className="caps-xs text-sm uppercase text-muted-foreground">{stat.label}</p>
+            {/* Technical Specifications Bar (Symmetrical, single-line benchmarks) */}
+            <div className="mt-8 grid grid-cols-3 gap-2 rounded-2xl border border-white/10 bg-white/[0.02] p-4 sm:p-5 backdrop-blur-xl">
+              {GALLERY_STATS.map((stat, idx) => (
+                <div
+                  key={stat.label}
+                  className={`flex flex-col justify-center space-y-1 text-center sm:text-left ${
+                    idx !== 0 ? "border-l border-white/10 pl-2 sm:pl-4 lg:pl-6" : ""
+                  }`}
+                >
+                  <p className="whitespace-nowrap text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-primary to-amber-400">
+                    {stat.value}
+                  </p>
+                  <p className="whitespace-nowrap text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    {stat.label}
+                  </p>
                 </div>
               ))}
             </div>
 
-            <div className="mt-8">
-              <Button
-                asChild
-                size="lg"
-                className="studio-primary-action rounded-2xl px-7 text-base font-semibold shadow-lg"
+            {/* Action CTA & Proof */}
+            <div className="mt-8 flex flex-col sm:flex-row sm:items-center gap-4">
+              <Link
+                href="/playground"
+                prefetch={false}
+                className="group inline-flex h-12 sm:h-13 items-center justify-center gap-2.5 rounded-full bg-gradient-to-r from-primary via-orange-500 to-amber-500 px-7 sm:px-8 text-sm sm:text-base font-semibold text-white shadow-[0_4px_24px_rgba(255,90,20,0.4)] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_8px_32px_rgba(255,90,20,0.65)] active:scale-[0.98] cursor-pointer"
               >
-                <Link href="/playground" prefetch={false}>
-                  <Wand2Icon className="mr-2 size-5" /> Open Playground
-                </Link>
-              </Button>
+                <Wand2Icon className="size-4 sm:size-5 transition-transform duration-300 group-hover:rotate-12" />
+                <span>Open AI Playground</span>
+                <ArrowRightIcon className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
+              </Link>
+
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+                </span>
+                <span>Instant Cloud Processing • Free Trial</span>
+              </div>
             </div>
           </div>
         </div>
@@ -96,14 +165,15 @@ export function GalleryShowcaseSection() {
         <motion.div
           animate={{ y: [0, -16, 0] }}
           transition={{ duration: 7.5, repeat: Infinity, ease: "easeInOut" }}
-          className="showcase-frame relative rounded-[2.25rem] border border-border/60 p-4 sm:p-5"
+          className="showcase-frame relative rounded-[2.25rem] border border-border/60 p-3 sm:p-5"
         >
-          <div className="grid gap-4 sm:grid-cols-2">
+          {/* 2 items in a row on mobile, masonry stagger */}
+          <div className="grid grid-cols-2 gap-2.5 sm:gap-4">
             {GALLERY_IMAGES.map((image, index) => (
               <div
                 key={image.src}
-                className={`showcase-image-card overflow-hidden rounded-[1.8rem] border border-border/60 ${
-                  index % 2 === 0 ? "sm:translate-y-6" : ""
+                className={`showcase-image-card overflow-hidden rounded-2xl sm:rounded-[1.8rem] border border-border/60 ${
+                  index % 2 === 1 ? "translate-y-3 sm:translate-y-6" : ""
                 }`}
               >
                 <Image
@@ -111,7 +181,7 @@ export function GalleryShowcaseSection() {
                   alt={image.alt}
                   width={900}
                   height={1200}
-                  className="h-full w-full object-cover"
+                  className="h-full w-full object-cover aspect-[3/4]"
                   priority={index < 2}
                 />
               </div>

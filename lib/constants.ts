@@ -23,16 +23,16 @@ export const HIGHLIGHTS: { label: string; icon: LucideIcon }[] = [
 ];
 
 export const GALLERY_STATS = [
-  { value: "100K+", label: "Images processed" },
-  { value: "25K+", label: "Happy creators" },
-  { value: "4.9/5", label: "User satisfaction" },
+  { value: "< 1.0s", label: "Execution speed" },
+  { value: "4K UHD", label: "Max resolution" },
+  { value: "100%", label: "Lossless quality" },
 ] as const;
 
 export const GALLERY_IMAGES = [
-  { src: "/gallery-1.png", alt: "Stylized portrait with background removed" },
-  { src: "/gallery-2.png", alt: "AI scene replacement result" },
-  { src: "/gallery-3.png", alt: "Super-upscaled macro details" },
-  { src: "/gallery-4.png", alt: "Watermarked studio branding" },
+  { src: "/1.webp", alt: "Stylized portrait with background removed" },
+  { src: "/2.png", alt: "AI scene replacement result" },
+  { src: "/3.jpg", alt: "Super-upscaled macro details" },
+  { src: "/gallery-1.png", alt: "Watermarked studio branding" },
 ] as const;
 
 export const HERO_VIDEO_SRC = "https://ik.imagekit.io/gcunh6w0m/hero.mp4";
