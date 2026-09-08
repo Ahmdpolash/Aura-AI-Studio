@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import {
+  ArrowUpRightIcon,
   ChevronDownIcon,
   CrownIcon,
   LogInIcon,
@@ -11,9 +12,11 @@ import {
   SparklesIcon,
   Wand2Icon,
   XIcon,
+  ZapIcon,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { motion } from "motion/react";
 
 import { Button } from "@/components/ui/button";
 import { CENTER_NAV_LINKS, HERO_VIDEO_SRC } from "@/lib/constants";
@@ -117,7 +120,7 @@ export function HomeHeroSection() {
       <SeamlessHeroBackground />
       <div className="hero-fade pointer-events-none absolute inset-0 z-20" />
 
-      <div className="home-hero-stack">
+      <div className="home-hero-stack pb-12 sm:pb-16 lg:pb-20">
         <div className="home-nav-border-wrapper">
           <div className="home-nav-beam" />
           <nav className="home-nav">
@@ -318,7 +321,7 @@ export function HomeHeroSection() {
           )}
         </div>
 
-        <div className="home-hero-copy">
+        <div className="home-hero-copy order-2 md:order-1 pt-4 sm:pt-6 md:pt-14 lg:pt-20">
           <h1 className="hero-title home-hero-title">
             <span className="block">Next-Gen AI Image Studio.</span>
             <span
@@ -352,23 +355,150 @@ export function HomeHeroSection() {
           </div>
         </div>
 
-        <div className="home-demo-wrap">
-          <div className="home-demo-shift">
-            <div className="hero-demo-glass home-demo-glass-shell">
-              <div className="hero-demo-glass-inner home-demo-inner">
-                <Image
-                  src="/demo-two.png"
-                  alt="Aura Studio workspace showing upload, AI tools, and interactive canvas comparison"
-                  width={3290}
-                  height={1872}
-                  className="h-auto w-full"
-                  priority
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1100px"
-                />
+        <motion.div
+          initial={{ opacity: 0, y: 35, scale: 0.98 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.9, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+          className="home-demo-wrap relative order-1 md:order-2 mt-4 sm:mt-6 md:mt-10"
+        >
+          {/* Multi-layer ambient pulsating glow behind the showcase deck */}
+          <motion.div
+            animate={{ opacity: [0.65, 0.95, 0.65], scale: [0.98, 1.02, 0.98] }}
+            transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
+            className="pointer-events-none absolute -inset-4 sm:-inset-8 -z-10 rounded-[3rem] bg-gradient-to-r from-orange-500/30 via-amber-500/20 to-primary/30 blur-3xl opacity-80"
+          />
+          <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4/5 h-4/5 -z-10 rounded-full bg-orange-600/20 blur-[110px]" />
+
+          {/* Perspective Container */}
+          <div className="home-demo-shift group/demo relative !translate-y-0">
+            {/* Floating Feature Glass Badges - Anchored to window corners */}
+            {/* Badge 1: Top Right - Neural Execution Speed */}
+            <motion.div
+              animate={{ y: [0, -7, 0], rotate: [0, 0.8, 0] }}
+              transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
+              className="pointer-events-none select-none absolute -top-4 right-3 sm:-top-5 sm:right-6 lg:-top-6 lg:right-8 z-40 hidden sm:flex items-center gap-2.5 rounded-2xl border border-white/20 bg-black/80 px-3.5 py-2 shadow-[0_16px_36px_rgba(0,0,0,0.7),0_0_25px_rgba(255,140,0,0.25)] backdrop-blur-2xl"
+            >
+              <div className="flex size-7 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 text-black shadow-[0_0_12px_rgba(255,180,0,0.5)]">
+                <ZapIcon className="size-4 fill-black text-black" />
+              </div>
+              <div>
+                <div className="text-[11px] font-semibold text-white tracking-wide">0.8s Neural Cutout</div>
+                <div className="text-[10px] text-zinc-400 font-medium">Zero-latency edge detection</div>
+              </div>
+            </motion.div>
+
+            {/* Badge 2: Bottom Left - Interactive Split Comparison */}
+            <motion.div
+              animate={{ y: [0, 7, 0], rotate: [0, -0.8, 0] }}
+              transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
+              className="pointer-events-none select-none absolute -bottom-4 left-3 sm:-bottom-5 sm:left-6 lg:-bottom-6 lg:left-8 z-40 hidden sm:flex items-center gap-2.5 rounded-2xl border border-white/20 bg-black/80 px-3.5 py-2 shadow-[0_16px_36px_rgba(0,0,0,0.7),0_0_25px_rgba(255,90,20,0.25)] backdrop-blur-2xl"
+            >
+              <div className="flex size-7 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-rose-500 text-white shadow-[0_0_12px_rgba(255,90,20,0.5)]">
+                <SparklesIcon className="size-4 text-white" />
+              </div>
+              <div>
+                <div className="text-[11px] font-semibold text-white tracking-wide">Interactive Dual Canvas</div>
+                <div className="text-[10px] text-zinc-400 font-medium">Real-time split slider preview</div>
+              </div>
+            </motion.div>
+
+            {/* Badge 3: Center Right - 4K Lossless Canvas */}
+            <motion.div
+              animate={{ y: [0, -6, 0] }}
+              transition={{ repeat: Infinity, duration: 5.5, ease: "easeInOut" }}
+              className="pointer-events-none select-none absolute top-1/2 -right-3 sm:-right-4 -translate-y-1/2 z-40 hidden lg:flex items-center gap-2 rounded-2xl border border-white/20 bg-black/80 px-3.5 py-2 shadow-[0_14px_30px_rgba(0,0,0,0.7),0_0_20px_rgba(255,180,0,0.2)] backdrop-blur-2xl"
+            >
+              <div className="flex size-6 items-center justify-center rounded-lg bg-gradient-to-br from-amber-400/20 to-orange-500/20 border border-amber-400/30 text-amber-300">
+                <CrownIcon className="size-3.5 text-amber-400" />
+              </div>
+              <div className="text-[11px] font-semibold text-white/95">
+                4K Ultra-HD Output
+              </div>
+            </motion.div>
+
+            {/* Outer Border Beam Light Shell */}
+            <div className="relative rounded-[1.65rem] sm:rounded-[2rem] lg:rounded-[2.25rem] p-[2px] sm:p-[2.5px] overflow-hidden bg-gradient-to-b from-white/30 via-white/10 to-white/5 shadow-[0_30px_100px_rgba(0,0,0,0.9),0_0_60px_rgba(255,90,20,0.25)]">
+              {/* Rotating conic light beam (Tailwind + Motion native) */}
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ repeat: Infinity, duration: 7, ease: "linear" }}
+                className="pointer-events-none absolute -inset-[180%]"
+                style={{
+                  background:
+                    "conic-gradient(from 0deg, transparent 0deg, transparent 60deg, rgba(255, 90, 20, 0.4) 100deg, rgba(255, 120, 30, 0.95) 130deg, rgba(255, 215, 60, 1) 150deg, rgba(255, 120, 30, 0.95) 170deg, rgba(255, 90, 20, 0.4) 200deg, transparent 240deg, transparent 360deg)",
+                }}
+              />
+
+              {/* Glass Frame Shell */}
+              <div className="relative rounded-[calc(1.65rem-2px)] sm:rounded-[calc(2rem-2.5px)] lg:rounded-[calc(2.25rem-2.5px)] bg-[#0c0a09]/85 backdrop-blur-3xl overflow-hidden border border-white/[0.08]">
+                {/* Specular Top Border Highlight */}
+                <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/45 to-transparent pointer-events-none z-20" />
+
+                {/* macOS Frosted Glass Window Header Bar */}
+                <div className="relative z-20 flex items-center justify-between border-b border-white/[0.08] bg-black/40 px-3.5 py-2.5 sm:px-5 sm:py-3 backdrop-blur-xl">
+                  {/* Window Traffic Lights */}
+                  <div className="flex items-center gap-2">
+                    <span className="size-2.5 sm:size-3 rounded-full bg-[#ff5f56]/90 border border-[#e0443e]/50 shadow-[0_0_6px_rgba(255,95,86,0.5)]" />
+                    <span className="size-2.5 sm:size-3 rounded-full bg-[#ffbd2e]/90 border border-[#dea123]/50 shadow-[0_0_6px_rgba(255,189,46,0.5)]" />
+                    <span className="size-2.5 sm:size-3 rounded-full bg-[#27c93f]/90 border border-[#1aab29]/50 shadow-[0_0_6px_rgba(39,201,63,0.5)]" />
+                  </div>
+
+                  {/* Browser URL / Live Engine Status Pill */}
+                  <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs text-white/75 shadow-inner">
+                    <span className="relative flex h-2 w-2">
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                      <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+                    </span>
+                    <span className="font-mono text-[10px] sm:text-[11px] tracking-wide text-zinc-300">
+                      aura.studio/playground
+                    </span>
+                    <span className="hidden md:inline-block text-[9px] uppercase font-semibold text-amber-400 tracking-wider bg-amber-500/15 px-1.5 py-0.5 rounded border border-amber-500/25">
+                      Live Neural v2.4
+                    </span>
+                  </div>
+
+                  {/* Quick Action to Playground */}
+                  <Link
+                    href="/playground"
+                    className="group/cta inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/15 px-2.5 py-1 text-[11px] sm:text-xs font-medium text-primary hover:bg-primary/25 hover:border-primary/60 transition-all duration-200"
+                  >
+                    <span>Launch Studio</span>
+                    <ArrowUpRightIcon className="size-3 sm:size-3.5 transition-transform duration-200 group-hover/cta:translate-x-0.5 group-hover/cta:-translate-y-0.5" />
+                  </Link>
+                </div>
+
+                {/* Main Workspace Preview Content */}
+                <Link
+                  href="/playground"
+                  className="relative block overflow-hidden bg-black/50 group/preview cursor-pointer"
+                >
+                  {/* Subtle diagonal glass sheen overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.03] to-white/[0.08] pointer-events-none z-10" />
+
+                  {/* The Workspace Screenshot Image */}
+                  <Image
+                    src="/aura-demo.png"
+                    alt="Aura Studio workspace showing upload, AI tools, and interactive canvas comparison"
+                    width={3290}
+                    height={1872}
+                    className="h-auto w-full transition-transform duration-700 ease-out group-hover/preview:scale-[1.015]"
+                    priority
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1100px"
+                  />
+
+                  {/* Hover Center Interactive Call-to-Action Pill */}
+                  <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/25 opacity-0 backdrop-blur-[2px] transition-all duration-300 group-hover/preview:opacity-100">
+                    <div className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/85 px-5 py-2.5 text-xs sm:text-sm font-semibold text-white shadow-[0_10px_30px_rgba(0,0,0,0.8),0_0_24px_rgba(255,90,20,0.45)] backdrop-blur-xl transition-all duration-300 group-hover/preview:scale-105">
+                      <SparklesIcon className="size-4 text-amber-400" />
+                      <span>Open Interactive AI Playground</span>
+                      <ArrowUpRightIcon className="size-4 text-primary" />
+                    </div>
+                  </div>
+                </Link>
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
