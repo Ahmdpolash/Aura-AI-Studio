@@ -4,9 +4,8 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "motion/react";
-import { Button } from "@/components/ui/button";
 import { GALLERY_IMAGES, GALLERY_STATS, HIGHLIGHTS, SHOWCASE_BG_VIDEO_SRC } from "@/lib/constants";
-import { ArrowRightIcon, CheckCircle2Icon, SparklesIcon, Wand2Icon } from "lucide-react";
+import { ArrowRightIcon, CheckCircle2Icon, SparklesIcon } from "lucide-react";
 
 const FEATURE_TAGS: Record<string, { badge: string; desc: string }> = {
   "AI Background Remove": { badge: "0.8s Fast", desc: "Sub-pixel edges" },
@@ -218,25 +217,24 @@ export function GalleryShowcaseSection() {
               ))}
             </div>
 
-            {/* Action CTA & Proof */}
-            <div className="mt-8 flex flex-col sm:flex-row sm:items-center gap-4">
-              <Link
-                href="/playground"
-                prefetch={false}
-                className="group inline-flex h-12 sm:h-13 items-center justify-center gap-2.5 rounded-full bg-gradient-to-r from-primary via-orange-500 to-amber-500 px-7 sm:px-8 text-sm sm:text-base font-semibold text-white shadow-[0_4px_24px_rgba(255,90,20,0.4)] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_8px_32px_rgba(255,90,20,0.65)] active:scale-[0.98] cursor-pointer"
-              >
-                <Wand2Icon className="size-4 sm:size-5 transition-transform duration-300 group-hover:rotate-12" />
-                <span>Open AI Playground</span>
-                <ArrowRightIcon className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
-              </Link>
-
+            {/* Sleek Action & Proof Bar */}
+            <div className="mt-8 flex flex-wrap items-center justify-between gap-3 pt-5 border-t border-white/10">
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 <span className="relative flex h-2 w-2">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
                 </span>
-                <span>Instant Cloud Processing • Free Trial</span>
+                <span>Instant Cloud Engine • Free Credits Included</span>
               </div>
+
+              <Link
+                href="/playground"
+                prefetch={false}
+                className="group inline-flex items-center gap-1.5 text-xs font-semibold text-white/90 hover:text-primary transition-colors cursor-pointer"
+              >
+                <span>Try in Playground</span>
+                <ArrowRightIcon className="size-3.5 text-primary transition-transform duration-300 group-hover:translate-x-1" />
+              </Link>
             </div>
           </div>
         </div>
