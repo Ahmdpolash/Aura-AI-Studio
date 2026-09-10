@@ -198,19 +198,19 @@ export function GalleryShowcaseSection() {
               </div>
             </div>
 
-            {/* Technical Specifications Bar (Symmetrical, single-line benchmarks) */}
-            <div className="mt-8 grid grid-cols-3 gap-2 rounded-2xl border border-white/10 bg-white/[0.02] p-4 sm:p-5 backdrop-blur-xl">
+            {/* Technical Specifications Bar (Responsive benchmarks) */}
+            <div className="mt-8 grid grid-cols-3 gap-2 sm:gap-4 rounded-2xl border border-white/10 bg-white/[0.02] p-3 sm:p-5 backdrop-blur-xl">
               {GALLERY_STATS.map((stat, idx) => (
                 <div
                   key={stat.label}
-                  className={`flex flex-col justify-center space-y-1 text-center sm:text-left ${
+                  className={`flex min-w-0 flex-col justify-center space-y-0.5 sm:space-y-1 text-center sm:text-left ${
                     idx !== 0 ? "border-l border-white/10 pl-2 sm:pl-4 lg:pl-6" : ""
                   }`}
                 >
-                  <p className="whitespace-nowrap text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-primary to-amber-400">
+                  <p className="truncate text-base xs:text-lg sm:text-2xl lg:text-3xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-primary to-amber-400">
                     {stat.value}
                   </p>
-                  <p className="whitespace-nowrap text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  <p className="text-[9px] xs:text-[10px] sm:text-xs font-semibold uppercase tracking-tight sm:tracking-wider text-muted-foreground leading-tight break-words sm:whitespace-nowrap">
                     {stat.label}
                   </p>
                 </div>
