@@ -379,19 +379,19 @@ export function HomeHeroSection() {
             micro-details 2x, and stamp dynamic watermarks.
           </p>
 
-          <div className="mt-9 flex w-full max-w-md flex-col items-center justify-center gap-4 sm:max-w-none sm:flex-row">
+          <div className="mt-7 sm:mt-9 flex w-full max-w-xs sm:max-w-none flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
             <Link
               href="/playground"
               prefetch={false}
-              className="group inline-flex h-13 sm:h-14 items-center justify-center gap-2.5 rounded-full bg-gradient-to-r from-primary via-orange-500 to-amber-500 px-8 py-3.5 text-base font-semibold text-white shadow-[0_4px_28px_rgba(255,90,20,0.4)] transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_8px_38px_rgba(255,90,20,0.65)] active:scale-[0.98] cursor-pointer"
+              className="group inline-flex h-11 sm:h-14 w-full sm:w-auto items-center justify-center gap-2 rounded-full bg-gradient-to-r from-primary via-orange-500 to-amber-500 px-5 py-2.5 sm:px-8 sm:py-3.5 text-sm sm:text-base font-semibold text-white shadow-[0_4px_24px_rgba(255,90,20,0.38)] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_8px_36px_rgba(255,90,20,0.6)] active:scale-[0.98] cursor-pointer"
             >
-              <Wand2Icon className="size-5 transition-transform duration-300 group-hover:rotate-12" />
+              <Wand2Icon className="size-4 sm:size-5 transition-transform duration-300 group-hover:rotate-12" />
               <span>Open AI Playground</span>
             </Link>
 
             <a
               href="#how-it-works"
-              className="inline-flex h-13 sm:h-14 items-center justify-center rounded-full border border-border/80 bg-card/40 px-8 py-3.5 text-base font-medium text-foreground/90 backdrop-blur-md shadow-sm transition-all duration-300 hover:scale-[1.04] hover:border-primary/50 hover:bg-card/80 hover:text-foreground hover:shadow-[0_0_25px_rgba(255,180,0,0.18)] active:scale-[0.98] cursor-pointer"
+              className="inline-flex h-11 sm:h-14 w-full sm:w-auto items-center justify-center rounded-full border border-border/80 bg-card/40 px-5 py-2.5 sm:px-8 sm:py-3.5 text-sm sm:text-base font-medium text-foreground/90 backdrop-blur-md shadow-sm transition-all duration-300 hover:scale-[1.03] hover:border-primary/50 hover:bg-card/80 hover:text-foreground hover:shadow-[0_0_25px_rgba(255,180,0,0.18)] active:scale-[0.98] cursor-pointer"
             >
               See How It Works
             </a>

@@ -297,7 +297,7 @@ export function HowItWorksSection() {
 
           <Button
             asChild
-            className="rounded-full bg-gradient-to-r from-primary via-orange-500 to-amber-500 px-6 font-semibold text-white shadow-[0_4px_20px_rgba(255,90,20,0.35)] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_6px_28px_rgba(255,90,20,0.6)] cursor-pointer shrink-0"
+            className="rounded-full bg-gradient-to-r from-primary via-orange-500 to-amber-500 h-10 sm:h-11 px-4 sm:px-6 text-xs sm:text-sm font-semibold text-white shadow-[0_4px_20px_rgba(255,90,20,0.35)] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_6px_28px_rgba(255,90,20,0.6)] cursor-pointer shrink-0"
           >
             <Link href="/playground" className="inline-flex items-center gap-2">
               <span>Open AI Playground</span>
