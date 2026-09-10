@@ -140,10 +140,10 @@ export function HomeHeroSection() {
                 />
               </span>
               <div className="min-w-0">
-                <span className="caps-2xs block text-xs font-semibold text-foreground sm:text-sm">
+                <span className="caps-2xs block text-xs font-semibold text-foreground sm:text-sm whitespace-nowrap">
                   Aura Studio
                 </span>
-                <span className="caps-xs block truncate text-[10px] uppercase text-primary sm:text-xs">
+                <span className="caps-xs hidden sm:block truncate text-[10px] uppercase text-primary sm:text-xs">
                   AI Image Studio
                 </span>
               </div>
@@ -240,7 +240,10 @@ export function HomeHeroSection() {
                     <LogInIcon className="mr-1.5 size-3.5" /> Sign In
                   </Button>
 
-                  <Button asChild className="home-btn-nav-primary">
+                  <Button
+                    asChild
+                    className="home-btn-nav-primary hidden xs:inline-flex h-8 px-3 text-[11px] font-semibold sm:h-auto sm:px-6 sm:py-2.5 sm:text-xs whitespace-nowrap shrink-0"
+                  >
                     <Link href="/playground">Launch Studio</Link>
                   </Button>
 
@@ -451,10 +454,10 @@ export function HomeHeroSection() {
                     </span>
                   </div>
 
-                  {/* Quick Action to Playground */}
+                  {/* Quick Action to Playground - Hidden on mobile to avoid overflow/wrapping */}
                   <Link
                     href="/playground"
-                    className="group/cta inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/15 px-2.5 py-1 text-[11px] sm:text-xs font-medium text-primary hover:bg-primary/25 hover:border-primary/60 transition-all duration-200"
+                    className="group/cta hidden sm:inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/15 px-2.5 py-1 text-[11px] sm:text-xs font-medium text-primary hover:bg-primary/25 hover:border-primary/60 transition-all duration-200 shrink-0 whitespace-nowrap"
                   >
                     <span>Launch Studio</span>
                     <ArrowUpRightIcon className="size-3 sm:size-3.5 transition-transform duration-200 group-hover/cta:translate-x-0.5 group-hover/cta:-translate-y-0.5" />
@@ -480,8 +483,19 @@ export function HomeHeroSection() {
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1100px"
                   />
 
+                  {/* Mobile-Only Interactive Tap Strip */}
+                  <div className="flex sm:hidden items-center justify-between border-t border-white/10 bg-black/65 px-3.5 py-2 backdrop-blur-md">
+                    <span className="text-[11px] font-medium text-zinc-300">
+                      Interactive AI Split Canvas
+                    </span>
+                    <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-primary">
+                      <span>Launch Studio</span>
+                      <ArrowUpRightIcon className="size-3 text-primary" />
+                    </span>
+                  </div>
+
                   {/* Hover Center Interactive Call-to-Action Pill */}
-                  <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/25 opacity-0 backdrop-blur-[2px] transition-all duration-300 group-hover/preview:opacity-100">
+                  <div className="absolute inset-0 z-20 hidden sm:flex items-center justify-center bg-black/25 opacity-0 backdrop-blur-[2px] transition-all duration-300 group-hover/preview:opacity-100">
                     <div className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/85 px-5 py-2.5 text-xs sm:text-sm font-semibold text-white shadow-[0_10px_30px_rgba(0,0,0,0.8),0_0_24px_rgba(255,90,20,0.45)] backdrop-blur-xl transition-all duration-300 group-hover/preview:scale-105">
                       <span>Open Interactive AI Playground</span>
                       <ArrowUpRightIcon className="size-4 text-primary" />
